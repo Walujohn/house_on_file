@@ -1,0 +1,6 @@
+<!--The next 2 lines are the same-->
+<!--<= turbo_stream.prepend "properties", partial: "properties/property", locals: { property: @property } %>-->
+<%= turbo_stream.prepend "properties", @property %>
+<%= turbo_stream.update Property.new, "" %>
+<%= render_turbo_stream_flash_messages %>
+

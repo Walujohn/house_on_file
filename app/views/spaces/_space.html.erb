@@ -1,0 +1,43 @@
+<%= turbo_frame_tag space do %>
+ <div class="space">
+   <%= turbo_frame_tag dom_id(space, :edit) do %>
+     <div class="space__header">
+        <h2 class="space__title">
+            <%= space.name %>
+        </h2>
+        <div class="space__actions">
+            <%= button_to "Delete",
+                    [property, space],
+                    method: :delete,
+                    form: { data: { turbo_confirm: "Are you sure?" } },
+                    class: "btn btn--light" %>
+            <%= link_to "Edit",
+                    [:edit, property, space],
+                    class: "btn btn--light" %>
+        </div>
+      </div>
+    <% end %>
+    <div class="space__body">
+        <div class="feature feature--header">
+            <div class="feature__name">Details</div>
+            <div class="feature__quantity">Quantity</div>
+            <div class="feature__price">Price</div>
+            <div class="feature__actions"></div>
+        </div>
+
+        <%= turbo_frame_tag nested_dom_id(space, "features") do %>
+          <%= render space.features, property: property, space: space %>
+        <% end %>
+        
+        <%= turbo_frame_tag nested_dom_id(space, Feature.new) %>
+
+        <div class="space__footer">
+            <%= link_to "Add feature",
+                        [:new, property, space, :feature],
+                        data: { turbo_frame: nested_dom_id(space, Feature.new) },
+                        class: "btn btn--primary" %>
+        </div>
+    </div>
+ </div>
+<% end %>
+  

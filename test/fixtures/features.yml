@@ -1,0 +1,43 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+#one:
+#  space: one
+#  name: MyString
+#  description: MyText
+#  quantity: 1
+#  unit_price: 9.99
+#
+#two:
+#  space: two
+#  name: MyString
+#  description: MyText
+#  quantity: 1
+#  unit_price: 9.99
+
+one:
+  space: one
+  name: Floor Covering
+  description: A carpet with a zebra pattern
+  quantity: 1
+  unit_price: 1000
+
+two:
+  space: one
+  name: Ceiling covering
+  description: Blue mosque color
+  quantity: 10
+  unit_price: 25
+
+three:
+  space: two
+  name: Wall Covering
+  description: Sherwin williams brand sunshine yellow paint
+  quantity: 1
+  unit_price: 1000
+
+four:
+  space: two
+  name: Wall Covering
+  description: This wall has a mural by Honduran artist Josue
+  quantity: 10
+  unit_price: 25

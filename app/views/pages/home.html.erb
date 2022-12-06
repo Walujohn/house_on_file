@@ -1,0 +1,10 @@
+<main class="container">
+  <h1>House On File</h1>
+  <p>A blazing fast property report generator built with <%= link_to "Hotwire", "https://hotwired.dev/" %> </p>
+
+  <% if user_signed_in? %>
+    <%= link_to "View properties", properties_path, class: "btn btn--dark" %>
+  <% else %>
+    <%= link_to "Sign in", new_user_session_path, class: "btn btn--dark" %>
+  <% end %>
+</main>

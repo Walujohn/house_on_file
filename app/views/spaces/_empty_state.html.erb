@@ -1,0 +1,10 @@
+<div class="empty-state empty-state--only-child">
+  <p class="empty-state__text">
+    House On File was not able to find enough data on the internet to create a report for this property. Please use the builder tools here to create a custom property report.
+  </p>
+
+  <%= link_to "Build",
+              new_property_space_path(@property),
+              class: "btn btn--primary",
+              data: { turbo_frame: dom_id(Space.new) } %>
+</div>

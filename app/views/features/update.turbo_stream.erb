@@ -1,0 +1,5 @@
+<%= turbo_stream.replace @feature do %>
+  <%= render @feature, quote: @property, space: @space %>
+<% end %>
+
+<%= render_turbo_stream_flash_messages %>

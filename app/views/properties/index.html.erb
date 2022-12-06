@@ -1,0 +1,19 @@
+<!--<= turbo_stream_from "properties" %>-->
+<%= turbo_stream_from current_group, "properties" %>
+
+<div class="container">
+  <div class="header">
+    <h1>Properties</h1>
+    <%= link_to "New property",
+                new_property_path,
+                class: "btn btn--primary",
+                data: { turbo_frame: dom_id(Property.new) } %>
+  </div>
+
+  <%= turbo_frame_tag Property.new %>
+
+  <%= turbo_frame_tag "properties" do %>
+    <%= render "properties/empty_state" %>
+    <%= render @properties %>
+  <% end %>
+</div>

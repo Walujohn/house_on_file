@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+first:
+  group: kpmg
+  name: First property
+
+second:
+  group: kpmg
+  name: Second property
+
+third:
+  group: kpmg
+  name: Third property

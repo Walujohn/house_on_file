@@ -1,0 +1,61 @@
+en:
+  simple_form:
+    "yes": 'Yes'
+    "no": 'No'
+    placeholders:
+      property:
+        name: Name of your property
+      feature:
+        name: Name of your feature
+        description: Description (required)
+        quantity: 1 
+        unit_price: $100.00
+    labels:
+      property:
+        name: Name
+      space:
+        name: Name
+      feature:
+        name: Name
+        description: Description
+        quantity: Quantity
+        unit_price: Unity price
+    required:
+      text: 'required'
+      mark: '*'
+      # You can uncomment the line below if you need to overwrite the whole required html.
+      # When using html, text and mark won't be used.
+      # html: '<abbr title="required">*</abbr>'
+    error_notification:
+      default_message: "Please review the problems below:"
+      
+  helpers:
+    submit:
+      property:
+        create: Create property
+        update: Update property
+      space:
+        create: Create space
+        update: Update space
+      feature:
+        create: Create feature
+        update: Update feature
+    # Examples
+    # labels:
+    #   defaults:
+    #     password: 'Password'
+    #   user:
+    #     new:
+    #       email: 'E-mail to sign in.'
+    #     edit:
+    #       email: 'E-mail.'
+    # hints:
+    #   defaults:
+    #     username: 'User name to sign in.'
+    #     password: 'No special characters, please.'
+    # include_blanks:
+    #   defaults:
+    #     age: 'Rather not say'
+    # prompts:
+    #   defaults:
+    #     age: 'Select your age'

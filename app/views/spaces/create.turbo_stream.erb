@@ -1,0 +1,15 @@
+<%# Step 1: remove the form from the Properties#show page %>
+<%= turbo_stream.update Space.new, "" %>
+
+<%# Step 2: add the space at the right place %>
+<% if previous_space = @space.previous_space %>
+  <%= turbo_stream.after previous_space do %>
+    <%= render @space, property: @property %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.prepend "spaces" do %>
+    <%= render @space, property: @property %>
+  <% end %>
+<% end %>
+
+<%= render_turbo_stream_flash_messages %>
