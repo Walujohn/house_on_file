@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # README
 
 This README would normally document whatever steps are necessary to get the
@@ -25,3 +26,6 @@ Things you may want to cover:
 
 12/2/2022 - start
 A big thank you to hotrails.dev for helping this project to rebuild on Rails 7 anew! We started from the hotrails.dev tutorials and then built custom from there within the Rails 7 conventions.
+=======
+# house_on_file
+>>>>>>> 4a23aaceb0e84839ddf39da631b8aae5b215b90b
