@@ -19,6 +19,17 @@
     <%= render "spaces/empty_state" %>
     <%= render @spaces, property: @property %>
   <% end %>
+    
+    <%= link_to "New appliance",
+                new_property_appliance_path(@property),
+                data: { turbo_frame: dom_id(Appliance.new) },
+                class: "btn btn--primary" %>
+
+  <%= turbo_frame_tag Appliance.new %>
+  <%= turbo_frame_tag "appliances" do %>
+    <%= render "appliances/empty_state" %>
+    <%= render @appliances, property: @property %>
+  <% end %>
 </main>
 
 <%= turbo_frame_tag dom_id(@property, :total) do %>

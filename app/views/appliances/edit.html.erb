@@ -1,0 +1,11 @@
+<main class="container">
+  <%= link_to sanitize("&larr; Back to property"), property_path(@property) %>
+
+  <div class="header">
+    <h1>Edit appliance</h1>
+  </div>
+
+  <%= turbo_frame_tag dom_id(@appliance, :edit) do  %>    
+    <%= render "form", property: @property, appliance: @appliance %>
+  <% end %>
+</main>

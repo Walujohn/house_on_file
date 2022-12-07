@@ -5,10 +5,19 @@ en:
     placeholders:
       property:
         name: Name of your property
+      space:
+        name: Name of your space
       feature:
         name: Name of your feature
         description: Description (required)
         quantity: 1 
+        unit_price: $100.00
+      appliance:
+        name: Name of your appliance
+      appliance_feature:
+        name: Name of your feature
+        description: Description (required)
+        quantity: 1
         unit_price: $100.00
     labels:
       property:
@@ -16,6 +25,13 @@ en:
       space:
         name: Name
       feature:
+        name: Name
+        description: Description
+        quantity: Quantity
+        unit_price: Unity price
+      appliance:
+        name: Name
+      appliance_feature:
         name: Name
         description: Description
         quantity: Quantity
@@ -38,6 +54,12 @@ en:
         create: Create space
         update: Update space
       feature:
+        create: Create feature
+        update: Update feature
+      appliance:
+        create: Create appliance
+        update: Update appliance
+      appliance_feature:
         create: Create feature
         update: Update feature
     # Examples

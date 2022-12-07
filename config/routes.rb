@@ -10,5 +10,9 @@ Rails.application.routes.draw do
       resources :spaces, except: [:index, :show] do
           resources :features, except: [:index, :show]
       end
+      resources :appliances, except: [:index, :show] do
+          resources :appliance_features, except: [:index, :show]
+      end
   end
+    
 end

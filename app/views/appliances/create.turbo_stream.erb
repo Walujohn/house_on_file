@@ -1,0 +1,15 @@
+<%# Step 1: remove the form from the Properties#show page %>
+<%= turbo_stream.update Appliance.new, "" %>
+
+<%# Step 2: add the space at the right place %>
+<% if previous_appliance = @appliance.previous_appliance %>
+  <%= turbo_stream.after previous_appliance do %>
+    <%= render @appliance, property: @property %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.prepend "appliances" do %>
+    <%= render @appliance, property: @property %>
+  <% end %>
+<% end %>
+
+<%= render_turbo_stream_flash_messages %>

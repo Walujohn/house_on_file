@@ -2,6 +2,8 @@ class Property < ApplicationRecord
     belongs_to :group
     has_many :spaces, dependent: :destroy
     has_many :features, through: :spaces
+    has_many :appliances, dependent: :destroy
+    has_many :appliance_features, through: :appliances
     
     validates :name, presence: true
     
@@ -18,6 +20,6 @@ class Property < ApplicationRecord
     broadcasts_to ->(property) { [property.group, "properties"] }, inserts_by: :prepend
     
     def total_features
-        self.features.count
+        self.features.count + self.appliance_features.count
     end
 end

@@ -7,6 +7,7 @@ class PropertiesController < ApplicationController
 
     def show
         @spaces = @property.spaces.includes(:features).ordered
+        @appliances = @property.appliances.includes(:appliance_features).ordered
     end
 
     def new

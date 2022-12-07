@@ -1,0 +1,20 @@
+<%= simple_form_for [property, appliance, appliance_feature],
+                    html: { class: "form feature feature--form" } do |f| %>
+
+  <%= form_error_notification(appliance_feature) %>
+
+  <%= f.input :name,
+              wrapper_html: { class: "feature__name" },
+              input_html: { autofocus: true } %>
+  <%= f.input :quantity,
+              wrapper_html: { class: "feature__quantity" } %>
+  <%= f.input :unit_price,
+              wrapper_html: { class: "feature__price" } %>
+  <%= f.input :description,
+              wrapper_html: { class: "feature__description" } %>
+
+  <div class="feature__actions">
+    <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
+    <%= f.submit class: "btn btn--secondary" %>
+  </div>
+<% end %>

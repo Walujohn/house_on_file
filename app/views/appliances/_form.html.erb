@@ -1,0 +1,6 @@
+<%= simple_form_for [property, appliance], html: { class: "form appliance" } do |f| %>
+  <%= form_error_notification(appliance) %>
+  <%= f.input :name, html5: true, input_html: { autofocus: true } %>
+  <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
+  <%= f.submit class: "btn btn--secondary" %>
+<% end %>
