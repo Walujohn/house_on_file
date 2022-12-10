@@ -15,4 +15,8 @@ Rails.application.routes.draw do
       end
   end
     
+  get "/template", to: "properties#template", as: "template"
+    
+  get "/create_everything", to: "properties#create_everything", as: "create_everything"
+    
 end

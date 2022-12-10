@@ -1,5 +1,5 @@
 class PropertiesController < ApplicationController
-    before_action :set_property, only: [:show, :edit, :update, :destroy]
+    before_action :set_property, only: [:show, :edit, :update, :destroy, :template, :create_everything]
 
     def index
         @properties = current_group.properties.ordered
@@ -48,6 +48,13 @@ class PropertiesController < ApplicationController
             format.html { redirect_to properties_path, notice: "Property was successfully destroyed." }
             format.turbo_stream { flash.now[:notice] = "Property was successfully destroyed." }
         end
+    end
+    
+    def template 
+    end
+    
+    def create_everything
+        @property.create_everything
     end
 
     private

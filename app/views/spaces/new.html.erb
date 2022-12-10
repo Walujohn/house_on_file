@@ -3,6 +3,10 @@
 
   <div class="header">
     <h1>New space</h1>
+    <%= link_to "New space",
+                new_property_space_path(@property),
+                data: { turbo_frame: dom_id(Space.new) },
+                class: "btn btn--primary" %>
   </div>
     
   <%= turbo_frame_tag @space do %>
