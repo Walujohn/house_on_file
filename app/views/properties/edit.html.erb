@@ -1,11 +1,24 @@
 <main class="container">
   <%= link_to sanitize("&larr; Back to property"), property_path(@property) %>
 
-  <div class="header">
-    <h1>Edit property</h1>
-  </div>
+  <% if @template %>
+ 
+    Many properties are similar on the inside or outside. Please choose an idea below that sounds close to what this property is. 
+    
+    <%= turbo_frame_tag @property do %>
+      <%= render "form", property: @property, template: "everything" %>
+    <% end %>
 
-  <%= turbo_frame_tag @property do %>
-    <%= render "form", property: @property %>
+  <% else %>
+    
+    <div class="header">
+      <h1>Edit property</h1>
+    </div>
+    
+    <%= turbo_frame_tag @property do %>
+      <%= render "form", property: @property %>
+    <% end %>
+    
   <% end %>
+
 </main>
