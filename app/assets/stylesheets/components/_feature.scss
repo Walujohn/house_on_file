@@ -30,7 +30,7 @@
     font-size: var(--font-size-s);
   }
 
-  &__quantity-price {
+  &__variety-brand {
     flex: 0 0 auto;
     align-self: flex-end;
     justify-self: flex-end;
@@ -43,7 +43,7 @@
     }
   }
 
-  &__quantity {
+  &__variety {
     flex: 1;
     display: none;
 
@@ -53,7 +53,7 @@
     }
   }
 
-  &__price {
+  &__brand {
     flex: 1;
     display: none;
 
@@ -78,8 +78,8 @@
   &--form {
     box-shadow: var(--shadow-small);
 
-    .line-item__quantity,
-    .line-item__price {
+    .line-item__variety,
+    .line-item__brand {
       display: block;
     }
 

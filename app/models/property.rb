@@ -1,9 +1,9 @@
 class Property < ApplicationRecord
     belongs_to :group
     has_many :spaces, dependent: :destroy
-    has_many :features, through: :spaces
+    has_many :features, through: :spaces, dependent: :destroy
     has_many :appliances, dependent: :destroy
-    has_many :appliance_features, through: :appliances
+    has_many :appliance_features, through: :appliances, dependent: :destroy
     
     validates :name, presence: true
     
@@ -56,7 +56,7 @@ class Property < ApplicationRecord
     end
     
     def define_template(template)   
-      if template = "everything"
+      if template == "everything"
         self.create_property_template(everything_template_spaces, everything_template_appliances)
       end
     end
@@ -126,6 +126,8 @@ class Property < ApplicationRecord
     end
 
     def create_property_template(spaces, appliances)  
+      CREATED_SPACES.clear
+      CREATED_APPLIANCES.clear
       self.template_spaces(spaces)
       self.template_features(CREATED_SPACES)
       self.template_appliances(appliances)

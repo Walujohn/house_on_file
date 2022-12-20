@@ -36,24 +36,27 @@ class PropertiesController < ApplicationController
     def update
         if params[:property].include?("template")
             
-          if @property.define_template(params[:property][:template])
-              respond_to do |format|
-                  format.html { redirect_to properties_path, notice: "Property was successfully updated." }
-                  format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
-              end
+          if @template = @property.define_template(params[:property][:template])
+            @spaces = @property.spaces.includes(:features).ordered
+            @appliances = @property.appliances.includes(:appliance_features).ordered
+            
+            respond_to do |format|
+              format.html { redirect_to properties_path, notice: "Property was successfully updated." }
+              format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
+            end
           else
-              render :edit, status: :unprocessable_entity
+            render :edit, status: :unprocessable_entity
           end
             
         else
         
           if @property.update(property_params)
-              respond_to do |format|
-                  format.html { redirect_to properties_path, notice: "Property was successfully updated." }
-                  format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
-              end
+            respond_to do |format|
+              format.html { redirect_to properties_path, notice: "Property was successfully updated." }
+              format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
+            end
           else
-              render :edit, status: :unprocessable_entity
+            render :edit, status: :unprocessable_entity
           end
             
         end

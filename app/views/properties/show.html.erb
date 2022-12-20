@@ -22,8 +22,10 @@
     <% end %>
   
   <% else %>
-
-    <%= render "properties/banner", property: @property %>   
+    
+    <%= turbo_frame_tag @property do %>
+        <%= render "properties/banner", property: @property %>  
+    <% end %>
     
   <% end %>
     

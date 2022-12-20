@@ -1,15 +1,19 @@
-<main class="container">
-  <%= link_to sanitize("&larr; Back to property"), property_path(@property) %>
+<% if @template %>
 
-  <% if @template %>
- 
-    Many properties are similar on the inside or outside. Please choose an idea below that sounds close to what this property is. 
+  <%= turbo_frame_tag @property do %>
+    <main class="container">
     
-    <%= turbo_frame_tag @property do %>
+      Many properties are similar on the inside or outside. Please choose an idea below that sounds close to what this property is. 
+    
       <%= render "form", property: @property, template: "everything" %>
-    <% end %>
 
-  <% else %>
+    </main>
+  <% end %>
+
+<% else %>
+
+  <main class="container">
+    <%= link_to sanitize("&larr; Back to property"), property_path(@property) %>
     
     <div class="header">
       <h1>Edit property</h1>
@@ -18,7 +22,7 @@
     <%= turbo_frame_tag @property do %>
       <%= render "form", property: @property %>
     <% end %>
-    
-  <% end %>
+      
+  </main>
 
-</main>
+<% end %>
