@@ -51,6 +51,10 @@ gem "simple_form", "~> 5.1.0"
 
 gem "pry"
 
+gem 'wicked_pdf'
+
+gem 'wkhtmltopdf-binary'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 

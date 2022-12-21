@@ -1,18 +1,9 @@
-<%= turbo_stream_from current_group, "properties" %>
-
 <main class="container mb-xxxxl">
-  <%= link_to sanitize("&larr; Back to properties"), properties_path %>
 
   <div class="header">
     <h1>
       <%= @property.name %>
     </h1>
-    <div class="property__actions">
-      <%= link_to "Publish", 
-                  property_path(@property, format: :pdf), 
-                  data: { turbo_frame: "_top" },
-                  class: "btn btn--light" %>
-    </div>
   </div>
     
   <% if @property.spaces.present? %>

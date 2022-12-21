@@ -8,6 +8,21 @@ class PropertiesController < ApplicationController
     def show
         @spaces = @property.spaces.includes(:features).ordered
         @appliances = @property.appliances.includes(:appliance_features).ordered
+        
+        respond_to do |format|
+          format.html
+          format.pdf do # wicked_pdf gem
+            render pdf: "file_name", # Excluding ".pdf" extension
+            template: "properties/report",
+            formats: [:html],
+            layout: "pdf"
+#            page_size: 'A4',
+#            orientation: "Landscape",
+#            lowquality: true,
+#            zoom: 1,
+#            dpi: 75
+        end
+      end
     end
 
     def new

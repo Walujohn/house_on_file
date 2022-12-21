@@ -14,5 +14,5 @@ Rails.application.routes.draw do
           resources :appliance_features, except: [:index, :show]
       end
   end
-    
+        
 end
