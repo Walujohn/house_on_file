@@ -11,7 +11,7 @@ class PropertiesController < ApplicationController
         
         respond_to do |format|
           format.html
-          format.pdf do # wicked_pdf gem
+          format.pdf do #wicked_pdf gem
             render pdf: "file_name", # Excluding ".pdf" extension
             template: "properties/report",
             formats: [:html],
