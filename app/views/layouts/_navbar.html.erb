@@ -2,10 +2,16 @@
   <% if user_signed_in? %>
     <div class="navbar__brand">
       <%= current_group.name %>
+      <%# image_tag(current_user.avatar_url) %>
     </div>
     <div class="navbar__name">
       <%= current_user.name %>
     </div>
+    
+    <%= link_to "Edit Account", 
+                edit_user_registration_path,
+                class: "btn btn--dark" %>
+    
     <%= button_to "Sign out",
                   destroy_user_session_path,
                   method: :delete,
