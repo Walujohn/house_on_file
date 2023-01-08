@@ -1,10 +1,6 @@
 <%= simple_form_for property, html: { class: "property form" } do |f| %>
   <%= form_error_notification(property) %>
-  <% if @template && template == "everything" %>
-  <%= f.hidden_field :template, value: "everything" %>
-  <% else %>
   <%= f.input :name, input_html: { autofocus: true } %>
   <%= link_to "Cancel", properties_path, class: "btn btn--light" %>
-  <% end %>
   <%= f.submit class: "btn btn--secondary" %>
 <% end %>

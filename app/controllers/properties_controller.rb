@@ -42,39 +42,39 @@ class PropertiesController < ApplicationController
         end
     end
 
-    def edit
-        if params.include?("template")
-            @template = "template"
-        end                
+    def edit  
+      if params.include?("new_templates")
+        @space = @property.spaces.build
+        @appliance = @property.appliances.build
+      end
     end
 
     def update
-        if params[:property].include?("template")
+      if params[:property].include?("template")
+        @spaces = @property.spaces.includes(:features).ordered
+        @appliances = @property.appliances.includes(:appliance_features).ordered
             
-          if @template = @property.define_template(params[:property][:template])
-            @spaces = @property.spaces.includes(:features).ordered
-            @appliances = @property.appliances.includes(:appliance_features).ordered
-            
-            respond_to do |format|
-              format.html { redirect_to properties_path, notice: "Property was successfully updated." }
-              format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
-            end
-          else
-            render :edit, status: :unprocessable_entity
+        if @template = @property.define_template(params[:property][:template])
+          respond_to do |format|
+            format.html { redirect_to property_path(@property), notice: "Property was successfully updated." }
+            format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
           end
-            
         else
-        
-          if @property.update(property_params)
-            respond_to do |format|
-              format.html { redirect_to properties_path, notice: "Property was successfully updated." }
-              format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
-            end
-          else
-            render :edit, status: :unprocessable_entity
-          end
-            
+          render :show, status: :unprocessable_entity
         end
+            
+      else
+        
+        if @property.update(property_params)
+          respond_to do |format|
+            format.html { redirect_to properties_path, notice: "Property was successfully updated." }
+            format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
+          end
+        else
+          render :edit, status: :unprocessable_entity
+        end
+            
+      end
     end
 
     def destroy

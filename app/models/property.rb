@@ -19,28 +19,67 @@ class Property < ApplicationRecord
     
     broadcasts_to ->(property) { [property.group, "properties"] }, inserts_by: :prepend
     
+    SPACES_TEMPLATES = {
+        "2 bed" => ["kitchen", "bedroom 1", "bedroom 2"],
+        "4 bed" => ["kitchen", "bedroom 1", "bedroom 2", "bedroom 3", "bedroom 4"],
+        "Studio apt." => ["kitchen", "bedroom", "loft"],
+        "Retail" => ["basement", "sales floor"]     
+        }
+    
+    APPLIANCES_TEMPLATES = {
+        "2 bed" => ["hvac", "refrigerator"],
+        "4 bed" => ["hvac", "refrigerator", "shower tub"],
+        "Studio apt." => ["refrigerator"],
+        "Retail" => ["dryer vent"]
+        }
+    
     FEATURES_TEMPLATES = {  
-          "basement": { 
-              ceiling_covering: { name: "ceiling covering", description: "A ceiling covering", quantity: 12, unit_price: 3 }, 
-              wall_covering: { name: "wall covering", description: "A wall covering", quantity: 12, unit_price: 3 },
-              floor_covering: { name: "floor covering", description: "A floor covering", quantity: 12, unit_price: 3 },
-              window: { name: "window", description: "A window", quantity: 12, unit_price: 3 }
-              },
-          "kitchen": { 
-              ceiling_covering: { name: "ceiling covering", description: "A ceiling covering", quantity: 12, unit_price: 3 }, 
-              wall_covering: { name: "wall covering", description: "A wall covering", quantity: 12, unit_price: 3 },
-              floor_covering: { name: "floor covering", description: "A floor covering", quantity: 12, unit_price: 3 }
-              } 
+      "basement": { ceiling_covering: { name: "ceiling covering", 
+                                        description: "A ceiling covering", 
+                                        quantity: 12, 
+                                        unit_price: 3 }, 
+          
+                    wall_covering: { name: "wall covering", 
+                                     description: "A wall covering", 
+                                     quantity: 12, 
+                                     unit_price: 3 }, 
+          
+                    floor_covering: { name: "floor covering", 
+                                      description: "A floor covering", 
+                                      quantity: 12, 
+                                      unit_price: 3 },
+          
+                    window: { name: "window", 
+                              description: "A window", 
+                              quantity: 12, 
+                              unit_price: 3 }
+          },
+        
+      "kitchen": { ceiling_covering: { name: "ceiling covering", 
+                                       description: "A ceiling covering", 
+                                       quantity: 12, 
+                                       unit_price: 3 }, 
+          
+                   wall_covering: { name: "wall covering", 
+                                    description: "A wall covering", 
+                                    quantity: 12, 
+                                    unit_price: 3 },
+          
+                   floor_covering: { name: "floor covering", 
+                                     description: "A floor covering", 
+                                     quantity: 12, 
+                                     unit_price: 3 }
+          } 
         }
     
     APPLIANCE_FEATURES_TEMPLATES = {
-           "hvac": { 
+      "hvac": { 
               ceiling_covering: { name: "ceiling covering", description: "A ceiling covering", quantity: 12, unit_price: 3 }, 
               wall_covering: { name: "wall covering", description: "A wall covering", quantity: 12, unit_price: 3 },
               floor_covering: { name: "floor covering", description: "A floor covering", quantity: 12, unit_price: 3 },
               window: { name: "window", description: "A window", quantity: 12, unit_price: 3 }
               },
-          "refrigerator": { 
+      "refrigerator": { 
               ceiling_covering: { name: "ceiling covering", description: "A ceiling covering", quantity: 12, unit_price: 3 }, 
               wall_covering: { name: "wall covering", description: "A wall covering", quantity: 12, unit_price: 3 },
               floor_covering: { name: "floor covering", description: "A floor covering", quantity: 12, unit_price: 3 }
@@ -52,23 +91,27 @@ class Property < ApplicationRecord
     CREATED_APPLIANCES = Array.new
     
     def total_features
-        self.features.count + self.appliance_features.count
+      self.features.count + self.appliance_features.count
     end
     
-    def define_template(template)   
-      if template == "everything"
-        self.create_property_template(everything_template_spaces, everything_template_appliances)
+    def define_template(template)  
+      if we_have_this_template(template)
+        self.create_property_template(spaces_templates(template), appliances_templates(template))
       end
     end
     
-    def everything_template_spaces
-      ["basement", "kitchen", "bedroom"]
+    def we_have_this_template(template)
+      spaces_templates(template) and appliances_templates(template)
+    end
+            
+    def spaces_templates(template)
+      SPACES_TEMPLATES["#{template}"]
     end
     
-    def everything_template_appliances
-      ["hvac", "refrigerator"]
+    def appliances_templates(template)
+      APPLIANCES_TEMPLATES["#{template}"]
     end
-    
+                      
 #    template spaces
     def template_spaces(spaces)
       spaces.each { |space| CREATED_SPACES << create_space(self, space) }

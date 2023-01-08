@@ -14,4 +14,10 @@ module ApplicationHelper
     def nested_dom_id(*args)
         args.map { |arg| arg.respond_to?(:to_key) ? dom_id(arg) : arg }.join("_")
     end
+    
+    def list_of_space_names
+        %w[attic bathroom basement balcony bedroom 
+           deck porch garage hallway 
+           kitchen loft].sort
+    end
 end

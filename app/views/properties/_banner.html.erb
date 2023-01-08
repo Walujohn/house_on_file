@@ -3,7 +3,5 @@
         House On File was not able to find enough data on the internet to create a report for this property. Please use the builder tools here to create a custom property report.
     </p>
 
-    <%= link_to "Build",
-                  edit_property_path(property, template: "template"),
-                  class: "btn btn--light" %>
+    <%= render "properties/form_template", property: @property, template: "2 bed" %>
 </div>

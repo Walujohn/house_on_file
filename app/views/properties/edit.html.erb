@@ -1,13 +1,7 @@
-<% if @template %>
+<% if @space or @appliance %>
 
-  <%= turbo_frame_tag @property do %>
-    <main class="container">
-    
-      Many properties are similar on the inside or outside. Please choose an idea below that sounds close to what this property is. 
-    
-      <%= render "form", property: @property, template: "everything" %>
-
-    </main>
+  <%= turbo_frame_tag "new_templates" do %>
+    <%= render "new_templates", property: @property, space: @space, appliance: @appliance %>
   <% end %>
 
 <% else %>
@@ -22,7 +16,6 @@
     <%= turbo_frame_tag @property do %>
       <%= render "form", property: @property %>
     <% end %>
-      
   </main>
 
 <% end %>

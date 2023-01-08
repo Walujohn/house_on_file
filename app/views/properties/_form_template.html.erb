@@ -1,0 +1,5 @@
+<%= simple_form_for property, html: { class: "property form" } do |f| %>
+  <%= form_error_notification(property) %>
+  <%= f.hidden_field :template, value: template %>
+  <%= f.submit "#{template}", class: "btn btn--secondary" %>
+<% end %>
