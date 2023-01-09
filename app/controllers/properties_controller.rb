@@ -43,10 +43,6 @@ class PropertiesController < ApplicationController
     end
 
     def edit  
-      if params.include?("new_templates")
-        @space = @property.spaces.build
-        @appliance = @property.appliances.build
-      end
     end
 
     def update

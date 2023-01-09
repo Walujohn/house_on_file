@@ -1,21 +1,11 @@
-<% if @space or @appliance %>
-
-  <%= turbo_frame_tag "new_templates" do %>
-    <%= render "new_templates", property: @property, space: @space, appliance: @appliance %>
+<main class="container">
+  <%= link_to sanitize("&larr; Back to property"), property_path(@property) %>
+    
+  <div class="header">
+    <h1>Edit property</h1>
+  </div>
+    
+  <%= turbo_frame_tag @property do %>
+    <%= render "form", property: @property %>
   <% end %>
-
-<% else %>
-
-  <main class="container">
-    <%= link_to sanitize("&larr; Back to property"), property_path(@property) %>
-    
-    <div class="header">
-      <h1>Edit property</h1>
-    </div>
-    
-    <%= turbo_frame_tag @property do %>
-      <%= render "form", property: @property %>
-    <% end %>
-  </main>
-
-<% end %>
+</main>

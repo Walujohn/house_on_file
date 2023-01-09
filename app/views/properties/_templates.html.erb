@@ -1,0 +1,12 @@
+<div class="empty-state">
+    <p class="empty-state__text">
+        House On File was not able to find enough data on the internet to create a report for this property. Please use the builder tools here to create a custom property report.
+    </p>
+    
+    <%= image_tag "figma_ban.png" %>
+
+    <%= render "t_form", property: property, template: "2 bed" %>
+    <%= render "t_form", property: property, template: "4 bed" %>
+    <%= render "t_form", property: property, template: "Studio apt." %>
+    <%= render "t_form", property: property, template: "Retail" %>
+</div>
