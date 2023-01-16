@@ -1,8 +1,6 @@
 class SpacesController < ApplicationController
   before_action :set_property
   before_action :set_space, only: [:edit, :update, :destroy]
-  before_action :set_first_space, only: [:new, :create, :update] 
-  before_action :set_other_space, only: [:edit]
 
   def new
     @space = @property.spaces.build
@@ -10,8 +8,12 @@ class SpacesController < ApplicationController
 
   def create
     @space = @property.spaces.build(space_params)
-
+      
     if @space.save
+      if params[:old_space]
+        @previous_space = @property.spaces.find(params[:old_space])
+        duplicate_features(@previous_space, @space)
+      end
       respond_to do |format|
         format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
         format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
@@ -42,6 +44,16 @@ class SpacesController < ApplicationController
           format.turbo_stream { flash.now[:notice] = "Space was successfully destroyed." }
       end
   end
+    
+  def duplicate_features(previous_space, space)
+    previous_space.features.each do |f|
+      space.features.build(id: self,
+                           name: f.name, 
+                           variety: f.variety, 
+                           description: f.description)
+    end
+    space = space.save
+  end
 
   private
 
@@ -55,13 +67,5 @@ class SpacesController < ApplicationController
     
   def set_space
     @space = @property.spaces.find(params[:id])
-  end
-    
-  def set_first_space
-    @first_space = params[:first_space] or @first_space = params.dig(:space, :first_space)
-  end
-    
-  def set_other_space
-    @other_space = params[:other_space]
   end
 end

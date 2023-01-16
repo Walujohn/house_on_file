@@ -1,8 +1,8 @@
 <%= turbo_frame_tag property do %>
   <div class="property">
     <%= link_to property.name,
-                property_path(property) %>
-<!--            data: { turbo_frame: "_top" }-->
+                property_path(property),
+                data: { turbo_frame: "_top" } %>
     <div class="property__actions">
       <%= button_to "Delete",
                     property_path(property),

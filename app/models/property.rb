@@ -23,14 +23,16 @@ class Property < ApplicationRecord
         "2 bed" => ["kitchen", "bedroom 1", "bedroom 2"],
         "4 bed" => ["kitchen", "bedroom 1", "bedroom 2", "bedroom 3", "bedroom 4"],
         "Studio apt." => ["kitchen", "bedroom", "loft"],
-        "Retail" => ["basement", "sales floor"]     
+        "Retail" => ["basement", "sales floor"],
+        "one of each" => ["bedroom", "dining room", "living room", "kitchen", "bathroom", "entry foyer", "driveway"]
         }
     
     APPLIANCES_TEMPLATES = {
         "2 bed" => ["hvac", "refrigerator"],
         "4 bed" => ["hvac", "refrigerator", "shower tub"],
         "Studio apt." => ["refrigerator"],
-        "Retail" => ["dryer vent"]
+        "Retail" => ["dryer vent"],
+        "one of each" => ["air conditioner"]
         }
     
     FEATURES_TEMPLATES = {  
@@ -91,7 +93,11 @@ class Property < ApplicationRecord
     CREATED_APPLIANCES = Array.new
     
     FEATURE_NAMES = Set.new
-        
+    
+    def styles
+      { "wall covering" => "wall covering", "floor covering" => "floor covering", "counter" => "counter" }
+    end
+    
     def total_features
       self.features.count + self.appliance_features.count
     end
@@ -103,7 +109,7 @@ class Property < ApplicationRecord
     end
     
     def we_have_this_template(template)
-      spaces_templates(template) and appliances_templates(template)
+      spaces_templates(template) or appliances_templates(template)
     end
             
     def spaces_templates(template)

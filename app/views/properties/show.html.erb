@@ -7,7 +7,27 @@
     <h1>
       <%= @property.name %>
     </h1>
-    <div class="property__actions">  
+    <div class="property__actions"> 
+      <%= simple_form_for [@property],
+                           html: { class: "form feature feature--form" } do |f| %>
+        <%= form_error_notification(@property) %>
+        <fieldset data-controller="element search-params">
+        
+          <%= f.label :style %>
+          <%= f.select :name, @property.styles.invert, {}, autocomplete: "off",
+                       data: { action: "change->search-params#encode change->element#click" } %>
+          <noscript>
+            <button formmethod="get" formaction="<%= property_path(@property) %>">Select name</button>
+          </noscript>
+
+          <a href="<%= property_path(@property) %>" 
+             hidden
+             data-search-params-target="anchor"
+             data-element-target="click" 
+             data-turbo-frame="<%= @property %>"></a> 
+          
+        </fieldset>
+      <% end %>
       <%= link_to "New space",
                   new_property_space_path(@property),
                   data: { turbo_frame: dom_id(Space.new) },
@@ -20,53 +40,13 @@
     </div>
   </div>
 
-  <% if @space %>
-    
-    <%= turbo_frame_tag @property do %>
-      <!--this is a 'property' showed like a space on the other page-->
-      <div class="space"> 
-        <%= turbo_frame_tag dom_id(@property, :edit) do %>
-          <div class="space__header">
-            <div class="space__actions">
-              <%= button_to "Delete",
-                          property_path(@property),
-                          method: :delete,
-                          form: { data: { turbo_confirm: "Are you sure?" } },
-                          class: "btn btn--light" %>
-              <%= link_to "Edit",
-                        edit_property_path(@property),
-                        class: "btn btn--light" %>
-            </div>
-          </div>
-        <% end %>
-        <div class="space__body">
-          <div class="feature feature--header">
-            <div class="feature__name">Spaces</div>
-          </div>
-
-          <%= turbo_frame_tag nested_dom_id("spaces") do %>
-            <%= render @spaces, property: @property %>
-          <% end %>
-        
-          <%= turbo_frame_tag nested_dom_id(@space) %>
-
-          <div class="space__footer">
-            <%= link_to "Add space",
-                        [:new, @property, :space, first_space: "yes"],
-                        data: { turbo_frame: nested_dom_id(@space) },
-                        class: "btn btn--primary" %>
-            <%# image_tag "figma_ban.png" %>
-            <%# render "t_form", property: @property, template: "2 bed" %>
-            <%# render "t_form", property: @property, template: "4 bed" %>
-            <%# render "t_form", property: @property, template: "Studio apt." %>
-            <%# render "t_form", property: @property, template: "Retail" %>
-          </div>
-        </div>
-      </div>  
-    <% end %>
-    
-  <% else %>
-    
+<%# image_tag "figma_ban.png" %>
+<%# render "t_form", property: @property, template: "2 bed" %>
+<%# render "t_form", property: @property, template: "4 bed" %>
+<%# render "t_form", property: @property, template: "Studio apt." %>
+<%# render "t_form", property: @property, template: "Retail" %>    
+  <%= turbo_frame_tag @property do %>
+<!--    <div class="space__body">-->
     <%= turbo_frame_tag Space.new %>
     <%= turbo_frame_tag "spaces" do %>
       <%= render @spaces, property: @property %>
@@ -75,8 +55,8 @@
     <%= turbo_frame_tag Appliance.new %>
     <%= turbo_frame_tag "appliances" do %>
       <%= render @appliances, property: @property %>
-    <% end %>  
-    
+    <% end %> 
+<!--    </div>-->
   <% end %>
 </main>
 

@@ -1,6 +1,5 @@
 class PropertiesController < ApplicationController
     before_action :set_property, only: [:show, :edit, :update, :destroy]
-    before_action :set_space, only: [:show]
   
     def index
       @properties = current_group.properties.ordered
@@ -9,6 +8,7 @@ class PropertiesController < ApplicationController
     def show
       @spaces = @property.spaces.includes(:features).ordered
       @appliances = @property.appliances.includes(:appliance_features).ordered
+      @space = @property.spaces.build
 
       respond_to do |format|
         format.html
@@ -34,6 +34,7 @@ class PropertiesController < ApplicationController
         @property = current_group.properties.build(property_params)
 
         if @property.save
+            @property.define_template("one of each")
             respond_to do |format|
                 format.html { redirect_to properties_path, notice: "Property was successfully created." }
                 format.turbo_stream { flash.now[:notice] = "Property was successfully created." }
@@ -47,21 +48,19 @@ class PropertiesController < ApplicationController
     end
 
     def update
-      if params[:property].include?("template")
+      if params.dig(:property, :template)
         @spaces = @property.spaces.includes(:features).ordered
         @appliances = @property.appliances.includes(:appliance_features).ordered
-            
-        if @template = @property.define_template(params[:property][:template])
+          
+        if @template = @property.define_template(params.dig(:property, :template))
           respond_to do |format|
             format.html { redirect_to property_path(@property), notice: "Property was successfully updated." }
             format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
           end
         else
           render :show, status: :unprocessable_entity
-        end
-            
+        end     
       else
-        
         if @property.update(property_params)
           respond_to do |format|
             format.html { redirect_to properties_path, notice: "Property was successfully updated." }
@@ -69,8 +68,7 @@ class PropertiesController < ApplicationController
           end
         else
           render :edit, status: :unprocessable_entity
-        end
-            
+        end    
       end
     end
 
@@ -87,12 +85,6 @@ class PropertiesController < ApplicationController
 
     def set_property
         @property = current_group.properties.find(params[:id])
-    end
-    
-    def set_space
-      if @property.spaces.empty? and @property.appliances.empty?    
-        @space = @property.spaces.build
-      end
     end
 
     def property_params
