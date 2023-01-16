@@ -1,8 +1,0 @@
-<% list_of_space_names.each do |name| %>
-
-  <%= simple_form_for [property, space] do |f| %>
-    <%= f.hidden_field :name, value: "#{name}" %>
-    <%= f.submit "#{name}", class: "btn btn--drawn" %>
-  <% end %>
-
-<% end %>

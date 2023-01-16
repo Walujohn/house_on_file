@@ -1,6 +1,8 @@
 class SpacesController < ApplicationController
   before_action :set_property
   before_action :set_space, only: [:edit, :update, :destroy]
+  before_action :set_first_space, only: [:new, :create, :update] 
+  before_action :set_other_space, only: [:edit]
 
   def new
     @space = @property.spaces.build
@@ -53,5 +55,13 @@ class SpacesController < ApplicationController
     
   def set_space
     @space = @property.spaces.find(params[:id])
+  end
+    
+  def set_first_space
+    @first_space = params[:first_space] or @first_space = params.dig(:space, :first_space)
+  end
+    
+  def set_other_space
+    @other_space = params[:other_space]
   end
 end

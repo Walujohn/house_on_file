@@ -16,8 +16,6 @@ module ApplicationHelper
     end
     
     def list_of_space_names
-        %w[attic bathroom basement balcony bedroom 
-           deck porch garage hallway 
-           kitchen loft].sort
+        %w[attic basement hallway].sort
     end
 end

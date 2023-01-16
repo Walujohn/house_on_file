@@ -1,6 +1,19 @@
-<%= simple_form_for [property, space], html: { class: "form space" } do |f| %>
-  <%= form_error_notification(space) %>
-  <%= f.input :name, html5: true, input_html: { autofocus: true } %>
-  <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
-  <%= f.submit class: "btn btn--secondary" %>
+<% if @first_space %>
+  <% list_of_space_names.each do |name| %>
+    <%= simple_form_for [property, space] do |f| %>
+      <%= f.hidden_field :name, value: "#{name}" %>
+      <%= f.hidden_field :first_space, value: "yes" %>
+      <%= f.submit "#{name}", class: "btn btn--drawn" %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= simple_form_for [property, space], html: { class: "form space" } do |f| %>
+    <%= form_error_notification(space) %>
+    <% if @other_space %>
+      <%= f.hidden_field :first_space, value: "yes" %>
+    <% end %>
+    <%= f.input :name, html5: true, input_html: { autofocus: true } %>
+    <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
+    <%= f.submit class: "btn btn--secondary" %>
+  <% end %>
 <% end %>

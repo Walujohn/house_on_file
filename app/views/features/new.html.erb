@@ -10,5 +10,10 @@
              property: @property,
              space: @space,
              feature: @feature %>
+    <% if @rollover %>
+      <%= turbo_stream.append nested_dom_id(@space, "features") do %>
+        <%= render @space.features[0...-1], property: @property, space: @space %>
+      <% end %>
+    <% end %>
   <% end %>
 </main>

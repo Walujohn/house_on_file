@@ -2,7 +2,7 @@
 
 <main class="container mb-xxxxl">
   <%= link_to sanitize("&larr; Back to properties"), properties_path %>
-
+    
   <div class="header">
     <h1>
       <%= @property.name %>
@@ -19,31 +19,67 @@
                   class: "btn btn--light" %>
     </div>
   </div>
-    
-  <% if @property.spaces.present? %>
+
+  <% if @space %>
     
     <%= turbo_frame_tag @property do %>
-      <%= turbo_frame_tag Space.new %>
-      <%= turbo_frame_tag "spaces" do %>
-        <%= render @spaces, property: @property %>
-      <% end %>
-    
-      <%= turbo_frame_tag Appliance.new %>
-      <%= turbo_frame_tag "appliances" do %>
-        <%= render @appliances, property: @property %>
-      <% end %>
+      <!--this is a 'property' showed like a space on the other page-->
+      <div class="space"> 
+        <%= turbo_frame_tag dom_id(@property, :edit) do %>
+          <div class="space__header">
+            <div class="space__actions">
+              <%= button_to "Delete",
+                          property_path(@property),
+                          method: :delete,
+                          form: { data: { turbo_confirm: "Are you sure?" } },
+                          class: "btn btn--light" %>
+              <%= link_to "Edit",
+                        edit_property_path(@property),
+                        class: "btn btn--light" %>
+            </div>
+          </div>
+        <% end %>
+        <div class="space__body">
+          <div class="feature feature--header">
+            <div class="feature__name">Spaces</div>
+          </div>
+
+          <%= turbo_frame_tag nested_dom_id("spaces") do %>
+            <%= render @spaces, property: @property %>
+          <% end %>
+        
+          <%= turbo_frame_tag nested_dom_id(@space) %>
+
+          <div class="space__footer">
+            <%= link_to "Add space",
+                        [:new, @property, :space, first_space: "yes"],
+                        data: { turbo_frame: nested_dom_id(@space) },
+                        class: "btn btn--primary" %>
+            <%# image_tag "figma_ban.png" %>
+            <%# render "t_form", property: @property, template: "2 bed" %>
+            <%# render "t_form", property: @property, template: "4 bed" %>
+            <%# render "t_form", property: @property, template: "Studio apt." %>
+            <%# render "t_form", property: @property, template: "Retail" %>
+          </div>
+        </div>
+      </div>  
     <% end %>
-  
+    
   <% else %>
     
-    <%= turbo_frame_tag @property do %>
-      <%= render "properties/templates", property: @property %>  
+    <%= turbo_frame_tag Space.new %>
+    <%= turbo_frame_tag "spaces" do %>
+      <%= render @spaces, property: @property %>
     <% end %>
     
-  <% end %>
+    <%= turbo_frame_tag Appliance.new %>
+    <%= turbo_frame_tag "appliances" do %>
+      <%= render @appliances, property: @property %>
+    <% end %>  
     
+  <% end %>
 </main>
 
 <%= turbo_frame_tag dom_id(@property, :total) do %>
-    <%= render "properties/total", property: @property %>
+  <%= render "properties/total", property: @property %>
 <% end %>

@@ -11,6 +11,11 @@
         &times;
         <%= number_to_currency feature.unit_price %>
       </div>
+        
+      <div class="feature__variety">
+        <%= feature.variety %>
+      </div>
+        
       <div class="feature__variety">
         <%= feature.quantity %>
       </div>
@@ -19,12 +24,12 @@
       </div>
       <div class="feature__actions">
         <%= button_to "Delete",
-                      [@property, space, feature],
+                      [property, space, feature],
                       method: :delete,
                       class: "btn btn--light" %>
         <%= link_to "Edit",
-                    [:edit, @property, space, feature],
-                    class: "btn btn--light" %>
+                    [:edit, property, space, feature, tab: "switch"],
+                     class: "btn btn--light" %>
       </div>
     </div>
 <% end %>

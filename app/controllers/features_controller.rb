@@ -2,9 +2,13 @@ class FeaturesController < ApplicationController
   before_action :set_property
   before_action :set_space
   before_action :set_feature, only: [:edit, :update, :destroy]
+  before_action :rollover_space, only: [:new]
+  before_action :set_tab, only: [:new, :create, :edit, :update]
+  before_action :set_selected_name, only: [:new, :create, :update]
 
   def new
-    @feature = @space.features.build
+#    @feature = @space.features.build
+    @feature = @space.features.build(feature_params)
   end
 
   def create
@@ -16,7 +20,7 @@ class FeaturesController < ApplicationController
             format.turbo_stream { flash.now[:notice] = "Feature was successfully created." }
         end
     else
-        render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
     
@@ -46,7 +50,8 @@ class FeaturesController < ApplicationController
   private
 
   def feature_params
-    params.require(:feature).permit(:name, :description, :quantity, :unit_price)
+#    params.require(:feature).permit(:name, :description, :quantity, :unit_price)
+    params.fetch(:feature, {}).permit(:name, :variety, :description, :quantity, :unit_price)
   end
 
   def set_property
@@ -60,5 +65,23 @@ class FeaturesController < ApplicationController
   def set_feature
     @feature = @space.features.find(params[:id])
   end
+ 
+  def rollover_space
+    if params[:rollover] and @space.features.empty?
+      @rollover = @property.rollover(@space)
+    end
+  end
     
+  def set_tab
+    @tab = params[:tab] or @tab = params.dig(:feature, :tab)
+  end
+    
+  def set_selected_name
+    if params[:feature]
+      @selected_name = params[:feature][:name]    
+    else
+#      default
+      @selected_name = "wall covering"
+    end
+  end
 end

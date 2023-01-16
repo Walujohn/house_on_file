@@ -90,6 +90,8 @@ class Property < ApplicationRecord
     
     CREATED_APPLIANCES = Array.new
     
+    FEATURE_NAMES = Set.new
+        
     def total_features
       self.features.count + self.appliance_features.count
     end
@@ -175,5 +177,24 @@ class Property < ApplicationRecord
       self.template_features(CREATED_SPACES)
       self.template_appliances(appliances)
       self.template_appliance_features(CREATED_APPLIANCES)
+    end
+    
+    def collect_feature_names
+      self.features.each {|f| FEATURE_NAMES << f.name}
+    end
+        
+    def create_template_features(space)        
+      FEATURE_NAMES.each do |feature| 
+        @feature = space.features.build(id: space, 
+                                        name: feature, 
+                                        description: "The #{space.name} #{feature}")
+        @feature.save
+      end
+    end
+    
+    def rollover(space)
+      FEATURE_NAMES.clear
+      self.collect_feature_names
+      create_template_features(space)
     end
 end

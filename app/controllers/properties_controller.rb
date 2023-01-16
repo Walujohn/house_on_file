@@ -1,26 +1,27 @@
 class PropertiesController < ApplicationController
     before_action :set_property, only: [:show, :edit, :update, :destroy]
+    before_action :set_space, only: [:show]
   
     def index
-        @properties = current_group.properties.ordered
+      @properties = current_group.properties.ordered
     end
 
     def show
-        @spaces = @property.spaces.includes(:features).ordered
-        @appliances = @property.appliances.includes(:appliance_features).ordered
-        
-        respond_to do |format|
-          format.html
-          format.pdf do # wicked_pdf gem
-            render pdf: "file_name", # Excluding ".pdf" extension
-            template: "properties/report",
-            formats: [:html],
-            layout: "pdf"
-#            page_size: 'A4',
-#            orientation: "Landscape",
-#            lowquality: true,
-#            zoom: 1,
-#            dpi: 75
+      @spaces = @property.spaces.includes(:features).ordered
+      @appliances = @property.appliances.includes(:appliance_features).ordered
+
+      respond_to do |format|
+        format.html
+        format.pdf do # wicked_pdf gem
+          render pdf: "file_name", # Excluding ".pdf" extension
+          template: "properties/report",
+          formats: [:html],
+          layout: "pdf"
+#         page_size: 'A4',
+#         orientation: "Landscape",
+#         lowquality: true,
+#         zoom: 1,
+#         dpi: 75
         end
       end
     end
@@ -86,6 +87,12 @@ class PropertiesController < ApplicationController
 
     def set_property
         @property = current_group.properties.find(params[:id])
+    end
+    
+    def set_space
+      if @property.spaces.empty? and @property.appliances.empty?    
+        @space = @property.spaces.build
+      end
     end
 
     def property_params
