@@ -23,16 +23,14 @@ class Property < ApplicationRecord
         "2 bed" => ["kitchen", "bedroom 1", "bedroom 2"],
         "4 bed" => ["kitchen", "bedroom 1", "bedroom 2", "bedroom 3", "bedroom 4"],
         "Studio apt." => ["kitchen", "bedroom", "loft"],
-        "Retail" => ["basement", "sales floor"],
-        "one of each" => ["bedroom", "dining room", "living room", "kitchen", "bathroom", "entry foyer", "driveway"]
+        "Retail" => ["basement", "sales floor"]
         }
     
     APPLIANCES_TEMPLATES = {
         "2 bed" => ["hvac", "refrigerator"],
         "4 bed" => ["hvac", "refrigerator", "shower tub"],
         "Studio apt." => ["refrigerator"],
-        "Retail" => ["dryer vent"],
-        "one of each" => ["air conditioner"]
+        "Retail" => ["dryer vent"]
         }
     
     FEATURES_TEMPLATES = {  

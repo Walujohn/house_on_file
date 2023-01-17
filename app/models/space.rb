@@ -9,4 +9,14 @@ class Space < ApplicationRecord
   def previous_space
       property.spaces.ordered.where("name < ?", name).last
   end
+    
+  def duplicate_features(space)
+    self.features.each do |f|
+      space.features.build(id: space,
+                           name: f.name, 
+                           variety: f.variety, 
+                           description: f.description)
+    end
+    space.save
+  end
 end

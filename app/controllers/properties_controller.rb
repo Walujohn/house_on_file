@@ -8,7 +8,6 @@ class PropertiesController < ApplicationController
     def show
       @spaces = @property.spaces.includes(:features).ordered
       @appliances = @property.appliances.includes(:appliance_features).ordered
-      @space = @property.spaces.build
 
       respond_to do |format|
         format.html
@@ -34,7 +33,6 @@ class PropertiesController < ApplicationController
         @property = current_group.properties.build(property_params)
 
         if @property.save
-            @property.define_template("one of each")
             respond_to do |format|
                 format.html { redirect_to properties_path, notice: "Property was successfully created." }
                 format.turbo_stream { flash.now[:notice] = "Property was successfully created." }

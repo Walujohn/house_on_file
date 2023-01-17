@@ -13,12 +13,12 @@
                         class: "btn btn--light" %>
           <%= link_to "Edit",
                       [:edit, property, space],
-                      class: "btn btn--light" %>
-          <%= simple_form_for [property, @space] do |f| %>
-            <%= form_error_notification(@space) %>
-            <%= hidden_field_tag "old_space", "#{space.id}" %>
+                      class: "btn btn--light" %> 
+          <%= simple_form_for [property, space] do |f| %>
+            <%= form_error_notification(space) %>
+            <%= hidden_field_tag "previous_space_id", "#{space.id}" %>
             <%= f.hidden_field :name, value: "#{space.name}" %>
-            <%= f.submit "+", class: "btn btn--secondary" %>
+            <%= f.submit "+", class: "btn btn--light" %>
           <% end %>
         </div>
       </div>

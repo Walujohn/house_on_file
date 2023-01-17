@@ -9,11 +9,7 @@ class SpacesController < ApplicationController
   def create
     @space = @property.spaces.build(space_params)
       
-    if @space.save
-      if params[:old_space]
-        @previous_space = @property.spaces.find(params[:old_space])
-        duplicate_features(@previous_space, @space)
-      end
+    if @space.save  
       respond_to do |format|
         format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
         format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
@@ -27,15 +23,30 @@ class SpacesController < ApplicationController
   end
 
   def update
-    if @space.update(space_params)
-      respond_to do |format|
-        format.html { redirect_to property_path(@property), notice: "Space was successfully updated." }
-        format.turbo_stream { flash.now[:notice] = "Space was successfully updated." }
+    if params[:previous_space_id]
+      @space = @property.spaces.build(space_params)
+      @previous_space = @property.spaces.find(params[:previous_space_id])
+      if @space.save  
+        @previous_space.duplicate_features(@space) unless @previous_space.features.empty? 
+        
+        respond_to do |format|
+          format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
+          format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
+        end
+      else
+        render :new, status: :unprocessable_entity
       end
-    else
-      render :edit, status: :unprocessable_entity
-    end
-  end    
+    else  
+      if @space.update(space_params)
+        respond_to do |format|
+          format.html { redirect_to property_path(@property), notice: "Space was successfully updated." }
+          format.turbo_stream { flash.now[:notice] = "Space was successfully updated." }
+        end
+      else
+        render :edit, status: :unprocessable_entity
+      end
+    end  
+  end
     
   def destroy
       @space.destroy
@@ -43,16 +54,6 @@ class SpacesController < ApplicationController
           format.html { redirect_to property_path(@property), notice: "Space was successfully destroyed." }
           format.turbo_stream { flash.now[:notice] = "Space was successfully destroyed." }
       end
-  end
-    
-  def duplicate_features(previous_space, space)
-    previous_space.features.each do |f|
-      space.features.build(id: self,
-                           name: f.name, 
-                           variety: f.variety, 
-                           description: f.description)
-    end
-    space = space.save
   end
 
   private

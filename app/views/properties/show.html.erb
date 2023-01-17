@@ -49,6 +49,7 @@
 <!--    <div class="space__body">-->
     <%= turbo_frame_tag Space.new %>
     <%= turbo_frame_tag "spaces" do %>
+      <%= render "spaces/empty_state" %>
       <%= render @spaces, property: @property %>
     <% end %>
     
