@@ -6,6 +6,16 @@ class PropertiesController < ApplicationController
     end
 
     def show
+      if Property::SPACES_TEMPLATES.keys.include?(params.dig(:property, :name))
+        @property.spaces.each {|space| space.destroy unless space.features.present?}
+        @property.appliances.each {|appliance| appliance.destroy unless appliance.appliance_features.present?}
+        @property.define_template(params[:property][:name])
+      end
+      if @property.list_of_space_names.include?(params.dig(:property, :name))
+        @space = @property.spaces.build(id: self, name: params.dig(:property, :name))
+        @space.save
+      end
+
       @spaces = @property.spaces.includes(:features).ordered
       @appliances = @property.appliances.includes(:appliance_features).ordered
 

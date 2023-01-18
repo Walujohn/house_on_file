@@ -7,7 +7,9 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: [:google_oauth2]
     
   belongs_to :group
-        
+    
+  accepts_nested_attributes_for :group
+      
   def name
     email.split("@").first.capitalize
   end

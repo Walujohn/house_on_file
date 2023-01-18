@@ -23,14 +23,16 @@ class Property < ApplicationRecord
         "2 bed" => ["kitchen", "bedroom 1", "bedroom 2"],
         "4 bed" => ["kitchen", "bedroom 1", "bedroom 2", "bedroom 3", "bedroom 4"],
         "Studio apt." => ["kitchen", "bedroom", "loft"],
-        "Retail" => ["basement", "sales floor"]
+        "Retail" => ["basement", "sales floor"],
+        "Town home" => ["kitchen", "bedroom 1", "bedroom 2"]
         }
     
     APPLIANCES_TEMPLATES = {
         "2 bed" => ["hvac", "refrigerator"],
         "4 bed" => ["hvac", "refrigerator", "shower tub"],
         "Studio apt." => ["refrigerator"],
-        "Retail" => ["dryer vent"]
+        "Retail" => ["dryer vent"],
+        "Town home" => ["kitchen", "bedroom 1", "bedroom 2"]
         }
     
     FEATURES_TEMPLATES = {  
@@ -93,7 +95,11 @@ class Property < ApplicationRecord
     FEATURE_NAMES = Set.new
     
     def styles
-      { "wall covering" => "wall covering", "floor covering" => "floor covering", "counter" => "counter" }
+      { "Town home" => "Town home", "4 bed" => "4 bed", "Studio apt." => "Studio apt.", "Retail" => "Retail", "attic" => "attic", "basement" => "basement", "hallway" => "hallway" }
+    end
+    
+    def list_of_space_names
+      %w[attic basement hallway].sort
     end
     
     def total_features
