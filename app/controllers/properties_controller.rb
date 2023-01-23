@@ -1,5 +1,6 @@
 class PropertiesController < ApplicationController
     before_action :set_property, only: [:show, :edit, :update, :destroy]
+    before_action :set_came_from_new_create, only: [:new, :create]
   
     def index
       @properties = current_group.properties.ordered
@@ -36,20 +37,24 @@ class PropertiesController < ApplicationController
     end
 
     def new
-        @property = Property.new
+#     @property = Property.new
+      @property = Property.new property_params        
     end
 
     def create
-        @property = current_group.properties.build(property_params)
-
-        if @property.save
-            respond_to do |format|
-                format.html { redirect_to properties_path, notice: "Property was successfully created." }
-                format.turbo_stream { flash.now[:notice] = "Property was successfully created." }
-            end
-        else
-            render :new, status: :unprocessable_entity
+      if params.dig(:property, :style) == "Apartments"
+        Property.build(property_params, current_group)
+      end
+      @property = current_group.properties.build(property_params)
+        
+      if @property.save
+        respond_to do |format|
+          format.html { redirect_to properties_path, notice: "Property was successfully created." }
+          format.turbo_stream { flash.now[:notice] = "Property was successfully created." }
         end
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
 
     def edit  
@@ -94,8 +99,16 @@ class PropertiesController < ApplicationController
     def set_property
         @property = current_group.properties.find(params[:id])
     end
+    
+    def set_came_from_new_create
+      @came_from_new_create = "yes"
+    end
 
     def property_params
-        params.require(:property).permit(:name)
+#     params.require(:property).permit(:name)
+      params.fetch(:property, {}).permit(:name, :style, :letter, :low, 
+                                         :high, :address, :addresstwo, 
+                                         :city, :state, :yearbuilt, 
+                                         :squarefootage, :lotsize, :zip)
     end
 end

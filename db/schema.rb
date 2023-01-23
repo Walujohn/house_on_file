@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_23_164139) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_22_193737) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -58,6 +58,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_23_164139) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "group_id", null: false
+    t.string "address"
+    t.string "addresstwo"
+    t.string "city"
+    t.string "state"
+    t.string "country"
+    t.integer "yearbuilt"
+    t.integer "squarefootage"
+    t.string "lotsize"
+    t.integer "zip"
+    t.string "style"
+    t.string "letter"
+    t.integer "low"
+    t.integer "high"
     t.index ["group_id"], name: "index_properties_on_group_id"
   end
 

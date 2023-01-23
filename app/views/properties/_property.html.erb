@@ -1,8 +1,26 @@
 <%= turbo_frame_tag property do %>
+<!--replace with commented out to make more info display and wrap like features-->
+<!--<div class="feature">-->
   <div class="property">
+<!--<div class="feature__name">-->
     <%= link_to property.name,
                 property_path(property),
                 data: { turbo_frame: "_top" } %>
+<!--</div>-->
+<!--
+    <div class="feature__variety-brand">
+      <%# property.low %>
+        &times;
+      <%# property.high %>
+    </div>
+    <div class="feature__variety">
+      <%# property.low %>
+    </div>
+    <div class="feature__brand">
+      <%# property.high %>
+    </div>
+-->
+<!--<div class="feature__actions">-->
     <div class="property__actions">
       <%= button_to "Delete",
                     property_path(property),

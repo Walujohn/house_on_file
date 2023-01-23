@@ -4,11 +4,14 @@ class Property < ApplicationRecord
     has_many :features, through: :spaces, dependent: :destroy
     has_many :appliances, dependent: :destroy
     has_many :appliance_features, through: :appliances, dependent: :destroy
-    
     validates :name, presence: true
-    
+#    enum :access, publish: 0, draft: 1, passcode_protect: 2
+#    has_rich_text :content
+#    with_options presence: true do
+#      validates :content
+#      validates :passcode, if: :passcode_protect?
+#    end
     scope :ordered, -> { order(id: :desc) }
-    
 #    the next two lines are the same
 #    after_create_commit -> { broadcast_prepend_to "properties", partial: "properties/property", locals: { property: self }, target: "properties" }
 #    after_create_commit -> { broadcast_prepend_later_to "properties" }
@@ -16,7 +19,6 @@ class Property < ApplicationRecord
 #    after_destroy_commit -> { broadcast_remove_to "properties" }
 #    Those three callbacks are equivalent to the following single line
 #    broadcasts_to ->(property) { "properties" }, inserts_by: :prepend
-    
     broadcasts_to ->(property) { [property.group, "properties"] }, inserts_by: :prepend
     
     SPACES_TEMPLATES = {
@@ -96,6 +98,10 @@ class Property < ApplicationRecord
     
     def styles
       { "Town home" => "Town home", "4 bed" => "4 bed", "Studio apt." => "Studio apt.", "Retail" => "Retail", "attic" => "attic", "basement" => "basement", "hallway" => "hallway" }
+    end
+    
+    def forms
+      { "Address" => "Address", "Apartments" => "Apartments" }
     end
     
     def list_of_space_names
@@ -206,5 +212,23 @@ class Property < ApplicationRecord
       FEATURE_NAMES.clear
       self.collect_feature_names
       create_template_features(space)
+    end
+    
+    def self.build(params, current_group)
+      low = params[:low] 
+      high = params[:high]
+      letters = params[:letter]
+        
+      (low..high).each do |number|
+        if letters.empty?
+          @property = current_group.properties.build(name: "#{number}") 
+          @property.save
+        else
+          letters.split("").each do |letter| 
+            @property = current_group.properties.build(name: "#{number}" + "#{letter}") 
+            @property.save
+          end         
+        end
+      end
     end
 end

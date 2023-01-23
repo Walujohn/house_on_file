@@ -1,6 +1,55 @@
 <%= simple_form_for property, html: { class: "property form" } do |f| %>
   <%= form_error_notification(property) %>
-  <%= f.input :name, input_html: { autofocus: true } %>
+  <div class="container">
+    <%= f.input :name, input_html: { autofocus: true } %>
+    <%= f.input :address, placeholder: "Address" %>
+    <%= f.input :addresstwo, placeholder: "Address Two" %>
+    <%= f.input :city, placeholder: "City" %>
+    <%= f.input :state, placeholder: "State" %>
+    <%# f.input :country %>
+    <%= f.input :yearbuilt, placeholder: "Year built" %>
+    <%= f.input :squarefootage, placeholder: "Square footage" %>
+    <%= f.input :lotsize, placeholder: "Lot size" %>
+    <%= f.input :zip, placeholder: "Zip" %>
+
+    <% if @came_from_new_create %>
+      <fieldset data-controller="element search-params">
+        <%= f.label :style %>
+        <%= f.select :style, property.forms.invert, {}, autocomplete: "off",
+                     data: { action: "change->search-params#encode change->element#click" } %>
+        <noscript>
+          <button formmethod="get" formaction="<%= new_property_path %>">Select style</button>
+        </noscript>
+        <a href="<%= new_property_path %>" 
+           hidden
+           data-search-params-target="anchor"
+           data-element-target="click" 
+           data-turbo-frame="<%= f.field_id(:turbo_frame, property.id) %>"></a> 
+      </fieldset> 
+    <% end %>  
+      
+    <turbo-frame id="<%= f.field_id(:turbo_frame, property.id) %>">
+      <% if property.style == "Apartments" and @came_from_new_create %>
+        <section class="w-full max-w-lg">
+          <%= field_set_tag "Apartments annote" do %>
+            <%= f.label :numbers_end_with_letters? %>
+            <%= f.text_field :letter, placeholder: "i.e. abc" %>
+            <%= f.text_field :low, placeholder: "Lowest apt. #" %>
+            <%= f.text_field :high, placeholder: "Highest apt. #" %>
+<!--        how to make styling like features forms-->
+<!--        <div class="form feature feature--form">-->
+            <%# f.input :letter,
+              #         wrapper_html: { class: "feature__name" } %>
+            <%# f.input :low,
+              #         wrapper_html: { class: "feature__variety" } %>
+            <%# f.input :high,
+              #         wrapper_html: { class: "feature__brand" } %>
+<!--        </div>-->
+          <% end %>
+        </section>
+      <% end %>
+    </turbo-frame>
+  </div>
   <%= link_to "Cancel", properties_path, class: "btn btn--light" %>
   <%= f.submit class: "btn btn--secondary" %>
 <% end %>
