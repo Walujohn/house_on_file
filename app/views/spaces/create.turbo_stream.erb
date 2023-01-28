@@ -1,14 +1,37 @@
-<%# Step 1: remove the form from the Properties#show page %>
-<%= turbo_stream.update Space.new, "" %>
-
-<%# Step 2: add the space at the right place %>
-<% if previous_space = @space.previous_space %>
-  <%= turbo_stream.after previous_space do %>
-    <%= render @space, property: @property %>
+<% if params[:drawn] %>
+  <%= turbo_stream.append nested_dom_id("space", Space.new) do %>
+    <%= turbo_frame_tag nested_dom_id("space", @space) do %>
+      <%= button_to "#{params.dig(:space, :name)}",
+                    [@property, @space, drawn: "#{@space.name}"],
+                    method: :delete,
+                    class: "btn--drawn" %>
+    <% end %>
   <% end %>
 <% else %>
-  <%= turbo_stream.prepend "spaces" do %>
-    <%= render @space, property: @property %>
+  <%# Step 1: remove the form from the Properties#show page %>
+  <%= turbo_stream.update Space.new, "" %>
+<% end %>
+
+<%# Step 2: add the space at the right place %>
+<% if params[:list].present? %>
+  <% if previous_space = @space.previous_space_with_list(@space.location) %>
+    <%= turbo_stream.after previous_space do %>
+      <%= render @space, property: @property %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.prepend "spaces" do %>
+      <%= render @space, property: @property %>
+    <% end %>
+  <% end %>
+<% else %>
+  <% if previous_space = @space.previous_space %>
+    <%= turbo_stream.after previous_space do %>
+      <%= render @space, property: @property %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.prepend "spaces" do %>
+      <%= render @space, property: @property %>
+    <% end %>
   <% end %>
 <% end %>
 

@@ -2,7 +2,7 @@
                     html: { class: "form feature feature--form" } do |f| %>
   <%= form_error_notification(feature) %>
 
-  <%= turbo_frame_tag "tabs" do %>
+  <%= turbo_frame_tag "tabs", class: "form feature__dropdowns" do %>
     <% if @tab %>
       <%= f.hidden_field :tab, value: @tab %>
       <%= f.input :name,
@@ -12,7 +12,7 @@
                   new_property_space_feature_path(property, space),
                   wrapper_html: { class: "feature__variety" } %>
     <% else %>
-      <fieldset data-controller="element search-params">
+      <fieldset data-controller="element search-params" class="feature--fieldset">
         <%= f.label :name %>
         <%= f.select :name, feature.names.invert, {}, autocomplete: "off",
                      data: { action: "change->search-params#encode change->element#click" } %>
@@ -36,7 +36,7 @@
         <% end %>
         <%# turbo_stream.replace dom_id(@feature), partial: "feature", object: feature %>
       </turbo-frame>
-      <%= link_to "Tab",
+      <%= link_to "Input",
                   new_property_space_feature_path(property, space, tab: "switch"),
                   wrapper_html: { class: "feature__variety" } %>
     <% end %>

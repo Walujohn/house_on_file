@@ -1,6 +1,39 @@
 <%= simple_form_for [property, space], html: { class: "form space" } do |f| %>
   <%= form_error_notification(space) %>
+  <%= hidden_field_tag :list, "#{params[:location]}" %>
+  
+  <% if params[:edit_location] and params[:edit_location] == "interior" %>
+    <%= hidden_field_tag :edit_location, "exterior" %>
+  <% elsif params[:edit_location] and params[:edit_location] == "exterior" %>
+    <%= hidden_field_tag :edit_location, "interior" %>
+  <% else %>
+    <% if space.location == "interior" %>
+  <!--  default opposite location to update to-->
+      <%= hidden_field_tag :edit_location, "exterior" %>
+    <% else %>
+      <%= hidden_field_tag :edit_location, "interior" %>
+    <% end %>
+  <% end %>
+
+  <% if params[:edit_location] %>
+    <%= f.hidden_field :location, value: params[:edit_location] %>
+  <% else %>
+    <%= f.hidden_field :location %>
+  <% end %>
+
   <%= f.input :name, html5: true, input_html: { autofocus: true } %>
   <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
   <%= f.submit class: "btn btn--secondary" %>
+  <% if params[:action] == "edit" %> 
+    <% if params[:edit_location] %>
+      <button formmethod="get" 
+              formaction="<%= edit_property_space_path(property, space) %>"
+              class="btn btn--light"><%= params[:edit_location] %></button>
+      <%# f.submit "Login", type: "image", src: url_for("/assets/btn_google_signin_dark_normal_web.png") %>
+    <% else %>
+      <button formmethod="get" 
+              formaction="<%= edit_property_space_path(property, space) %>"
+              class="btn btn--light"><%= space.location %></button>
+    <% end %>
+  <% end %>
 <% end %>

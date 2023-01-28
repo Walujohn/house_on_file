@@ -1,26 +1,2 @@
-<% if @template %>
-
-  <%# add the spaces and appliances at the right place %>
-  <%= turbo_stream.replace @property do %>
-
-    <%= turbo_frame_tag @property do %>
-      <%= turbo_frame_tag Space.new %>
-      <%= turbo_frame_tag "spaces" do %>
-        <%= render @spaces, property: @property %>
-      <% end %>
-    
-      <%= turbo_frame_tag Appliance.new %>
-      <%= turbo_frame_tag "appliances" do %>
-        <%= render @appliances, property: @property %>
-      <% end %>
-    <% end %>
-
-  <% end %>
-  <%= render_turbo_stream_flash_messages %>
-
-<% else %>
-
-  <%= turbo_stream.replace @property %>
-  <%= render_turbo_stream_flash_messages %>
-
-<% end %>
+<%= turbo_stream.replace @property %>
+<%= render_turbo_stream_flash_messages %>

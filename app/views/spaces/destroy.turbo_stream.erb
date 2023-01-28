@@ -1,3 +1,7 @@
+<% if params[:drawn] %>
+  <%= turbo_stream.remove nested_dom_id("space", @space) %>
+<% end %>
+
 <%= turbo_stream.remove @space %>
 <%= render_turbo_stream_flash_messages %>
 

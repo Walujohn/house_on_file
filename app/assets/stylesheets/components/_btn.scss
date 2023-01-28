@@ -72,7 +72,9 @@
   }
     
   &--drawn {
-    font-family: cursive;
+    font-size: var(--font-size-xs);
+    background-color: transparent;
+    border: none;
   }
 }
 

@@ -1,24 +1,31 @@
 class PropertiesController < ApplicationController
     before_action :set_property, only: [:show, :edit, :update, :destroy]
+    before_action :set_space, only: [:show]
     before_action :set_came_from_new_create, only: [:new, :create]
+    before_action :set_names, only: [:show]
+    before_action :set_lettered_names, only: [:show]
   
     def index
       @properties = current_group.properties.ordered
     end
 
-    def show
-      if Property::SPACES_TEMPLATES.keys.include?(params.dig(:property, :name))
-        @property.spaces.each {|space| space.destroy unless space.features.present?}
-        @property.appliances.each {|appliance| appliance.destroy unless appliance.appliance_features.present?}
-        @property.define_template(params[:property][:name])
-      end
-      if @property.list_of_space_names.include?(params.dig(:property, :name))
-        @space = @property.spaces.build(id: self, name: params.dig(:property, :name))
-        @space.save
-      end
-
-      @spaces = @property.spaces.includes(:features).ordered
-      @appliances = @property.appliances.includes(:appliance_features).ordered
+    def show   
+      if @dropdown_name = params.dig(:property, :name)
+        if @dropdown_name == "List interiors" 
+          @spaces = @property.spaces.includes(:features).ordered.where(location: "interior")
+        elsif @dropdown_name == "List exteriors"
+          @spaces = @property.spaces.includes(:features).ordered.where(location: "exterior")
+        elsif @dropdown_name == "Draw"
+          @spaces = @property.spaces.includes(:features).ordered
+        else
+          @property.respond_to_dropdown(@dropdown_name)
+          @spaces = @property.spaces.includes(:features).ordered
+        end
+        @appliances = @property.appliances.includes(:appliance_features).ordered
+      else
+        @spaces = @property.spaces.includes(:features).ordered
+        @appliances = @property.appliances.includes(:appliance_features).ordered    
+      end 
 
       respond_to do |format|
         format.html
@@ -38,16 +45,16 @@ class PropertiesController < ApplicationController
 
     def new
 #     @property = Property.new
-      @property = Property.new property_params        
+      @property = Property.new property_params   
     end
 
     def create
-      if params.dig(:property, :style) == "Apartments"
-        Property.build(property_params, current_group)
-      end
       @property = current_group.properties.build(property_params)
         
       if @property.save
+        if params.dig(:property, :style) == "Apartments"
+          Property.build(property_params, current_group)
+        end
         respond_to do |format|
           format.html { redirect_to properties_path, notice: "Property was successfully created." }
           format.turbo_stream { flash.now[:notice] = "Property was successfully created." }
@@ -61,28 +68,15 @@ class PropertiesController < ApplicationController
     end
 
     def update
-      if params.dig(:property, :template)
-        @spaces = @property.spaces.includes(:features).ordered
-        @appliances = @property.appliances.includes(:appliance_features).ordered
+      if @property.update(property_params)
           
-        if @template = @property.define_template(params.dig(:property, :template))
-          respond_to do |format|
-            format.html { redirect_to property_path(@property), notice: "Property was successfully updated." }
-            format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
-          end
-        else
-          render :show, status: :unprocessable_entity
-        end     
+        respond_to do |format|
+          format.html { redirect_to properties_path, notice: "Property was successfully updated." }
+          format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
+        end
       else
-        if @property.update(property_params)
-          respond_to do |format|
-            format.html { redirect_to properties_path, notice: "Property was successfully updated." }
-            format.turbo_stream { flash.now[:notice] = "Property was successfully updated." }
-          end
-        else
-          render :edit, status: :unprocessable_entity
-        end    
-      end
+        render :edit, status: :unprocessable_entity
+      end    
     end
 
     def destroy
@@ -97,11 +91,23 @@ class PropertiesController < ApplicationController
     private
 
     def set_property
-        @property = current_group.properties.find(params[:id])
+      @property = current_group.properties.find(params[:id])
+    end
+    
+    def set_space
+      @space = @property.spaces.build
     end
     
     def set_came_from_new_create
       @came_from_new_create = "yes"
+    end
+    
+    def set_names
+      @names = @property.list_of_space_names
+    end
+  
+    def set_lettered_names 
+      @lettered_names = @names.group_by { |name| name[0].to_sym } 
     end
 
     def property_params

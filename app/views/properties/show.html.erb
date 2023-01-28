@@ -1,17 +1,30 @@
 <%= turbo_stream_from current_group, "properties" %>
 <main class="container mb-xxxxl">
   <%= link_to sanitize("&larr; Back to properties"), properties_path %>
-    
+  <%= link_to "pdf", 
+                property_path(@property, format: :pdf), 
+                data: { turbo_frame: "_top" },
+                class: "btn btn--light" %>
   <div class="header">
     <h1>
       <%= @property.name %>
     </h1>
-    <div class="property__actions"> 
-        
+    <div class="property__actions">
+      <%= link_to "New space",
+                  new_property_space_path(@property),
+                  data: { turbo_frame: dom_id(Space.new) },
+                  class: "btn btn--primary headerLink" %>  
+<!--
+      <section>
+        <form action="<%# new_property_space_path(@property) %>" class="hidden sm:block" data-turbo-frame="dialog">
+          <button name="turbo_frame" value="dialog" aria-expanded="false">Select from ideas</button>
+        </form>
+      </section>
+-->
       <%= simple_form_for [@property] do |f| %>
         <%= form_error_notification(@property) %>
-        <fieldset data-controller="element search-params">
-          <%= f.label :style %>
+        <div data-controller="element search-params">
+          <span>Tools</span>
           <%= f.select :name, @property.styles.invert, {}, autocomplete: "off",
                        data: { action: "change->search-params#encode change->element#click" } %>
           <noscript>
@@ -22,38 +35,95 @@
              data-search-params-target="anchor"
              data-element-target="click" 
              data-turbo-frame="<%= dom_id(@property) %>"></a> 
-        </fieldset>
-      <% end %>
-        
-      <%= link_to "New space",
-                  new_property_space_path(@property),
-                  data: { turbo_frame: dom_id(Space.new) },
-                  class: "btn btn--primary" %>   
-        
-      <%= link_to "pdf", 
-                  property_path(@property, format: :pdf), 
-                  data: { turbo_frame: "_top" },
-                  class: "btn btn--light" %>
+        </div>
+      <% end %>   
     </div>
   </div>
-
-<%# image_tag "figma_ban.png" %>
-<%# render "t_form", property: @property, template: "2 bed" %>
-<%# render "t_form", property: @property, template: "4 bed" %>
-<%# render "t_form", property: @property, template: "Studio apt." %>
-<%# render "t_form", property: @property, template: "Retail" %>    
+    
+  <%# image_tag "wordswag.png" %> 
   <%= turbo_frame_tag @property do %>
 <!--    <div class="space__body">-->
+    <% if params.dig(:property, :name) == "Draw" %>
+      <div class="space">
+        <div class="space__body">
+          <h3>Choose</h3>
+          <div class="drawing-tool__body">
+            <% @lettered_names.each do |key, value| %>
+              <div class="drawing-tool__names">
+                <%= key %>
+                <% value.each do |value| %>
+                  <%= simple_form_for [@property, @space] do |form| %>
+                    <%= hidden_field_tag "drawn" %>
+                    <%= form.hidden_field :name, value: "#{value}" %>
+                    <%= form.submit "#{value}", class: "btn--drawn" %>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+          <div class="space__footer drawing-tool__staging">
+            <h3>Preview</h3>
+            <%= turbo_frame_tag nested_dom_id("space", Space.new) %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    
     <%= turbo_frame_tag Space.new %>
     <%= turbo_frame_tag "spaces" do %>
       <%= render "spaces/empty_state" %>
       <%= render @spaces, property: @property %>
     <% end %>
-    
+    <div class="header">
+      <h1>
+      </h1>
+      <div class="property__actions"> 
+        <%= link_to "New appliance",
+                    new_property_appliance_path(@property),
+                    data: { turbo_frame: dom_id(Appliance.new) },
+                    class: "btn btn--primary" %>  
+      </div>
+    </div>
     <%= turbo_frame_tag Appliance.new %>
     <%= turbo_frame_tag "appliances" do %>
+      <%= render "appliances/empty_state" %>
       <%= render @appliances, property: @property %>
     <% end %> 
+    <% if params.dig(:property, :name) == "List interiors" or params.dig(:property, :name) == "List exteriors" %>
+      <turbo-stream action="replace" targets=".headerLink">
+        <template>
+          <%= link_to "New space",
+                      new_property_space_path(@property, location: "#{params.dig(:property, :name)}"),
+                      data: { turbo_frame: dom_id(Space.new) },
+                      class: "btn btn--primary headerLink" %>
+        </template>
+      </turbo-stream>
+      <turbo-stream action="replace" targets=".emptyStateLink">
+        <template>
+          <%= link_to "Add space",
+                      new_property_space_path(@property, location: "#{params.dig(:property, :name)}"),
+                      data: { turbo_frame: dom_id(Space.new) },
+                      class: "btn btn--primary emptyStateLink" %>
+        </template>
+      </turbo-stream>
+    <% else %>
+      <turbo-stream action="replace" targets=".headerLink">
+        <template>
+          <%= link_to "New space",
+                      new_property_space_path(@property),
+                      data: { turbo_frame: dom_id(Space.new) },
+                      class: "btn btn--primary headerLink" %>
+        </template>
+      </turbo-stream>
+      <turbo-stream action="replace" targets=".emptyStateLink">
+        <template>
+          <%= link_to "Add space",
+                      new_property_space_path(@property),
+                      data: { turbo_frame: dom_id(Space.new) },
+                      class: "btn btn--primary emptyStateLink" %>
+        </template>
+      </turbo-stream>
+    <% end %>
 <!--    </div>-->
   <% end %>
 </main>

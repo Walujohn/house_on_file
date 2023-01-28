@@ -22,19 +22,17 @@ class Property < ApplicationRecord
     broadcasts_to ->(property) { [property.group, "properties"] }, inserts_by: :prepend
     
     SPACES_TEMPLATES = {
-        "2 bed" => ["kitchen", "bedroom 1", "bedroom 2"],
-        "4 bed" => ["kitchen", "bedroom 1", "bedroom 2", "bedroom 3", "bedroom 4"],
-        "Studio apt." => ["kitchen", "bedroom", "loft"],
-        "Retail" => ["basement", "sales floor"],
-        "Town home" => ["kitchen", "bedroom 1", "bedroom 2"]
+        "Create 3 bed" => ["kitchen", "bedroom", "bedroom", "bedroom"],
+        "Create studio apt." => ["kitchen", "bedroom", "loft"],
+        "Create retail layout" => ["basement", "sales floor"],
+        "Create town home" => ["kitchen", "bedroom 1", "bedroom 2"]
         }
     
     APPLIANCES_TEMPLATES = {
-        "2 bed" => ["hvac", "refrigerator"],
-        "4 bed" => ["hvac", "refrigerator", "shower tub"],
-        "Studio apt." => ["refrigerator"],
-        "Retail" => ["dryer vent"],
-        "Town home" => ["kitchen", "bedroom 1", "bedroom 2"]
+        "Create 3 bed" => ["hvac", "refrigerator", "shower tub"],
+        "Create studio apt." => ["refrigerator"],
+        "Create retail layout" => ["dryer vent"],
+        "Create town home" => ["hvac", "refrigerator", "shower tub"]
         }
     
     FEATURES_TEMPLATES = {  
@@ -91,13 +89,20 @@ class Property < ApplicationRecord
         }
     
     CREATED_SPACES = Array.new
-    
     CREATED_APPLIANCES = Array.new
-    
     FEATURE_NAMES = Set.new
     
+    DROPDOWNS = ["List interiors", "List exteriors", "List all"]
+    
     def styles
-      { "Town home" => "Town home", "4 bed" => "4 bed", "Studio apt." => "Studio apt.", "Retail" => "Retail", "attic" => "attic", "basement" => "basement", "hallway" => "hallway" }
+      { "List all" => "List all", 
+        "List interiors" => "List interiors",
+        "List exteriors" => "List exteriors",
+        "Create town home" => "Create town home", 
+        "Create 3 bed" => "Create 3 bed", 
+        "Create studio apt." => "Create studio apt.", 
+        "Create retail layout" => "Create retail layout",
+        "Draw" => "Draw" }
     end
     
     def forms
@@ -105,7 +110,9 @@ class Property < ApplicationRecord
     end
     
     def list_of_space_names
-      %w[attic basement hallway].sort
+      %w[attic basement bathroom balcony bedroom closet 
+         deck driveway entryway foyer garage hallway kitchen 
+         loft livingroom office patio porch pantry stairway sunroom].sort
     end
     
     def total_features
@@ -214,6 +221,7 @@ class Property < ApplicationRecord
       create_template_features(space)
     end
     
+#    building 'apartments' with numbers and letters
     def self.build(params, current_group)
       low = params[:low] 
       high = params[:high]
@@ -229,6 +237,18 @@ class Property < ApplicationRecord
             @property.save
           end         
         end
+      end
+    end
+    
+    def reset_template(to_name)
+      self.spaces.each { |space| space.destroy unless space.features.present? }
+      self.appliances.each { |appliance| appliance.destroy unless appliance.appliance_features.present? }
+      self.define_template(to_name)
+    end
+    
+    def respond_to_dropdown(dropdown_name)
+      if SPACES_TEMPLATES.keys.include?(dropdown_name)
+        self.reset_template(dropdown_name)
       end
     end
 end

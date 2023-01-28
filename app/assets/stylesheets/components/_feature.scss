@@ -75,6 +75,11 @@
     }
   }
 
+  &__dropdowns {
+    flex-basis: 100%; 
+    max-width: 100%;
+  }
+
   &--form {
     box-shadow: var(--shadow-small);
 
@@ -87,7 +92,11 @@
       order: 2;
     }
   }
-
+    
+  &--fieldset {
+    padding: var(--space-xxs);      
+  }
+  
   &--header {
     display: none;
     background-color: var(--color-light);

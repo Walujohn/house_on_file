@@ -1,14 +1,18 @@
 class SpacesController < ApplicationController
   before_action :set_property
   before_action :set_space, only: [:edit, :update, :destroy]
-
+  
   def new
     @space = @property.spaces.build
+    if params[:location] and params[:location] == "List exteriors"
+      @space.location = "exterior"
+    end
   end
 
-  def create
+  def create  
     @space = @property.spaces.build(space_params)
-      
+    @space.number_the_name(@property)
+
     if @space.save  
       respond_to do |format|
         format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
@@ -59,7 +63,7 @@ class SpacesController < ApplicationController
   private
 
   def space_params
-    params.require(:space).permit(:name)
+    params.require(:space).permit(:name, :location)
   end
 
   def set_property
@@ -70,3 +74,11 @@ class SpacesController < ApplicationController
     @space = @property.spaces.find(params[:id])
   end
 end
+
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+<div class="empty-state empty-state--only-child">
+  <p class="empty-state__text">
+    You don't have any appliances yet!
+  </p>
+
+  <%= link_to "Add appliance",
+              new_property_appliance_path(@property),
+              data: { turbo_frame: dom_id(Appliance.new) },
+              class: "btn btn--primary" %>  
+</div>

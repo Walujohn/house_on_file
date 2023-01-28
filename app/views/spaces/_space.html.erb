@@ -17,6 +17,7 @@
           <%= simple_form_for [property, space] do |f| %>
             <%= form_error_notification(space) %>
             <%= hidden_field_tag "previous_space_id", "#{space.id}" %>
+            <%= f.hidden_field :location, value: "#{space.location}" %>
             <%= f.hidden_field :name, value: "#{space.name}" %>
             <%= f.submit "+", class: "btn btn--light" %>
           <% end %>
@@ -27,7 +28,7 @@
       <div class="feature feature--header">
         <div class="feature__name">Features</div>
         <div class="feature__variety">Variety</div>
-        <div class="feature__brand">Brand</div>
+        <div class="feature__brand"></div>
         <div class="feature__actions"></div>
       </div>
 

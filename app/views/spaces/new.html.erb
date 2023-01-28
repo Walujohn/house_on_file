@@ -9,3 +9,13 @@
     <%= render "form", property: @property, space: @space %>
   <% end %>
 </main>
+<!--for the dialog box modal-->
+<!--
+<turbo-frame id="<%# params[:turbo_frame] || dom_id(@property) %>" role="section" target="_top">
+  <h1>Click spaces!</h1>
+  <%# link_to "Back", property_path(@property), class: "group-open:hidden" %>
+  <form method="dialog" class="hidden group-open:block">
+    <button>Back</button>
+  </form>
+</turbo-frame>
+-->
