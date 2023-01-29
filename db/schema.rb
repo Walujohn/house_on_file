@@ -38,7 +38,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_24_180817) do
   create_table "features", force: :cascade do |t|
     t.bigint "space_id", null: false
     t.string "name", null: false
-    t.text "description", null: false
+    t.text "description"
     t.integer "quantity"
     t.decimal "unit_price", precision: 10, scale: 2
     t.datetime "created_at", null: false

@@ -1,23 +1,40 @@
-<h2>Log in</h2>
+<div class="devise">
+  <h2>Log in</h2>
+  <label>Don't have an account?</label>
+  <%= render "devise/shared/links" %>
+  <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }) do |f| %>
+    <div class="form-inputs devise--inputs">
+      <%= f.label :email %>
+      <%= f.input :email,
+                  placeholder: "Email address",
+                  required: false,
+                  autofocus: true,
+                  input_html: { autocomplete: "email" } %>
+      <%= f.label :password %>
+      <%= f.input :password,
+                  placeholder: "Password",
+                  required: false,
+                  input_html: { autocomplete: "current-password" } %>
+      <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>  
+    </div>
 
-<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }) do |f| %>
-  <div class="form-inputs">
-    <%= f.label :email %>
-    <%= f.input :email,
-                required: false,
-                autofocus: true,
-                input_html: { autocomplete: "email" } %>
-    <%= f.label :password %>
-    <%= f.input :password,
-                required: false,
-                input_html: { autocomplete: "current-password" } %>
-    <%= f.label :remember_me %>
-    <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
-  </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Log in" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+    <div class="form-actions">
+      <%= f.button :submit, "Log in", class: "devise__btn" %>
+    </div>
+  <% end %>
+    
+  <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+    <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
+  <% end %>
+    
+  <%- if devise_mapping.omniauthable? %>
+    <%- resource_class.omniauth_providers.each do |provider| %>
+      <%= form_for "Login",
+                   url: omniauth_authorize_path(resource_name, provider),
+                   method: :post,
+                   data: {turbo: "false"} do |f| %>
+        <%= f.submit "Login", type: "image", src: url_for("/assets/btn_google_signin_dark_normal_web.png") %>
+      <% end %>  
+    <% end %>
+  <% end %>
+</div>

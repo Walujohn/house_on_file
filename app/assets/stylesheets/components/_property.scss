@@ -20,4 +20,52 @@
     align-self: flex-start;
     gap: var(--space-xs);
   }
+       
+  &__input-large {
+    flex: 1 1 100%;
+
+    @include media(tabletAndUp) {
+      flex: 1 1 0;
+    }   
+  }
+    
+  &__input-medium {
+    flex: 1;
+    display: none;
+
+    @include media(tabletAndUp) {
+      display: revert;
+      flex: 0 0 9rem;
+    }
+  }
+    
+  &__input-small {
+    flex: 1;
+    display: none;
+
+    @include media(tabletAndUp) {
+      display: revert;
+      flex: 0 0 7rem;
+    }
+  }
+    
+  &--form {
+    flex-basis: 100%;
+    justify-content: flex-end;
+//    gap: var(--space-xs);
+//    margin-bottom: var(--space-s);
+//    padding: var(--space-xs);     
+  }
+    
+  &--inputs {
+    display: flex;
+  }
+    
+  &--fieldset {
+    padding: var(--space-s);
+      
+    .legend {
+      margin-left: var(--space-l); 
+    }
+  }
 }

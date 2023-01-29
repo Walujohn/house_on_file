@@ -3,8 +3,7 @@ class Feature < ApplicationRecord
     
   validates :name, presence: true
 #  validates :variety, inclusion: { in: -> record { record.varieties.keys }, allow_blank: true },
-#                      presence: { if: -> record { record.varieties.present? } }
-  validates :description, presence: true 
+#                      presence: { if: -> record { record.varieties.present? } } 
 #  validates :quantity, numericality: { only_integer: true, greater_than: 0 }
 #  validates :unit_price, numericality: { greater_than: 0 }
 

@@ -1,0 +1,28 @@
+//  you typically don't add margins to components for a good design model but oh well
+.devise {
+  width: 100%;
+  padding-right: var(--space-xs);
+  padding-left: var(--space-xs);
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+
+  @include media(tabletAndUp) {
+    padding-right: var(--space-m);
+    padding-left: var(--space-m);
+    max-width: 24rem;
+  }
+    
+  &__btn {
+    border: solid 2px;
+    width: 100%;
+  }
+    
+  &__hint {
+    font-size: var(--font-size-xs);  
+  }
+    
+  &--inputs {
+    text-align: left;
+  }
+}

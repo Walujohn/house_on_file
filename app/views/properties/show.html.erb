@@ -1,10 +1,10 @@
 <%= turbo_stream_from current_group, "properties" %>
 <main class="container mb-xxxxl">
   <%= link_to sanitize("&larr; Back to properties"), properties_path %>
-  <%= link_to "pdf", 
-                property_path(@property, format: :pdf), 
-                data: { turbo_frame: "_top" },
-                class: "btn btn--light" %>
+  <%# link_to "pdf", 
+    #            property_path(@property, format: :pdf), 
+    #            data: { turbo_frame: "_top" },
+    #            class: "btn btn--light" %>
   <div class="header">
     <h1>
       <%= @property.name %>
@@ -39,8 +39,7 @@
       <% end %>   
     </div>
   </div>
-    
-  <%# image_tag "wordswag.png" %> 
+     
   <%= turbo_frame_tag @property do %>
 <!--    <div class="space__body">-->
     <% if params.dig(:property, :name) == "Draw" %>
