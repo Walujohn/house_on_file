@@ -1,7 +1,8 @@
 <%= simple_form_for property, html: { class: "property form property--form" } do |f| %>
   <%= form_error_notification(property) %>
-  <address class="property--form">
-    <%= f.input :name, input_html: { autofocus: true } %>
+  <div class="property--form">
+<!--config styles in simple form?-->
+    <div id="property-name"><%= f.input :name, input_html: { autofocus: true }, class: "property--input" %></div>
     <%= f.input :address, placeholder: "Address" %>
     <%= f.input :addresstwo, placeholder: "Address Two" %>
     <div class="property--inputs">
@@ -53,7 +54,7 @@
         </section>
       <% end %>
     </turbo-frame>
-  </address>
+  </div>
   <%= link_to "Cancel", properties_path, class: "btn btn--light" %>
   <%= f.submit class: "btn btn--secondary" %>
 <% end %>

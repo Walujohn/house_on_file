@@ -19,6 +19,10 @@
     color: var(--color-text-header);
   }
 
+  &__edit {
+    margin-right: var(--space-s);    
+  }
+
   &__right {
     margin-left: auto;
   }

@@ -4,7 +4,7 @@
   <%= render "devise/shared/links" %>
   <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }) do |f| %>
     <div class="form-inputs devise--inputs">
-      <%= f.label :email %>
+      <%= f.label :email_address %>
       <%= f.input :email,
                   placeholder: "Email address",
                   required: false,
@@ -15,7 +15,7 @@
                   placeholder: "Password",
                   required: false,
                   input_html: { autocomplete: "current-password" } %>
-      <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>  
+      <%# f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>  
     </div>
 
     <div class="form-actions">
@@ -24,7 +24,7 @@
   <% end %>
     
   <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-    <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
+    <%= link_to "Forgot your password?", new_password_path(resource_name), class: "devise__forgot-password" %><br />
   <% end %>
     
   <%- if devise_mapping.omniauthable? %>
@@ -33,7 +33,7 @@
                    url: omniauth_authorize_path(resource_name, provider),
                    method: :post,
                    data: {turbo: "false"} do |f| %>
-        <%= f.submit "Login", type: "image", src: url_for("/assets/btn_google_signin_dark_normal_web.png") %>
+        <%= f.submit "Login", type: "image", src: url_for("/assets/btn_google_signin_dark_normal_web.png"), class: "devise__google" %>
       <% end %>  
     <% end %>
   <% end %>

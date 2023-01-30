@@ -78,6 +78,13 @@
   &__dropdowns {
     flex-basis: 100%; 
     max-width: 100%;
+    padding-top: var(--space-xs);
+    padding-left: var(--space-xxxs);
+    gap: var(--space-s);
+  }
+    
+  &__link {
+    font-size: var(--font-size-m);
   }
 
   &--form {

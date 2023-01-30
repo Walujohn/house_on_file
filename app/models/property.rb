@@ -22,69 +22,75 @@ class Property < ApplicationRecord
     broadcasts_to ->(property) { [property.group, "properties"] }, inserts_by: :prepend
     
     SPACES_TEMPLATES = {
-        "Create 3 bed" => ["kitchen", "bedroom", "bedroom", "bedroom"],
-        "Create studio apt." => ["kitchen", "bedroom", "loft"],
-        "Create retail layout" => ["basement", "sales floor"],
-        "Create town home" => ["kitchen", "bedroom 1", "bedroom 2"]
+        "Create 3 bed" => ["bedroom", "bedroom 2", "bedroom 3", "sunroom", 
+                           "bathroom", "bathroom 2", "bathroom 3", "stairs", "basement", 
+                           "kitchen", "dining room", "living room", "foyer", 
+                           "front entrance", "hallway", "office", "yard", "garage"],
+        "Create studio apt." => ["kitchen area", "bedroom", "loft", "living room", "bathroom"],
+        "Create retail layout" => ["storage", "sales floor", "registers", "entrance", "emergency exit", "office", "family restrooms"],
+        "Create town home" => ["kitchen", "bedroom", "bedroom 2", "living room", "media room", "basement", "deck", "patio", "porch"]
         }
     
     APPLIANCES_TEMPLATES = {
-        "Create 3 bed" => ["hvac", "refrigerator", "shower tub"],
-        "Create studio apt." => ["refrigerator"],
-        "Create retail layout" => ["dryer vent"],
-        "Create town home" => ["hvac", "refrigerator", "shower tub"]
+        "Create 3 bed" => ["hvac", "refrigerator", "shower tub", "shower tub 2"],
+        "Create studio apt." => ["refrigerator", "fireplace", "dryer", "dryer vent"],
+        "Create retail layout" => ["commercial HVAC"],
+        "Create town home" => ["refrigerator", "shower", "dishwasher"]
         }
     
     FEATURES_TEMPLATES = {  
-      "basement": { ceiling_covering: { name: "ceiling covering", 
-                                        description: "A ceiling covering", 
-                                        quantity: 12, 
-                                        unit_price: 3 }, 
+      "basementOff": { ceiling_covering: { name: "ceiling covering", 
+                                        description: "A ceiling covering" }, 
+#                                        quantity: 12, 
+#                                        unit_price: 3 }, 
           
                     wall_covering: { name: "wall covering", 
-                                     description: "A wall covering", 
-                                     quantity: 12, 
-                                     unit_price: 3 }, 
+                                     description: "A wall covering" }, 
+#                                     quantity: 12, 
+#                                     unit_price: 3 }, 
           
                     floor_covering: { name: "floor covering", 
-                                      description: "A floor covering", 
-                                      quantity: 12, 
-                                      unit_price: 3 },
+                                      description: "A floor covering" }, 
+#                                      quantity: 12, 
+#                                      unit_price: 3 },
           
                     window: { name: "window", 
-                              description: "A window", 
-                              quantity: 12, 
-                              unit_price: 3 }
+                              description: "A window" } 
+#                              quantity: 12, 
+#                              unit_price: 3 }
           },
         
-      "kitchen": { ceiling_covering: { name: "ceiling covering", 
-                                       description: "A ceiling covering", 
-                                       quantity: 12, 
-                                       unit_price: 3 }, 
+      "kitchenOff": { ceiling_covering: { name: "ceiling covering", 
+                                       description: "A ceiling covering" }, 
+#                                       quantity: 12, 
+#                                       unit_price: 3 }, 
           
                    wall_covering: { name: "wall covering", 
-                                    description: "A wall covering", 
-                                    quantity: 12, 
-                                    unit_price: 3 },
+                                    description: "A wall covering" }, 
+#                                    quantity: 12, 
+#                                    unit_price: 3 },
           
                    floor_covering: { name: "floor covering", 
-                                     description: "A floor covering", 
-                                     quantity: 12, 
-                                     unit_price: 3 }
+                                     description: "A floor covering" } 
+#                                     quantity: 12, 
+#                                     unit_price: 3 }
           } 
         }
     
     APPLIANCE_FEATURES_TEMPLATES = {
-      "hvac": { 
-              ceiling_covering: { name: "ceiling covering", description: "A ceiling covering", quantity: 12, unit_price: 3 }, 
-              wall_covering: { name: "wall covering", description: "A wall covering", quantity: 12, unit_price: 3 },
-              floor_covering: { name: "floor covering", description: "A floor covering", quantity: 12, unit_price: 3 },
-              window: { name: "window", description: "A window", quantity: 12, unit_price: 3 }
+      "commercial HVAC": { 
+              single_split_system: { name: "single split system", description: "https://safetyculture.com/topics/hvac-systems/ ...additional parts, such as ductwork, can be incorporated into the system. This helps with better air distribution so the whole commercial space can be cooled or heated at the desired levels." }
               },
-      "refrigerator": { 
-              ceiling_covering: { name: "ceiling covering", description: "A ceiling covering", quantity: 12, unit_price: 3 }, 
-              wall_covering: { name: "wall covering", description: "A wall covering", quantity: 12, unit_price: 3 },
-              floor_covering: { name: "floor covering", description: "A floor covering", quantity: 12, unit_price: 3 }
+      "fireplace": { 
+              damper: { name: "damper", description: "Damper closes all the way." },
+              chimney_pipe: { name: "chimney pipe", description: "About 32 feet of 5d pipe used to connect."},
+              shroud: { name: "shroud", descriptions: "Shroud from K&B Metals Fabrication."},
+              apartment_insert_kit: { name: "apartments insert", description: "Fireplace insert used for apartments. I think mantel brand was Wisteria. A log lighter was removed before installing."},
+              marble_surround: { name: "marble surround", description: "Marble surround from Inter-Continental Marble Corp" }
+              }, 
+      "dryer vent": { 
+              connector_hose: { name: "connector hose", description: "Used semi-rigid aluminum flex connector hose fastened with metal tape." },
+              pipe: { name: "dryer vent pipe", description: "Rigid pipe and 4 elbows used. Cleaned from the roof 2022."}
               } 
         }
     

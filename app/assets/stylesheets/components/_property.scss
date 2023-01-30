@@ -49,9 +49,13 @@
     }
   }
     
+  &__dropdown {
+    width: 72%;        
+  }
+    
   &--form {
     flex-basis: 100%;
-    justify-content: flex-end;
+    justify-content: flex-start;
 //    gap: var(--space-xs);
 //    margin-bottom: var(--space-s);
 //    padding: var(--space-xs);     
@@ -61,6 +65,7 @@
     display: flex;
   }
     
+//  you typically don't add margins to components for a good design model but oh well
   &--fieldset {
     padding: var(--space-s);
       
@@ -68,4 +73,9 @@
       margin-left: var(--space-l); 
     }
   }
+}
+
+//these are inside Simple Form config?
+#property-name, #property_address, #property_addresstwo, #property_city, #property_state, #property_zip, #property_country, #property_yearbuilt, #property_lotsize, #property_squarefootage {
+  margin-bottom: var(--space-m);     
 }

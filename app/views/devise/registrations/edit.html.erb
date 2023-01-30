@@ -6,6 +6,7 @@
   <%= render "devise/shared/error_messages", resource: resource %>
 
   <div class="form-inputs devise--inputs">
+    <%= f.label "Email address" %>
     <%= f.input :email, required: true, autofocus: true %>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -17,13 +18,13 @@
       <%= group_form.input :name, required: true %>
     <% end %>
 
-    <%= f.label :password %>
+    <%= f.label :new_password %>
     <%= f.input :password,
                 hint: "leave it blank if you don't want to change it",
                 required: false,
                 input_html: { autocomplete: "new-password" } %>
     
-    <%= f.label :password_confirmation %>
+    <%= f.label :new_password_confirmation %>
     <%= f.input :password_confirmation,
                 required: false,
                 input_html: { autocomplete: "new-password" } %>
@@ -46,5 +47,5 @@
                 method: :delete,
                 form: { data: { turbo_confirm: "Are you sure?" } },
                 class: "btn" %></p>
-<%= link_to "Back", :back %>
+<%= link_to "Back", root_path %>
 </div>

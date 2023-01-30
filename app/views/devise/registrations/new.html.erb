@@ -1,12 +1,13 @@
 <div class="devise">
-  <%# image_tag "wordswag.png" %>
-  <h2>Begin House On File</h2>
+  <%= image_tag "wordswag.png", class: "signature" %>
+  <h2>Try House On File</h2>
+  <p>Create a profile and quickly direct simple property reports.</p>
   <% resource.group ||= Group.new %>
   <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: false }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
   
     <div class="form-inputs devise--inputs">
-      <%= f.label :email %>
+      <%= f.label :email_address %>
       <%= f.input :email, required: true, placeholder: "Email address", autofocus: true %>
       
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -17,7 +18,7 @@
         <%= group_form.label "Group name" %>
         <%= group_form.input :name, placeholder: "Group name", required: true %>
       <% end %>
-      <p id="devise__hint">Hint: Use your company/team name or make a new name up if that doesn't apply.</p>
+      <p class="devise__hint">Hint: Use your company/team name or make up a new name up if that doesn't apply.</p>
 
       <%= f.label :password %>
       <%= f.input :password, required: true, placeholder: "Password" %>

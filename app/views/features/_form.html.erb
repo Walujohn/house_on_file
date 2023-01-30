@@ -8,8 +8,9 @@
       <%= f.input :name,
                   wrapper_html: { class: "feature__name" },
                   input_html: { autofocus: true } %>
-      <%= link_to "Switch Input",
+      <%= link_to "Input instead?",
                   new_property_space_feature_path(property, space),
+                  class: "feature__link",
                   wrapper_html: { class: "feature__variety" } %>
     <% else %>
       <fieldset data-controller="element search-params" class="feature--fieldset">
@@ -36,8 +37,9 @@
         <% end %>
         <%# turbo_stream.replace dom_id(@feature), partial: "feature", object: feature %>
       </turbo-frame>
-      <%= link_to "Switch Input",
+      <%= link_to "Input instead?",
                   new_property_space_feature_path(property, space, tab: "switch"),
+                  class: "feature__link",
                   wrapper_html: { class: "feature__variety" } %>
     <% end %>
   <% end %>
@@ -47,7 +49,7 @@
   <%# f.input :unit_price,
     #         wrapper_html: { class: "feature__brand" } %>
   <%= f.input :description,
-              placeholder: "Description (required)      / Hugging Face (https://huggingface.co/) Inference API machine learning models text generation is (COMING SOON!)",
+              placeholder: "Description (brand, style, serial, pattern, description...) https://huggingface.co/ Inference API machine learning text generation is (COMING SOON!)",
               wrapper_html: { class: "feature__description" } %>
 
   <div class="feature__actions">

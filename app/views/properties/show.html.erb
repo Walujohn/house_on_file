@@ -24,9 +24,9 @@
       <%= simple_form_for [@property] do |f| %>
         <%= form_error_notification(@property) %>
         <div data-controller="element search-params">
-          <span>Tools</span>
           <%= f.select :name, @property.styles.invert, {}, autocomplete: "off",
-                       data: { action: "change->search-params#encode change->element#click" } %>
+                       data: { action: "change->search-params#encode change->element#click" },
+                       class: "property__dropdown" %>
           <noscript>
             <button formmethod="get" formaction="<%= property_path(@property) %>">Select style</button>
           </noscript>
@@ -35,6 +35,7 @@
              data-search-params-target="anchor"
              data-element-target="click" 
              data-turbo-frame="<%= dom_id(@property) %>"></a> 
+<!--          <span>Tip: Use the dropdown tools here to change views and create templates!</span>-->
         </div>
       <% end %>   
     </div>

@@ -16,13 +16,30 @@
   &__btn {
     border: solid 2px;
     width: 100%;
+    margin-bottom: var(--space-s);
+    margin-top: var(--space-m);
+  }
+  
+  &__google {
+    margin-top: var(--space-s);
   }
     
   &__hint {
-    font-size: var(--font-size-xs);  
+    font-size: var(--font-size-s); 
+    margin-bottom: var(--space-s);
   }
-    
+  
+  &__forgot-password {
+    text-decoration: underline;
+    font-size: var(--font-size-s);
+  }
+
   &--inputs {
     text-align: left;
   }
+}
+
+//these are inside Devise config?
+#user_email, #user_password, #user_password_confirmation, #user_remember_me {
+  margin-bottom: var(--space-s);
 }

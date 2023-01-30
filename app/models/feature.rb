@@ -11,14 +11,24 @@ class Feature < ApplicationRecord
 #  feature.property
   delegate :property, to: :space
     
-  VARIETIES = { "wall covering" => ["paint", "wood", "wallpaper"], 
-                "floor covering" => ["wood", "concrete", "tile", "slab"], 
-                "counter" => ["butcher's block", "wood"] 
+  VARIETIES = { "wall covering" => ["paint", "tile", "wood", "wallpaper", "bamboo", "other"], 
+                "floor covering" => ["carpet", "concrete", "tile", "wood", "stone", "linoleum", "laminate", "vinyl", "other"], 
+                "ceiling covering" => ["paint", "bamboo", "tile", "other"],
+                "counter tops" => ["soapstone", "quartz", "recycled glass", "laminate", "tile", "concrete butcher block", "stainless steel", "bamboo", "marble", "other"],
+                "trim" => ["crown", "baseboard", "decorative", "other"],
+                "cabinets" => ["wood", "faux wood", "paint", "stain", "other"],
+                "windows" => ["vinyl", "wood", "aluminum", "paint", "stain", "iron", "plastic", "other"]
       }
     
 #  these are for associating with the VARIETIES hash    
   def names 
-    { "wall covering" => "wall covering", "floor covering" => "floor covering", "counter" => "counter" }
+    { "wall covering" => "wall covering", 
+      "floor covering" => "floor covering", 
+      "ceiling covering" => "ceiling covering", 
+      "counter tops" => "counter tops", 
+      "trim" => "trim", 
+      "cabinets" => "cabinets", 
+      "windows" => "windows" }
   end
   
   def varieties(name)
