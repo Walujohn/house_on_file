@@ -52,8 +52,8 @@ class PropertiesController < ApplicationController
       @property = current_group.properties.build(property_params)
         
       if @property.save
-        if params.dig(:property, :style) == "Apartments"
-          Property.build(property_params, current_group)
+        if params.dig(:property, :style) == "Town houses, shared, apartments"
+          @property.build(property_params, current_group)
         end
         respond_to do |format|
           format.html { redirect_to properties_path, notice: "Property was successfully created." }
@@ -114,7 +114,7 @@ class PropertiesController < ApplicationController
 #     params.require(:property).permit(:name)
       params.fetch(:property, {}).permit(:name, :style, :letter, :low, 
                                          :high, :address, :addresstwo, 
-                                         :city, :state, :yearbuilt, 
-                                         :squarefootage, :lotsize, :zip)
+                                         :city, :state, :country, :yearbuilt, 
+                                         :squarefootage, :lotsize, :zip, :property_template)
     end
 end

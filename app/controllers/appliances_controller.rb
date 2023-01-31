@@ -8,6 +8,7 @@ class AppliancesController < ApplicationController
 
   def create
     @appliance = @property.appliances.build(appliance_params)
+    @appliance.user_id = current_user.id
 
     if @appliance.save
       respond_to do |format|

@@ -53,6 +53,11 @@
     width: 72%;        
   }
     
+  &__hint {
+    font-size: 0.875rem;
+    max-width: 50%;
+  }
+    
   &--form {
     flex-basis: 100%;
     justify-content: flex-start;

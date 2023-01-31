@@ -43,13 +43,16 @@
     <% end %>  
       
     <turbo-frame id="<%= f.field_id(:turbo_frame, property.id) %>">
-      <% if property.style == "Apartments" and @came_from_new_create %>
+      <% if property.style == "Town houses, shared, apartments" and @came_from_new_create %>
+        <%= f.hidden_field :property_template, value: "#{property.style}" %>
         <section>
-          <%= field_set_tag "Apartments annote", class: "property--fieldset" do %>
-            <%= f.label :units_end_with_letters? %>
+          <%= field_set_tag "Town houses, shared, apartments annote", class: "property--fieldset" do %>
+            <%= f.label :lowest_address_number_or_unit_number_with_this_name %>
+            <%= f.text_field :low, placeholder: "Lowest unit # or address" %>
+            <%= f.label :highest_address_number_or_unit_number_with_this_name %>
+            <%= f.text_field :high, placeholder: "Highest unit # or address" %>
+            <%= f.label :do_the_unit_names_end_with_letters? %>
             <%= f.text_field :letter, placeholder: "i.e. abc" %>
-            <%= f.text_field :low, placeholder: "Lowest apt. #" %>
-            <%= f.text_field :high, placeholder: "Highest apt. #" %>
           <% end %>
         </section>
       <% end %>

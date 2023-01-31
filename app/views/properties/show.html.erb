@@ -9,6 +9,13 @@
     <h1>
       <%= @property.name %>
     </h1>
+      
+    <% if @property.property_template and @property.property_template.to_i == 0 %>
+      <p class="property__hint">Hint: This is a town house, shared, apartments style template property. Changes made here will be inherited by its associated properties!</p>
+    <% else %>
+      <p class="property__hint">Inheriting changes from <%= current_group.properties.find(@property.property_template).name %></p>
+    <% end %>
+      
     <div class="property__actions">
       <%= link_to "New space",
                   new_property_space_path(@property),

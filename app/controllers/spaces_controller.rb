@@ -12,8 +12,12 @@ class SpacesController < ApplicationController
   def create  
     @space = @property.spaces.build(space_params)
     @space.number_the_name(@property)
+    @space.user_id = current_user.id
 
-    if @space.save  
+    if @space.save
+      if @property.property_template and @property.property_template.to_i == 0
+        @property.hand_down_space(current_group, @space)
+      end
       respond_to do |format|
         format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
         format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
@@ -29,6 +33,7 @@ class SpacesController < ApplicationController
   def update
     if params[:previous_space_id]
       @space = @property.spaces.build(space_params)
+      @space.user_id = current_user.id
       @previous_space = @property.spaces.find(params[:previous_space_id])
       if @space.save  
         @previous_space.duplicate_features(@space) unless @previous_space.features.empty? 

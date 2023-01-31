@@ -108,11 +108,12 @@ class Property < ApplicationRecord
         "Create 3 bed" => "Create 3 bed", 
         "Create studio apt." => "Create studio apt.", 
         "Create retail layout" => "Create retail layout",
+        "Reset canvas" => "Reset canvas",
         "Draw" => "Draw" }
     end
     
     def forms
-      { "Address" => "Address", "Apartments" => "Apartments" }
+      { "Address" => "Address", "Town houses, shared, apartments" => "Town houses, shared, apartments" }
     end
     
     def list_of_space_names
@@ -148,8 +149,8 @@ class Property < ApplicationRecord
       spaces.each { |space| CREATED_SPACES << create_space(self, space) }
     end
     
-    def create_space(property, space)
-      @space = property.spaces.build(id: self, name: "#{space}")
+    def create_space(property, space, location = "interior")
+      @space = property.spaces.build(id: self, name: "#{space}", location: location)
       @space.save
       @space
     end
@@ -228,33 +229,60 @@ class Property < ApplicationRecord
     end
     
 #    building 'apartments' with numbers and letters
-    def self.build(params, current_group)
-      low = params[:low] 
+    def build(params, current_group)
+      low = params[:low]
       high = params[:high]
-      letters = params[:letter]
-        
+      letters = params[:letter].strip
+      self.assign_numbers_and_letters(low, high, letters, current_group)
+#      if property_template = params[:property_template]
+#        split_property_template(property_template, current_group)   
+#      end
+    end
+    
+    def assign_numbers_and_letters(low, high, letters, current_group)
       (low..high).each do |number|
         if letters.empty?
-          @property = current_group.properties.build(name: "#{number}") 
+          @property = current_group.properties.build(name: "#{self.name.strip}" + " #{number}", property_template: "#{self.id}") 
           @property.save
         else
           letters.split("").each do |letter| 
-            @property = current_group.properties.build(name: "#{number}" + "#{letter}") 
+            @property = current_group.properties.build(name: "#{self.name.strip}" + " #{number}" + "#{letter}", property_template: "#{self.id}") 
             @property.save
           end         
         end
       end
     end
+
+#    def self.split_property_template(property_template, current_group)
+#      property_template.gsub(",","").split(" ").each do |word| 
+#        @property = current_group.properties.build(name: "#{word}") 
+#        @property.save
+#      end
+#    end
     
-    def reset_template(to_name)
-      self.spaces.each { |space| space.destroy unless space.features.present? }
-      self.appliances.each { |appliance| appliance.destroy unless appliance.appliance_features.present? }
-      self.define_template(to_name)
+    def hand_down_space(current_group, space)
+      id_string = self.id.to_s
+      properties = current_group.properties.select { |property| property.property_template == id_string }
+      self.send_space_hand_down(properties, space)
+    end
+    
+    def send_space_hand_down(properties, space)
+      properties.each do |property|
+        create_space(property, space.name, space.location)
+      end
+    end
+    
+    def reset_template
+      self.spaces.each { |space| space.destroy unless space.user_id }
+      self.appliances.each { |appliance| appliance.destroy unless appliance.user_id }
     end
     
     def respond_to_dropdown(dropdown_name)
       if SPACES_TEMPLATES.keys.include?(dropdown_name)
-        self.reset_template(dropdown_name)
+        self.reset_template
+        self.define_template(dropdown_name)
+      else
+        self.reset_template
       end
     end
 end

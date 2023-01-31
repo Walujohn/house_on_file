@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_24_180817) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_30_212625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_24_180817) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
     t.index ["name"], name: "index_appliances_on_name"
     t.index ["property_id"], name: "index_appliances_on_property_id"
   end
@@ -71,6 +72,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_24_180817) do
     t.string "letter"
     t.integer "low"
     t.integer "high"
+    t.string "property_template"
     t.index ["group_id"], name: "index_properties_on_group_id"
   end
 
@@ -80,6 +82,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_24_180817) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "location", default: 0, null: false
+    t.integer "user_id"
     t.index ["name"], name: "index_spaces_on_name"
     t.index ["property_id"], name: "index_spaces_on_property_id"
   end
