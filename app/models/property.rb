@@ -104,11 +104,11 @@ class Property < ApplicationRecord
       { "List all" => "List all", 
         "List interiors" => "List interiors",
         "List exteriors" => "List exteriors",
-        "Create town home" => "Create town home", 
-        "Create 3 bed" => "Create 3 bed", 
-        "Create studio apt." => "Create studio apt.", 
-        "Create retail layout" => "Create retail layout",
-        "Reset canvas" => "Reset canvas",
+        "Create town home" => "Reset unedited spaces and layer town home spaces", 
+        "Create 3 bed" => "Reset unedited spaces and layer 3 bed spaces", 
+        "Create studio apt." => "Reset unedited spaces and layer studio apt. spaces", 
+        "Create retail layout" => "Reset unedited spaces and layer retail layout spaces",
+        "Reset canvas" => "Reset unedited layers",
         "Draw" => "Draw" }
     end
     
@@ -210,7 +210,7 @@ class Property < ApplicationRecord
     end
     
     def collect_feature_names
-      self.features.each {|f| FEATURE_NAMES << f.name}
+      self.features.each { |f| FEATURE_NAMES << f.name }
     end
         
     def create_template_features(space)        
@@ -222,13 +222,45 @@ class Property < ApplicationRecord
       end
     end
     
-    def rollover(space)
-      FEATURE_NAMES.clear
-      self.collect_feature_names
-      create_template_features(space)
+    def create_class_hash_features(space)
+      Space::CREATED_FEATURES.each do |feature|
+        @feature = space.features.build(id: space, 
+                                        name: feature.name, 
+                                        description: feature.description,
+                                        feature_template: feature.id.to_s)
+        @feature.save
+      end
     end
     
-#    building 'apartments' with numbers and letters
+    def rollover(space, current_user)
+      FEATURE_NAMES.clear
+      self.collect_feature_names
+      create_template_features(space) unless FEATURE_NAMES.empty?
+      space.update(user_id: current_user.id) unless FEATURE_NAMES.empty?
+    end
+    
+    def rollover_property_broadcast_template(space, current_user)
+      self.rollover(space, current_user)
+      if FEATURE_NAMES.present?
+        properties = self.get_associated_properties(self.group)    
+    
+        if properties.present?
+          Space::CREATED_FEATURES.clear
+          space.collect_class_hash_features
+          properties.each do |property|
+            if property.spaces.present?
+              selected_space = property.spaces.select { |s| s.space_template == space.id.to_s }
+              if selected_space.present?
+                property.create_class_hash_features(selected_space.first) unless selected_space.first.features.present?
+                selected_space.first.update(user_id: current_user.id)
+              end    
+            end
+          end
+        end
+      end
+    end
+    
+#    building 'apartments, town houses, shared' with numbers and letters
     def build(params, current_group)
       low = params[:low]
       high = params[:high]
@@ -260,15 +292,198 @@ class Property < ApplicationRecord
 #      end
 #    end
     
-    def hand_down_space(current_group, space)
+    def get_associated_properties(current_group)
       id_string = self.id.to_s
       properties = current_group.properties.select { |property| property.property_template == id_string }
-      self.send_space_hand_down(properties, space)
+      properties
     end
     
-    def send_space_hand_down(properties, space)
-      properties.each do |property|
-        create_space(property, space.name, space.location)
+    def hand_down_duplicate_space_with_features(current_group, space, current_user)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          second_space = property.spaces.build(id: self, name: space.name, location: space.location, space_template: space.id.to_s, user_id: current_user.id)
+          second_space.save
+          space.hand_down_duplicated_features(second_space)
+        end
+      end
+    end
+    
+    def hand_down_space(current_group, space, current_user = nil)
+      user_id = is_there_a_current_user(current_user)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          s = property.spaces.build(id: self, name: space.name, location: space.location, space_template: space.id.to_s, user_id: user_id)
+          s.save
+        end
+      end
+    end
+    
+    def is_there_a_current_user(current_user)
+      if current_user
+        user_id = current_user.id
+      else
+        user_id = nil
+      end
+    end
+    
+    def hand_down_appliance(current_group, appliance, current_user = nil)
+      user_id = is_there_a_current_user(current_user)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          a = property.appliances.build(id: self, name: appliance.name, appliance_template: appliance.id.to_s, user_id: user_id)
+          a.save
+        end
+      end
+    end
+    
+    def hand_down_feature(current_group, space, feature, current_user = nil)
+      user_id = is_there_a_current_user(current_user)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          selected_space = property.spaces.select { |s| s.space_template == space.id.to_s }
+          if selected_space.present?            
+            f = selected_space.first.features.build(name: feature.name, variety: feature.variety, description: feature.description, feature_template: feature.id.to_s)
+            f.save
+            selected_space.first.update(user_id: user_id)
+          end
+        end
+      end
+    end
+    
+    def hand_down_appliance_feature(current_group, appliance, appliance_feature, current_user = nil)
+      user_id = is_there_a_current_user(current_user)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          selected_appliance = property.appliances.select { |a| a.appliance_template == appliance.id.to_s }
+          if selected_appliance.present?    
+            af = selected_appliance.first.appliance_features.build(name: appliance_feature.name, description: appliance_feature.description, appliance_feature_template: appliance_feature.id.to_s)
+            af.save
+            selected_appliance.first.update(user_id: user_id)
+          end
+        end
+      end
+    end
+    
+    def hand_down_destroy_space(current_group, space)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          if property.spaces.present?
+            property.spaces.each do |s| 
+              if s.space_template == space.id.to_s 
+                s.destroy unless s.user_id
+              end
+            end
+          end
+        end
+      end
+    end
+    
+    def hand_down_destroy_appliance(current_group, appliance)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          if property.appliances.present?
+            property.appliances.each do |a| 
+              if a.appliance_template == appliance.id.to_s 
+                a.destroy unless a.user_id
+              end
+            end
+          end
+        end
+      end
+    end
+    
+    def hand_down_feature_destroy(current_group, feature)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          selected_feature = property.features.select { |f| f.feature_template == feature.id.to_s }
+          if selected_feature.present?
+            selected_feature.first.destroy unless selected_feature.first.user_id
+          end
+        end
+      end
+    end
+    
+    def hand_down_appliance_feature_destroy(current_group, appliance_feature)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          selected_appliance_feature = property.appliance_features.select { |f| f.appliance_feature_template == appliance_feature.id.to_s }
+          if selected_appliance_feature.present?
+            selected_appliance_feature.first.destroy unless selected_appliance_feature.first.user_id
+          end
+        end
+      end
+    end
+    
+    def hand_down_update_space(current_group, space, current_user = nil)
+      user_id = is_there_a_current_user(current_user)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          if property.spaces.present?
+            property.spaces.each do |s| 
+              if s.space_template == space.id.to_s 
+                s.update(name: space.name, location: space.location, user_id: user_id)
+              end
+            end
+          end
+        end
+      end
+    end
+    
+    def hand_down_appliance_update(current_group, appliance, current_user = nil)
+      user_id = is_there_a_current_user(current_user)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          if property.appliances.present?
+            property.appliances.each do |a| 
+              if a.appliance_template == appliance.id.to_s 
+                a.update(name: appliance.name, user_id: user_id)
+              end
+            end
+          end
+        end
+      end
+    end
+    
+    def hand_down_feature_update(current_group, feature, current_user = nil)
+      user_id = is_there_a_current_user(current_user)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          if property.features.present?
+            selected_feature = property.features.select { |f| f.feature_template == feature.id.to_s }
+            if selected_feature.present?
+              selected_feature.first.update(name: feature.name, variety: feature.variety, description: feature.description)
+              selected_feature.first.space.update(user_id: user_id)
+            end
+          end
+        end
+      end
+    end
+    
+    def hand_down_appliance_feature_update(current_group, appliance_feature, current_user = nil)
+      user_id = is_there_a_current_user(current_user)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          if property.appliance_features.present?
+            selected_appliance_feature = property.appliance_features.select { |af| af.appliance_feature_template == appliance_feature.id.to_s }
+            if selected_appliance_feature.present?
+              selected_appliance_feature.first.update(name: appliance_feature.name, description: appliance_feature.description)
+              selected_appliance_feature.first.appliance.update(user_id: user_id)
+            end
+          end
+        end
       end
     end
     
@@ -277,12 +492,80 @@ class Property < ApplicationRecord
       self.appliances.each { |appliance| appliance.destroy unless appliance.user_id }
     end
     
-    def respond_to_dropdown(dropdown_name)
-      if SPACES_TEMPLATES.keys.include?(dropdown_name)
+    def respond_to_dropdown(dropdown_name, current_group)
+      if SPACES_TEMPLATES.keys.include?(dropdown_name) and self.property_template.blank?
         self.reset_template
         self.define_template(dropdown_name)
+      elsif SPACES_TEMPLATES.keys.include?(dropdown_name) and self.property_template and self.property_template.to_i != 0
+        self.reset_template
+        self.define_template(dropdown_name)
+#     if this is a broadcasting templater property then 'broadcast' the dropdown response
+      elsif SPACES_TEMPLATES.keys.include?(dropdown_name) and self.property_template and self.property_template.to_i == 0
+        self.reset_template
+        self.define_template(dropdown_name)
+        self.broadcast_response_to_dropdown(current_group)
+#     if this is a broadcasting templater property then 'broadcast' the dropdown response
+      elsif dropdown_name == "Reset canvas" and self.property_template and self.property_template.to_i == 0
+        self.reset_template
+        self.broadcast_the_reset(current_group)
       else
         self.reset_template
       end
+    end
+    
+    def broadcast_the_reset(current_group)
+      properties = self.get_associated_properties(current_group)
+      if properties.present?
+        properties.each do |property|
+          property.reset_template 
+        end
+      end
+    end
+    
+    def broadcast_response_to_dropdown(current_group) 
+      self.broadcast_response_to_dropdown_spaces(current_group)
+      self.broadcast_response_to_dropdown_appliances(current_group)
+      self.broadcast_response_to_dropdown_features(current_group)
+      self.broadcast_response_to_dropdown_appliance_features (current_group)
+    end
+    
+    def broadcast_response_to_dropdown_spaces(current_group)
+      CREATED_SPACES.each do |space|
+        self.hand_down_space(current_group, space) 
+      end
+    end
+    
+    def broadcast_response_to_dropdown_appliances(current_group)
+      CREATED_APPLIANCES.each do |appliance|
+        self.hand_down_appliance(current_group, appliance)
+      end
+    end
+    
+    def broadcast_response_to_dropdown_features(current_group)
+      CREATED_SPACES.each do |space|
+        if space.features
+          space.features.each do |feature|
+            self.hand_down_feature(current_group, space, feature)
+          end
+        end
+      end
+    end
+    
+    def broadcast_response_to_dropdown_appliance_features (current_group)
+      CREATED_APPLIANCES.each do |appliance|
+        if appliance.appliance_features
+          appliance.appliance_features.each do |appliance_feature|
+            self.hand_down_appliance_feature(current_group, appliance, appliance_feature)
+          end
+        end
+      end
+    end
+    
+    def broadcast_user_id(current_group)
+    end
+    
+    def associated_count (current_group)
+      properties = self.get_associated_properties(current_group)
+      properties.count
     end
 end

@@ -3,6 +3,7 @@
 
   <%= form_error_notification(appliance_feature) %>
 
+  <%= f.hidden_field :user_id, value: "#{current_user.id}" %>
   <%= f.input :name,
               wrapper_html: { class: "feature__name" },
               input_html: { autofocus: true } %>

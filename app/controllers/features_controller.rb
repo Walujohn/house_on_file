@@ -15,10 +15,15 @@ class FeaturesController < ApplicationController
     @feature = @space.features.build(feature_params)
 
     if @feature.save
-        respond_to do |format|
-            format.html { redirect_to property_path(@property), notice: "Feature was successfully created." }
-            format.turbo_stream { flash.now[:notice] = "Feature was successfully created." }
-        end
+      if @property.property_template and @property.property_template.to_i == 0
+        @property.hand_down_feature(current_group, @space, @feature, current_user)
+      end
+#     so this space cannot be destroyed by reset canvas if its features are edited
+      @space.update(user_id: current_user.id)
+      respond_to do |format|
+        format.html { redirect_to property_path(@property), notice: "Feature was successfully created." }
+        format.turbo_stream { flash.now[:notice] = "Feature was successfully created." }
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,18 +34,27 @@ class FeaturesController < ApplicationController
 
   def update
     if @feature.update(feature_params)
-        respond_to do |format|
-          format.html { redirect_to property_path(@property), notice: "Feature was successfully updated." }
-          format.turbo_stream { flash.now[:notice] = "Feature was successfully updated." }
-        end
+      if @property.property_template and @property.property_template.to_i == 0
+        @property.hand_down_feature_update(current_group, @feature, current_user)
+      end
+#     so this space cannot be destroyed by reset canvas if its features are edited
+      @space.update(user_id: current_user.id)
+      respond_to do |format|
+        format.html { redirect_to property_path(@property), notice: "Feature was successfully updated." }
+        format.turbo_stream { flash.now[:notice] = "Feature was successfully updated." }
+      end
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
+    if @property.property_template and @property.property_template.to_i == 0
+      @property.hand_down_feature_destroy(current_group, @feature)
+    end
     @feature.destroy
-
+#   so this space cannot be destroyed by reset canvas if its features are edited
+    @space.update(user_id: current_user.id)
     respond_to do |format|
       format.html { redirect_to property_path(@property), notice: "Feature was successfully destroyed." }
       format.turbo_stream { flash.now[:notice] = "Feature was successfully destroyed." }
@@ -51,7 +65,7 @@ class FeaturesController < ApplicationController
 
   def feature_params
 #    params.require(:feature).permit(:name, :description, :quantity, :unit_price)
-    params.fetch(:feature, {}).permit(:name, :variety, :description, :quantity, :unit_price)
+    params.fetch(:feature, {}).permit(:name, :variety, :description, :quantity, :unit_price, :user_id)
   end
 
   def set_property
@@ -68,7 +82,11 @@ class FeaturesController < ApplicationController
  
   def rollover_space
     if params[:rollover] and @space.features.empty?
-      @rollover = @property.rollover(@space)
+      if @property.property_template and @property.property_template.to_i == 0
+        @rollover = @property.rollover_property_broadcast_template(@space, current_user)
+      else
+        @rollover = @property.rollover(@space, current_user)
+      end
     end
   end
     

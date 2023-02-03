@@ -9,6 +9,8 @@ class Space < ApplicationRecord
   
   scope :ordered, -> { order(name: :asc) }
     
+  CREATED_FEATURES = Array.new
+
   def previous_space
     property.spaces.ordered.where("name < ?", name).last
   end
@@ -37,5 +39,18 @@ class Space < ApplicationRecord
       name = self.name  
       self.name = "#{name}" + " #{count}"
     end
+  end
+    
+  def hand_down_duplicated_features(second_space)
+    if self.features.present?
+      self.features.each do |feature|
+        second_space.features.build(id: self, name: feature.name, variety: feature.variety, description: feature.description, feature_template: feature.id.to_s)
+      end
+      second_space.save
+    end
+  end
+    
+  def collect_class_hash_features
+    self.features.each { |f| CREATED_FEATURES << f }
   end
 end

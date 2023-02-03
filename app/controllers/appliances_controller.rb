@@ -8,9 +8,11 @@ class AppliancesController < ApplicationController
 
   def create
     @appliance = @property.appliances.build(appliance_params)
-    @appliance.user_id = current_user.id
 
     if @appliance.save
+      if @property.property_template and @property.property_template.to_i == 0
+        @property.hand_down_appliance(current_group, @appliance, current_user)
+      end
       respond_to do |format|
         format.html { redirect_to property_path(@property), notice: "Appliance was successfully created." }
         format.turbo_stream { flash.now[:notice] = "Appliance was successfully created." }
@@ -25,6 +27,9 @@ class AppliancesController < ApplicationController
 
   def update
     if @appliance.update(appliance_params)
+      if @property.property_template and @property.property_template.to_i == 0
+        @property.hand_down_appliance_update(current_group, @appliance, current_user)
+      end
       respond_to do |format|
         format.html { redirect_to property_path(@property), notice: "Appliance was successfully updated." }
         format.turbo_stream { flash.now[:notice] = "Appliance was successfully updated." }
@@ -35,6 +40,9 @@ class AppliancesController < ApplicationController
   end    
     
   def destroy
+      if @property.property_template and @property.property_template.to_i == 0
+        @property.hand_down_destroy_appliance(current_group, @appliance)
+      end
       @appliance.destroy
       respond_to do |format|
           format.html { redirect_to property_path(@property), notice: "Appliance was successfully destroyed." }
@@ -45,7 +53,7 @@ class AppliancesController < ApplicationController
   private
 
   def appliance_params
-    params.require(:appliance).permit(:name)
+    params.require(:appliance).permit(:name, :user_id)
   end
 
   def set_property

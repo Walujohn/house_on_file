@@ -2,7 +2,7 @@ class ApplianceFeature < ApplicationRecord
   belongs_to :appliance
     
   validates :name, presence: true
-  validates :description, presence: true
+#  validates :description, presence: true
 #  validates :quantity, numericality: { only_integer: true, greater_than: 0 }
 #  validates :unit_price, numericality: { greater_than: 0 }
 

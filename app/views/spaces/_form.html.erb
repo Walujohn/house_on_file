@@ -21,6 +21,7 @@
     <%= f.hidden_field :location %>
   <% end %>
 
+  <%= f.hidden_field :user_id, value: current_user.id %>
   <%= f.input :name, html5: true, input_html: { autofocus: true } %>
   <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
   <%= f.submit class: "btn btn--secondary" %>

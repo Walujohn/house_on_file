@@ -10,19 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_30_212625) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_31_152256) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "appliance_features", force: :cascade do |t|
     t.bigint "appliance_id", null: false
     t.string "name", null: false
-    t.text "description", null: false
+    t.text "description"
     t.integer "quantity"
     t.decimal "unit_price", precision: 10, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "variety"
+    t.string "appliance_feature_template"
+    t.integer "user_id"
     t.index ["appliance_id"], name: "index_appliance_features_on_appliance_id"
   end
 
@@ -32,6 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_30_212625) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.string "appliance_template"
     t.index ["name"], name: "index_appliances_on_name"
     t.index ["property_id"], name: "index_appliances_on_property_id"
   end
@@ -45,6 +48,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_30_212625) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "variety"
+    t.string "feature_template"
+    t.integer "user_id"
     t.index ["space_id"], name: "index_features_on_space_id"
   end
 
@@ -83,6 +88,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_30_212625) do
     t.datetime "updated_at", null: false
     t.integer "location", default: 0, null: false
     t.integer "user_id"
+    t.string "space_template"
     t.index ["name"], name: "index_spaces_on_name"
     t.index ["property_id"], name: "index_spaces_on_property_id"
   end

@@ -18,7 +18,7 @@ class PropertiesController < ApplicationController
         elsif @dropdown_name == "Draw"
           @spaces = @property.spaces.includes(:features).ordered
         else
-          @property.respond_to_dropdown(@dropdown_name)
+          @property.respond_to_dropdown(@dropdown_name, current_group)
           @spaces = @property.spaces.includes(:features).ordered
         end
         @appliances = @property.appliances.includes(:appliance_features).ordered

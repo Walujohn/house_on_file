@@ -9,13 +9,12 @@
     <h1>
       <%= @property.name %>
     </h1>
-      
     <% if @property.property_template and @property.property_template.to_i == 0 %>
-      <p class="property__hint">Hint: This is a town house, shared, apartments style template property. Changes made here will be inherited by its associated properties!</p>
-    <% else %>
-      <p class="property__hint">Inheriting changes from <%= current_group.properties.find(@property.property_template).name %></p>
+      <p class="property__hint">Hint: This is a town house, shared, apartments style canvas property. Changes made here will be inherited by its <%= @property.associated_count(current_group) %> associated properties.</p>
     <% end %>
-      
+    <% if @property.property_template and @property.property_template.to_i != 0 %>
+      <p class="property__hint">Hint: Inheriting changes from <%= current_group.properties.where(id: @property.property_template.to_i).first.name %> canvas</p>
+    <% end %>
     <div class="property__actions">
       <%= link_to "New space",
                   new_property_space_path(@property),
@@ -28,7 +27,7 @@
         </form>
       </section>
 -->
-      <%= simple_form_for [@property] do |f| %>
+      <%= simple_form_for [@property], html: { class: "canvas-dropdown" } do |f| %>
         <%= form_error_notification(@property) %>
         <div data-controller="element search-params">
           <%= f.select :name, @property.styles.invert, {}, autocomplete: "off",
@@ -51,29 +50,7 @@
   <%= turbo_frame_tag @property do %>
 <!--    <div class="space__body">-->
     <% if params.dig(:property, :name) == "Draw" %>
-      <div class="space">
-        <div class="space__body">
-          <h3>Choose</h3>
-          <div class="drawing-tool__body">
-            <% @lettered_names.each do |key, value| %>
-              <div class="drawing-tool__names">
-                <%= key %>
-                <% value.each do |value| %>
-                  <%= simple_form_for [@property, @space] do |form| %>
-                    <%= hidden_field_tag "drawn" %>
-                    <%= form.hidden_field :name, value: "#{value}" %>
-                    <%= form.submit "#{value}", class: "btn--drawn" %>
-                  <% end %>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
-          <div class="space__footer drawing-tool__staging">
-            <h3>Preview</h3>
-            <%= turbo_frame_tag nested_dom_id("space", Space.new) %>
-          </div>
-        </div>
-      </div>
+      <%= render "selections" %>
     <% end %>
     
     <%= turbo_frame_tag Space.new %>

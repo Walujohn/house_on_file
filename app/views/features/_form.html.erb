@@ -5,6 +5,7 @@
   <%= turbo_frame_tag "tabs", class: "form feature__dropdowns" do %>
     <% if @tab %>
       <%= f.hidden_field :tab, value: @tab %>
+      <%= f.hidden_field :user_id, value: "#{current_user.id}" %>
       <%= f.input :name,
                   wrapper_html: { class: "feature__name" },
                   input_html: { autofocus: true } %>
@@ -14,6 +15,7 @@
                   wrapper_html: { class: "feature__variety" } %>
     <% else %>
       <fieldset data-controller="element search-params" class="feature--fieldset">
+        <%= f.hidden_field :user_id, value: "#{current_user.id}" %>
         <%= f.label :name %>
         <%= f.select :name, feature.names.invert, {}, autocomplete: "off",
                      data: { action: "change->search-params#encode change->element#click" } %>
