@@ -12,7 +12,6 @@ class SpacesController < ApplicationController
   def create  
     @space = @property.spaces.build(space_params)
     @space.number_the_name(@property)
-
     if @space.save
       if @property.property_template and @property.property_template.to_i == 0
         @property.hand_down_space(current_group, @space, current_user)

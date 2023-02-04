@@ -11,13 +11,15 @@ Rails.application.routes.draw do
   # root "articles#index"
     
   resources :properties do
-      resources :spaces, except: [:index, :show] do
+      resources :spaces, except: [:index] do
           resources :features, except: [:index, :show]
       end
       resources :appliances, except: [:index, :show] do
           resources :appliance_features, except: [:index, :show]
       end
   end
+  
+  resources :searches, only: :index
         
 end
 

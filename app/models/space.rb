@@ -9,6 +9,8 @@ class Space < ApplicationRecord
   
   scope :ordered, -> { order(name: :asc) }
     
+  scope :containing, -> (query) { where(name: query) }
+
   CREATED_FEATURES = Array.new
 
   def previous_space
@@ -38,6 +40,7 @@ class Space < ApplicationRecord
       count = multi_word_matches.count unless multi_word_matches.count <= 1
       name = self.name  
       self.name = "#{name}" + " #{count}"
+      self.name = self.name.strip
     end
   end
     

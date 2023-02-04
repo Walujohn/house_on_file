@@ -1,23 +1,40 @@
-      <div class="space">
-        <div class="space__body">
-          <h3>Choose</h3>
-          <div class="drawing-tool__body">
-            <% @lettered_names.each do |key, value| %>
-              <div class="drawing-tool__names">
-                <%= key %>
-                <% value.each do |value| %>
-                  <%= simple_form_for [@property, @space] do |form| %>
-                    <%= hidden_field_tag "drawn" %>
-                    <%= form.hidden_field :name, value: "#{value}" %>
-                    <%= form.submit "#{value}", class: "btn--drawn" %>
-                  <% end %>
-                <% end %>
-              </div>
+     
+
+
+
+
+
+<div class="space" data-controller="combobox">
+  
+  <form action="<%= searches_path(turbo_frame: "search_results") %>" data-turbo-frame="search_results" data-controller="form" class="peer" data-action="invalid->form#hideValidationMessage:capture">
+    <label for="search_query">Query</label>
+    <input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-combobox-target="input" data-action="focus->combobox#start focusout->combobox#stop">
+
+    <button> 
+      Search
+    </button>
+  </form>
+  <turbo-frame id="search_results" target="_top" class="empty:hidden peer-invalid:hidden"></turbo-frame> 
+        
+  <div class="space__body">
+    <h3>Choose</h3>
+    <div class="drawing-tool__body">
+      <% @lettered_names.each do |key, value| %>
+        <div class="drawing-tool__names">
+          <%= key %>
+          <% value.each do |value| %>
+            <%= simple_form_for [@property, @space] do |form| %>
+              <%= hidden_field_tag "drawn" %>
+              <%= form.hidden_field :name, value: "#{value}" %>
+              <%= form.submit "#{value}", class: "btn--drawn" %>
             <% end %>
-          </div>
-          <div class="space__footer drawing-tool__staging">
-            <h3>Preview</h3>
-            <%= turbo_frame_tag nested_dom_id("space", Space.new) %>
-          </div>
+          <% end %>
         </div>
-      </div>
+      <% end %>
+   </div>
+   <div class="space__footer drawing-tool__staging">
+     <h3>Preview</h3>
+     <%= turbo_frame_tag nested_dom_id("space", Space.new) %>
+   </div>
+  </div>
+</div>
