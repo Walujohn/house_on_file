@@ -15,6 +15,8 @@ class PropertiesController < ApplicationController
           @spaces = @property.spaces.includes(:features).ordered.where(location: "interior")
         elsif @dropdown_name == "List exteriors"
           @spaces = @property.spaces.includes(:features).ordered.where(location: "exterior")
+        elsif @dropdown_name == "List all"
+          @spaces = @property.spaces.includes(:features).ordered
         elsif @dropdown_name == "Draw"
           @spaces = @property.spaces.includes(:features).ordered
         else

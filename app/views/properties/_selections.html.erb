@@ -7,7 +7,9 @@
     <input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-action="input->form#submit">
 <!--<input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-combobox-target="input" data-action="focus->combobox#start focusout->combobox#stop input->form#submit">-->
 
-    <button data-form-target="submit"> 
+<!--added formethod="get" to fix the error displaying in dom that may disappear with combobox later...-->
+<!--there is also a chrome extensions error that pops up in the dom with this search bar feature sometimes-->
+    <button formmethod="get" data-form-target="submit"> 
       Search
     </button>
   </form>
