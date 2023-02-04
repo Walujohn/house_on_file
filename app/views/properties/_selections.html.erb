@@ -1,16 +1,13 @@
-     
-
-
-
-
-
-<div class="space" data-controller="combobox">
+<!--if can enhance progressively and get skypack working with stimulus-->
+<!--data-controller="combobox"-->
+<div class="space">
   
   <form action="<%= searches_path(turbo_frame: "search_results") %>" data-turbo-frame="search_results" data-controller="form" class="peer" data-action="invalid->form#hideValidationMessage:capture">
     <label for="search_query">Query</label>
-    <input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-combobox-target="input" data-action="focus->combobox#start focusout->combobox#stop">
+    <input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-action="input->form#submit">
+<!--<input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-combobox-target="input" data-action="focus->combobox#start focusout->combobox#stop input->form#submit">-->
 
-    <button> 
+    <button data-form-target="submit"> 
       Search
     </button>
   </form>

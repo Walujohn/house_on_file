@@ -1,7 +1,8 @@
 <turbo-frame id="<%= params.fetch(:turbo_frame, "search_results") %>">
   <h1>Results</h1>
 
-  <ul role="listbox" data-combobox-target="list">
+<!--  data-combobox-target="list"    -->
+  <ul role="listbox">
     <% @spaces.each do |space| %>
       <li>
         <%= link_to highlight(space.name, params[:query]), property_space_path(space.property, space), id: dom_id(space, :search_result), role: "option", class: "aria-selected:outline-black" %>
