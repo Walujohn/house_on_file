@@ -1,11 +1,38 @@
 <turbo-frame id="<%= params.fetch(:turbo_frame, "search_results") %>">
   <h1>Results</h1>
+<!--data-combobox-target="list"    -->
+  <ul role="listbox"> 
+    <% @names.each do |space| %>
+      <li class="space-search-result--line-item">
+        <div class="property space-search-result">
+          <%= link_to highlight(space, params[:query]), property_path(@property), id: dom_id(@property, :search_result), role: "option", class: "aria-selected:outline-black" %>
+            
+          <div class="property__actions">
+            <%= button_to "x2",
+                          property_path(@property),
+                          class: "btn btn--white" %>
+          </div>
+        </div>
+          
+        <div class="property space-search-result">
+          <%= link_to highlight(space, params[:query]), property_path(@property), id: "space", role: "option", class: "aria-selected:outline-black" %>
+          
+          <div class="property__actions">
+            Ceiling covering, wall covering, floor covering  
+            
+            <%= button_to "x2",
+                          property_path(@property),
+                          class: "btn btn--white" %>
+          </div>
+        </div>
+      </li>
+    <% end %>
 
-<!--  data-combobox-target="list"    -->
-  <ul role="listbox">
     <% @spaces.each do |space| %>
-      <li>
-        <%= link_to highlight(space.name, params[:query]), property_space_path(space.property, space), id: dom_id(space, :search_result), role: "option", class: "aria-selected:outline-black" %>
+      <li class="space-search-result--line-item">
+        <div class="property">
+          <%= link_to highlight(space.name, params[:query]), property_space_path(space.property, space), id: dom_id(space, :search_result), role: "option", class: "aria-selected:outline-black" %>
+        </div>
       </li>
     <% end %>
   </ul>

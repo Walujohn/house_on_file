@@ -1,9 +1,9 @@
 <!--if can enhance progressively and get skypack working with stimulus-->
 <!--data-controller="combobox"-->
 <div class="space">
-  
   <form action="<%= searches_path(turbo_frame: "search_results") %>" data-turbo-frame="search_results" data-controller="form" class="peer" data-action="invalid->form#hideValidationMessage:capture">
     <label for="search_query">Query</label>
+    <input type="hidden" name="property_id" value="<%= @property.id %>">
     <input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-action="input->form#submit">
 <!--<input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-combobox-target="input" data-action="focus->combobox#start focusout->combobox#stop input->form#submit">-->
 
@@ -14,26 +14,25 @@
     </button>
   </form>
   <turbo-frame id="search_results" target="_top" class="empty:hidden peer-invalid:hidden"></turbo-frame> 
-        
-  <div class="space__body">
+
+  <div class="space-search-result__body">
     <h3>Choose</h3>
-    <div class="drawing-tool__body">
-      <% @lettered_names.each do |key, value| %>
-        <div class="drawing-tool__names">
-          <%= key %>
-          <% value.each do |value| %>
-            <%= simple_form_for [@property, @space] do |form| %>
-              <%= hidden_field_tag "drawn" %>
-              <%= form.hidden_field :name, value: "#{value}" %>
-              <%= form.submit "#{value}", class: "btn--drawn" %>
-            <% end %>
+    <% @lettered_names.each do |key, value| %>
+      <h4 class="space-search-result--letter-header"><%= key %></h4>
+      <% value.each do |value| %>
+        <div class="space-search-result--letter-group">
+          <%= simple_form_for [@property, @space] do |form| %>
+            <%= hidden_field_tag "drawn" %>
+            <%= form.hidden_field :name, value: "#{value}" %>
+            <%= form.submit "#{value}", class: "btn btn--drawn" %>
           <% end %>
         </div>
       <% end %>
-   </div>
-   <div class="space__footer drawing-tool__staging">
+    <% end %>
+   <div class="space-search-result__footer">
      <h3>Preview</h3>
-     <%= turbo_frame_tag nested_dom_id("space", Space.new) %>
+<!--     <p>Hint: Click the name to remove it if you decide on a different space.</p>-->
+     <%= turbo_frame_tag nested_dom_id("space", Space.new), class: "space-search-result__turbo-frame" %>
    </div>
   </div>
 </div>

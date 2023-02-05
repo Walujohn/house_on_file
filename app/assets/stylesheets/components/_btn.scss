@@ -72,9 +72,24 @@
   }
     
   &--drawn {
-    font-size: var(--font-size-xs);
-    background-color: transparent;
+    font-size: var(--font-size-s);
     border: none;
+    font-weight: normal;
+    padding: var(--space-s);
+  }
+    
+  &--white {
+    color: var(--color-dark);
+    background-color: var(--color-white);
+    border: none;
+
+    &:hover,
+    &:focus,
+    &:focus-within,
+    &:active {
+      color: var(--color-dark);
+      filter: brightness(92%);
+    }   
   }
 }
 
