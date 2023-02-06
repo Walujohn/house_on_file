@@ -30,9 +30,7 @@
       <%= simple_form_for [@property], html: { class: "canvas-dropdown" } do |f| %>
         <%= form_error_notification(@property) %>
         <div data-controller="element search-params">
-          <%= f.select :name, @property.styles.invert, {}, autocomplete: "off",
-                       data: { action: "change->search-params#encode change->element#click" },
-                       class: "property__dropdown" %>
+          <%= f.select :name, @property.styles.invert, { disabled: [@property.styles.keys[4], @property.styles.keys[5], @property.styles.keys[6], @property.styles.keys[8], @property.styles.keys[9], @property.styles.keys[10], @property.styles.keys[11], @property.styles.keys[13], @property.styles.keys[14], @property.styles.keys[16], @property.styles.keys[17], @property.styles.keys[18]] }, autocomplete: "off", data: { action: "change->search-params#encode change->element#click" }, class: "property__dropdown" %>
           <noscript>
             <button formmethod="get" formaction="<%= property_path(@property) %>">Select style</button>
           </noscript>
@@ -49,7 +47,15 @@
      
   <%= turbo_frame_tag @property do %>
 <!--    <div class="space__body">-->
-    <% if params.dig(:property, :name) == "Draw" %>
+    <% if params.dig(:property, :name) == "Singles" %>
+      <%= render "selections" %>
+    <% end %>
+    
+    <% if params[:singles] and params[:singles] == "x2" %>
+      <%= render "selections" %>
+    <% end %>
+    
+    <% if params[:singles] and params[:singles] == "spaces with features" %>
       <%= render "selections" %>
     <% end %>
     

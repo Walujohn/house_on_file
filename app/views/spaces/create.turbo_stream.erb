@@ -1,16 +1,5 @@
-<% if params[:drawn] %>
-  <%= turbo_stream.append nested_dom_id("space", Space.new) do %>
-    <%= turbo_frame_tag nested_dom_id("space", @space) do %>
-      <%= button_to "#{params.dig(:space, :name)}",
-                    [@property, @space, drawn: "#{@space.name}"],
-                    method: :delete,
-                    class: "btn--white" %>
-    <% end %>
-  <% end %>
-<% else %>
-  <%# Step 1: remove the form from the Properties#show page %>
-  <%= turbo_stream.update Space.new, "" %>
-<% end %>
+<%# Step 1: remove the form from the Properties#show page %>
+<%# turbo_stream.update Space.new, "" %>
 
 <%# Step 2: add the space at the right place %>
 <% if params[:list].present? %>

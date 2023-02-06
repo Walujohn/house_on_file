@@ -16,28 +16,6 @@
     }        
   }
     
-  &__turbo-frame {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    max-height: 100%;
-    column-gap: var(--space-s); 
-  }
-
-  
-  &__footer {
-    border: dashed 2px var(--color-light);
-    border-radius: var(--border-radius);
-//    text-align: center;
-    padding: var(--space-xxs);
-    max-height: 100%;
-
-    @include media(tabletAndUp) {
-      padding: var(--space-m);
-    }
-  }
-    
   &--letter-group {
     display: flex;
     justify-content: space-between;

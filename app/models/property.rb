@@ -104,12 +104,29 @@ class Property < ApplicationRecord
       { "List all" => "List all", 
         "List interiors" => "List interiors",
         "List exteriors" => "List exteriors",
-        "Create town home" => "Reset unedited spaces and layer town home spaces", 
-        "Create 3 bed" => "Reset unedited spaces and layer 3 bed spaces", 
-        "Create studio apt." => "Reset unedited spaces and layer studio apt. spaces", 
-        "Create retail layout" => "Reset unedited spaces and layer retail layout spaces",
+          
+        "Create town home" => "Starting layer town home spaces: remove all unedited spaces", 
+        "Create town home dis 5" => "from property and generate a kitchen, bedroom, bedroom 2,",
+        "Create town home dis 6" => "living room, media room, basement, deck, patio, porch,",
+        "Create town home dis 7" => "refrigerator, shower and dishwasher starting layer",
+
+        "Create 3 bed" => "Starting layer 3 bedroom home spaces: remove all unedited spaces", 
+        "Create 3 bed dis 9" => "and generate a bedroom, bedroom 2, bedroom 3, sunroom, bathroom,", 
+        "Create 3 bed dis 10" => "bathroom 2, bathroom 3, stairs, basement, kitchen, dining room, living room,", 
+        "Create 3 bed dis 11" => "foyer, front entrance, hallway, office, yard, garage, hvac, refrigerator,", 
+        "Create 3 bed dis 12" => "shower tub, and shower tub 2 starting layer", 
+          
+        "Create studio apt." => "Starting layer studio apartment spaces: remove all unedited spaces", 
+        "Create studio apt. dis 14" => "from property and generate a kitchen area, bedroom, loft, living room,", 
+        "Create studio apt. dis 15" => "bathroom, refrigerator, fireplace, dryer, and dryer vent starting layer", 
+          
+        "Create retail layout" => "Starting layer retail layout spaces: remove all unedited spaces",
+        "Create retail layout dis 17" => "from property and generate a storage, sales floor, registers,",
+        "Create retail layout dis 18" => "entrance, emergency exit, office, family restrooms and commercial",
+        "Create retail layout dis 19" => "HVAC starting layer",
+          
         "Reset canvas" => "Reset unedited layers",
-        "Draw" => "Draw" }
+        "Singles" => "Singles" }
     end
     
     def forms
@@ -164,12 +181,22 @@ class Property < ApplicationRecord
         FEATURES_TEMPLATES[:"#{space.name}"].each do |feature|
           @feature = space.features.build(id: self, 
                                           name: feature[1][:name], 
-                                          description: feature[1][:description], 
-                                          quantity: feature[1][:quantity], 
-                                          unit_price: feature[1][:unit_price])
+                                          description: feature[1][:description])
            @feature.save 
         end  
       end
+    end
+    
+    def create_common_features(space)
+      common_features.each do |feature|
+        @feature = space.features.build(id: self, 
+                                        name: feature)
+        @feature.save 
+      end  
+    end
+    
+    def common_features
+      ["wall covering", "ceiling covering", "floor covering"]
     end
     
 #    template appliances

@@ -10,18 +10,43 @@ class SpacesController < ApplicationController
   end
 
   def create  
-    @space = @property.spaces.build(space_params)
-    @space.number_the_name(@property)
-    if @space.save
-      if @property.property_template and @property.property_template.to_i == 0
-        @property.hand_down_space(current_group, @space, current_user)
-      end
-      respond_to do |format|
-        format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
-        format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
+    if params[:x2]
+      @multiplier = params[:x2].to_i
+      @multiplier.times do    
+        @space = @property.spaces.build(space_params)
+        @space.number_the_name(@property)
+        if @space.save    
+          if params[:spaces_with_features]
+            @property.create_common_features(@space)
+          end    
+          if @property.property_template and @property.property_template.to_i == 0
+            @property.hand_down_space(current_group, @space, current_user)
+          end
+          respond_to do |format|
+            format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
+            format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
+          end
+        else
+          render :new, status: :unprocessable_entity
+        end
       end
     else
-      render :new, status: :unprocessable_entity
+      @space = @property.spaces.build(space_params)
+      @space.number_the_name(@property)
+      if @space.save
+        if params[:spaces_with_features]
+          @property.create_common_features(@space)
+        end
+        if @property.property_template and @property.property_template.to_i == 0
+          @property.hand_down_space(current_group, @space, current_user)
+        end
+        respond_to do |format|
+          format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
+          format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
+        end
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
   end
     
