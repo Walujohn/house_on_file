@@ -85,6 +85,8 @@
     
   &__link {
     font-size: var(--font-size-m);
+    display: flex;
+    align-items: center;
   }
 
   &--form {

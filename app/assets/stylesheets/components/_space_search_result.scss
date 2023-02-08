@@ -1,13 +1,12 @@
 .space-search-result {
   &__body {
-    height: 700px;
+    height: auto;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     column-gap: var(--space-m);  
     
     background-color: var(--color-white);
-    margin-top: var(--space-xs);
     padding: var(--space-xxs);
     padding-top: 0;
 
@@ -15,12 +14,38 @@
       padding: var(--space-m);
     }        
   }
+   
+//  you typically don't add margins to components for a good design model but oh well
+  &__tool-nav {
+    display: flex;
+    border: solid 2px var(--color-light);
+    border-radius: var(--border-radius);
+    justify-content: space-between;
+    margin-bottom: var(--space-xs);    
+  } 
+    
+  &__form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-right: var(--space-s);
+    /* font-weight: bold; */
+    font-size: var(--font-size-s);     
+  }
+    
+  &__search-input {
+    border-color: var(--color-light);
+    border-radius: var(--border-radius);    
+  }
+    
+  &__cancel {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;    
+  }
     
   &--letter-group {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--space-s);
     background-color: var(--color-light);     
   }
 

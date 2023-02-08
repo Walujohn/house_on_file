@@ -51,9 +51,10 @@
     }
   }
     
-  &__dropdown {
+  &__select {
     font-size: 0.875rem;
     width: 100%;
+    border-radius: var(--border-radius);
   }
     
   &__hint {

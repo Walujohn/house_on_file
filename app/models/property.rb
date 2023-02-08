@@ -105,28 +105,24 @@ class Property < ApplicationRecord
         "List interiors" => "List interiors",
         "List exteriors" => "List exteriors",
           
-        "Create town home" => "Starting layer town home spaces: remove all unedited spaces", 
-        "Create town home dis 5" => "from property and generate a kitchen, bedroom, bedroom 2,",
-        "Create town home dis 6" => "living room, media room, basement, deck, patio, porch,",
-        "Create town home dis 7" => "refrigerator, shower and dishwasher starting layer",
+        "Create town home" => "Town house size starting layer",
+        "Line four" => " Remove all unedited spaces and appliances from property and generate 2 bedrooms, kitchen,",
+        "Line five" => "living room, media room, basement, deck, patio, porch, refrigerator, shower and dishwasher",
 
-        "Create 3 bed" => "Starting layer 3 bedroom home spaces: remove all unedited spaces", 
-        "Create 3 bed dis 9" => "and generate a bedroom, bedroom 2, bedroom 3, sunroom, bathroom,", 
-        "Create 3 bed dis 10" => "bathroom 2, bathroom 3, stairs, basement, kitchen, dining room, living room,", 
-        "Create 3 bed dis 11" => "foyer, front entrance, hallway, office, yard, garage, hvac, refrigerator,", 
-        "Create 3 bed dis 12" => "shower tub, and shower tub 2 starting layer", 
+        "Create 3 bed" => "3 bedroom size starting layer", 
+        "Line seven" => "Remove all unedited spaces and appliances from property and generate, 3 bedrooms,",  
+        "Line eight" => "3 bathrooms, kitchen, dining room, living room, sunroom, stairs, basement, foyer,", 
+        "Line nine" => "front entrance, hallway, office, yard, garage, 2 shower tubs, hvac and refrigerator", 
           
-        "Create studio apt." => "Starting layer studio apartment spaces: remove all unedited spaces", 
-        "Create studio apt. dis 14" => "from property and generate a kitchen area, bedroom, loft, living room,", 
-        "Create studio apt. dis 15" => "bathroom, refrigerator, fireplace, dryer, and dryer vent starting layer", 
+        "Create studio apt." => "Studio apt. size starting layer", 
+        "Line eleven" => "Remove all unedited spaces and appliances from property and generate a bedroom,", 
+        "Line twelve" => "kitchen, loft, living room, bathroom, refrigerator, fireplace, dryer, and dryer vent", 
           
-        "Create retail layout" => "Starting layer retail layout spaces: remove all unedited spaces",
-        "Create retail layout dis 17" => "from property and generate a storage, sales floor, registers,",
-        "Create retail layout dis 18" => "entrance, emergency exit, office, family restrooms and commercial",
-        "Create retail layout dis 19" => "HVAC starting layer",
+        "Create retail layout" => "Commercial size starting layer",
+        "Line fourteen" => "Remove all unedited spaces and appliances from property and generate a storage,",
+        "Line fifteen" => "sales floor, registers, entrance, emergency exit, office, restrooms and commercial HVAC",
           
-        "Reset canvas" => "Reset unedited layers",
-        "Singles" => "Singles" }
+        "Reset canvas" => "Reset canvas/all unedited spaces and appliances" }
     end
     
     def forms
@@ -529,6 +525,7 @@ class Property < ApplicationRecord
 #     if this is a broadcasting templater property then 'broadcast' the dropdown response
       elsif SPACES_TEMPLATES.keys.include?(dropdown_name) and self.property_template and self.property_template.to_i == 0
         self.reset_template
+        self.broadcast_the_reset(current_group)
         self.define_template(dropdown_name)
         self.broadcast_response_to_dropdown(current_group)
 #     if this is a broadcasting templater property then 'broadcast' the dropdown response

@@ -1,6 +1,8 @@
 class SpacesController < ApplicationController
   before_action :set_property
   before_action :set_space, only: [:edit, :update, :destroy]
+  before_action :set_names, only: [:new]
+  before_action :set_lettered_names, only: [:new]
   
   def new
     @space = @property.spaces.build
@@ -20,8 +22,13 @@ class SpacesController < ApplicationController
             @property.create_common_features(@space)
           end    
           if @property.property_template and @property.property_template.to_i == 0
-            @property.hand_down_space(current_group, @space, current_user)
+            if params[:spaces_with_features]
+              @property.hand_down_duplicate_space_with_features(current_group, @space, current_user)
+            else
+              @property.hand_down_space(current_group, @space, current_user)
+            end
           end
+          @spaces = @property.spaces.includes(:features).ordered
           respond_to do |format|
             format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
             format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
@@ -38,7 +45,11 @@ class SpacesController < ApplicationController
           @property.create_common_features(@space)
         end
         if @property.property_template and @property.property_template.to_i == 0
-          @property.hand_down_space(current_group, @space, current_user)
+          if params[:spaces_with_features]
+            @property.hand_down_duplicate_space_with_features(current_group, @space, current_user)
+          else
+            @property.hand_down_space(current_group, @space, current_user)
+          end
         end
         respond_to do |format|
           format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
@@ -109,6 +120,14 @@ class SpacesController < ApplicationController
     
   def set_space
     @space = @property.spaces.find(params[:id])
+  end
+
+  def set_names
+    @names = @property.list_of_space_names
+  end
+  
+  def set_lettered_names 
+    @lettered_names = @names.group_by { |name| name[0].to_sym } 
   end
 end
 

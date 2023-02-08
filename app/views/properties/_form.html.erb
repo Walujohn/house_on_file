@@ -48,7 +48,7 @@
         <section>
           <%= field_set_tag "Town houses, shared, apartments annote", class: "property--fieldset" do %>
             <%= f.label :The_lowest_address_number_or_unit_number_of_this_property_model_is %>
-            <%= f.text_field :low, placeholder: "Lowest #" %>
+            <%= f.text_field :low, placeholder: "Lowest #", class: "form--property-low" %>
             <%= f.label :and_the_highest_address_number_or_unit_number_of_this_property_model_is %>
             <%= f.text_field :high, placeholder: "Highest #" %>
             <%= f.label :Do_the_unit_numbers_end_with_letters? %>

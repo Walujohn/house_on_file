@@ -72,16 +72,20 @@
   }
     
   &--drawn {
-    font-size: var(--font-size-s);
+    font-size: var(--font-size-m);
     border: none;
     font-weight: normal;
     padding: var(--space-s);
   }
     
+  &--toolbar {
+    color: var(--color-dark);
+  }
+    
   &--white {
     color: var(--color-dark);
     background-color: var(--color-white);
-    border: none;
+    border: solid 1px;
 
     &:hover,
     &:focus,

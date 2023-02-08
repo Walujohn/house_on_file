@@ -1,40 +1,120 @@
-<%= simple_form_for [property, space], html: { class: "form space" } do |f| %>
-  <%= form_error_notification(space) %>
-  <%= hidden_field_tag :list, "#{params[:location]}" %>
-  
-  <% if params[:edit_location] and params[:edit_location] == "interior" %>
-    <%= hidden_field_tag :edit_location, "exterior" %>
-  <% elsif params[:edit_location] and params[:edit_location] == "exterior" %>
-    <%= hidden_field_tag :edit_location, "interior" %>
-  <% else %>
-    <% if space.location == "interior" %>
+<% if controller_name == "spaces" and params[:singles] %>
+  <%= turbo_frame_tag "space_search_result_tool" do %>
+    <div class="space-search-result__cancel">
+      <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
+    </div>
+<!--if can enhance progressively and get skypack working with stimulus-->
+<!--data-controller="combobox"-->
+    <div class="space">
+      <div class="space-search-result__body">
+        <form action="<%= searches_path(turbo_frame: "search_results") %>" data-turbo-frame="search_results" data-controller="form" class="peer" data-action="invalid->form#hideValidationMessage:capture">
+          <label for="search_query">Query</label>
+          <input type="hidden" name="property_id" value="<%= @property.id %>">
+          <input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-action="input->form#submit" class="space-search-result__search-input">
+        <!--<input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-combobox-target="input" data-action="focus->combobox#start focusout->combobox#stop input->form#submit">-->
+
+        <!--added formethod="get" to fix the error displaying in dom that may disappear with combobox later...-->
+        <!--there is also a chrome extensions error that pops up in the dom with this search bar feature sometimes-->
+          <button formmethod="get" data-form-target="submit"> 
+            Search
+          </button>
+        </form>
+        <turbo-frame id="search_results" target="_top" class="empty:hidden peer-invalid:hidden"></turbo-frame>  
+          
+        <div class="space-search-result__tool-nav">
+          <%= link_to "Nil",
+                      new_property_space_path(@property, singles: "nil"),
+                      class: "btn btn--toolbar" %> 
+          <%= link_to "x2",
+                      new_property_space_path(@property, singles: "x2"),
+                      class: "btn btn--toolbar" %>
+          <%= link_to "Fill",
+                      new_property_space_path(@property, singles: "fill features"),
+                      class: "btn btn--toolbar" %>
+          <%= link_to "x2 w/ fill",
+                      new_property_space_path(@property, singles: "x2 w/ fill"),
+                      class: "btn btn--toolbar" %>
+        </div>
+        <% @lettered_names.each do |key, value| %>
+          <h4 class="space-search-result--letter-header"><%= key %></h4>
+          <% value.each do |value| %>
+            <div class="space-search-result--letter-group">
+              <%= simple_form_for [@property, @space], html: { class: "space-search-result__form" } do |form| %>
+                <% if params[:singles] and params[:singles] == "x2" %>
+                  <%= hidden_field_tag "x2", "2" %>
+                <% end %>
+                <% if params[:singles] and params[:singles] == "fill features" %>
+                  <%= hidden_field_tag "spaces_with_features", "common" %>
+                <% end %>
+                <% if params[:singles] and params[:singles] == "x2 w/ fill" %>
+                  <%= hidden_field_tag "x2", "2" %>
+                  <%= hidden_field_tag "spaces_with_features", "common" %>
+                <% end %>
+                <%= form.hidden_field :user_id, value: current_user.id %>
+                <%= form.hidden_field :name, value: "#{value}" %>
+                <%= hidden_field_tag "space_search_result_form" %>
+                <%= form.submit "#{value}", class: "btn btn--drawn" %>
+                <% if params[:singles] and params[:singles] == "x2" %>
+                  <span>x2</span>
+                <% end %>
+                <% if params[:singles] and params[:singles] == "fill features" %>
+                    <span>Wall, ceiling, floor covering</span>
+                <% end %>
+                <% if params[:singles] and params[:singles] == "x2 w/ fill" %>
+                  <span>Wall, ceiling, floor covering</span>
+                  <span>x2</span>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>  
+<% else %>
+  <%= simple_form_for [property, space], html: { class: "form space" } do |f| %>
+    <%= form_error_notification(space) %>
+    <%= hidden_field_tag :list, "#{params[:location]}" %>
+
+    <% if params[:edit_location] and params[:edit_location] == "interior" %>
+      <%= hidden_field_tag :edit_location, "exterior" %>
+    <% elsif params[:edit_location] and params[:edit_location] == "exterior" %>
+      <%= hidden_field_tag :edit_location, "interior" %>
+    <% else %>
+      <% if space.location == "interior" %>
   <!--  default opposite location to update to-->
       <%= hidden_field_tag :edit_location, "exterior" %>
-    <% else %>
+      <% else %>
       <%= hidden_field_tag :edit_location, "interior" %>
+      <% end %>
     <% end %>
-  <% end %>
 
-  <% if params[:edit_location] %>
-    <%= f.hidden_field :location, value: params[:edit_location] %>
-  <% else %>
-    <%= f.hidden_field :location %>
-  <% end %>
-
-  <%= f.hidden_field :user_id, value: current_user.id %>
-  <%= f.input :name, html5: true, input_html: { autofocus: true } %>
-  <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
-  <%= f.submit class: "btn btn--secondary" %>
-  <% if params[:action] == "edit" %> 
     <% if params[:edit_location] %>
-      <button formmethod="get" 
-              formaction="<%= edit_property_space_path(property, space) %>"
-              class="btn btn--light"><%= params[:edit_location] %></button>
-      <%# f.submit "Login", type: "image", src: url_for("/assets/btn_google_signin_dark_normal_web.png") %>
+      <%= f.hidden_field :location, value: params[:edit_location] %>
     <% else %>
-      <button formmethod="get" 
-              formaction="<%= edit_property_space_path(property, space) %>"
-              class="btn btn--light"><%= space.location %></button>
+      <%= f.hidden_field :location %>
+    <% end %>
+
+    <%= f.hidden_field :user_id, value: current_user.id %>
+    <%= f.input :name, html5: true, input_html: { autofocus: true } %>
+    <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
+    <%= f.submit class: "btn btn--secondary" %>
+    <% if controller_name == "spaces" and params[:action] == "new" %>
+      <%= link_to "More",
+                  new_property_space_path(@property, singles: "tool"),
+                  class: "btn btn--white" %>    
+    <% end %>
+    <% if params[:action] == "edit" %> 
+      <% if params[:edit_location] %>
+        <button formmethod="get" 
+                formaction="<%= edit_property_space_path(property, space) %>"
+                class="btn btn--light"><%= params[:edit_location] %></button>
+        <%# f.submit "Login", type: "image", src: url_for("/assets/btn_google_signin_dark_normal_web.png") %>
+      <% else %>
+        <button formmethod="get" 
+                formaction="<%= edit_property_space_path(property, space) %>"
+                class="btn btn--light"><%= space.location %></button>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

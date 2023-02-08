@@ -1,27 +1,37 @@
-<%# Step 1: remove the form from the Properties#show page %>
-<%# turbo_stream.update Space.new, "" %>
-
-<%# Step 2: add the space at the right place %>
-<% if params[:list].present? %>
-  <% if previous_space = @space.previous_space_with_list(@space.location) %>
-    <%= turbo_stream.after previous_space do %>
-      <%= render @space, property: @property %>
-    <% end %>
-  <% else %>
-    <%= turbo_stream.prepend "spaces" do %>
-      <%= render @space, property: @property %>
-    <% end %>
-  <% end %>
-<% else %>
-  <% if previous_space = @space.previous_space %>
-    <%= turbo_stream.after previous_space do %>
-      <%= render @space, property: @property %>
-    <% end %>
-  <% else %>
-    <%= turbo_stream.prepend "spaces" do %>
-      <%= render @space, property: @property %>
-    <% end %>
-  <% end %>
+<% if !params[:space_search_result_form] %>
+  <%# Step 1: remove the form from the Properties#show page %>
+  <%= turbo_stream.update Space.new, "" %>
 <% end %>
 
-<%= render_turbo_stream_flash_messages %>
+<% if params[:x2] %>
+  <%= turbo_stream.update "spaces" do %>
+    <%= render "spaces/empty_state" %>
+    <%= render @spaces, property: @property %>
+  <% end %>
+  <%= render_turbo_stream_flash_messages %>
+
+<% else %>
+  <%# Step 2: add the space at the right place %>
+  <% if params[:list].present? %>
+    <% if previous_space = @space.previous_space_with_list(@space.location) %>
+      <%= turbo_stream.after previous_space do %>
+        <%= render @space, property: @property %>
+      <% end %>
+    <% else %>
+      <%= turbo_stream.prepend "spaces" do %>
+        <%= render @space, property: @property %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <% if previous_space = @space.previous_space %>
+      <%= turbo_stream.after previous_space do %>
+        <%= render @space, property: @property %>
+      <% end %>
+    <% else %>
+      <%= turbo_stream.prepend "spaces" do %>
+        <%= render @space, property: @property %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= render_turbo_stream_flash_messages %>
+<% end %>

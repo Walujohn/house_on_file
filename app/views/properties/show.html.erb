@@ -1,10 +1,6 @@
 <%= turbo_stream_from current_group, "properties" %>
 <main class="container mb-xxxxl">
   <%= link_to sanitize("&larr; Back to properties"), properties_path %>
-  <%# link_to "pdf", 
-    #            property_path(@property, format: :pdf), 
-    #            data: { turbo_frame: "_top" },
-    #            class: "btn btn--light" %>
   <div class="header">
     <h1>
       <%= @property.name %>
@@ -16,6 +12,14 @@
       <p class="property__hint">Hint: Inheriting changes from <%= current_group.properties.where(id: @property.property_template.to_i).first.name %> canvas</p>
     <% end %>
     <div class="property__actions">
+<!--
+      https://turbo.hotwired.dev/handbook/drive#preload-links-into-the-cache
+      <a href="/properties" data-turbo-preload>Back to properties</a>
+-->
+      <%= link_to "pdf", 
+                  property_path(@property, format: :pdf), 
+                  data: { turbo_frame: "_top" },
+                  class: "btn btn--light" %>
       <%= link_to "New space",
                   new_property_space_path(@property),
                   data: { turbo_frame: dom_id(Space.new) },
@@ -27,10 +31,10 @@
         </form>
       </section>
 -->
-      <%= simple_form_for [@property], html: { class: "canvas-dropdown" } do |f| %>
+      <%= simple_form_for [@property], html: { class: "form--property-dropdown" } do |f| %>
         <%= form_error_notification(@property) %>
         <div data-controller="element search-params">
-          <%= f.select :name, @property.styles.invert, { disabled: [@property.styles.keys[4], @property.styles.keys[5], @property.styles.keys[6], @property.styles.keys[8], @property.styles.keys[9], @property.styles.keys[10], @property.styles.keys[11], @property.styles.keys[13], @property.styles.keys[14], @property.styles.keys[16], @property.styles.keys[17], @property.styles.keys[18]] }, autocomplete: "off", data: { action: "change->search-params#encode change->element#click" }, class: "property__dropdown" %>
+          <%= f.select :name, @property.styles.invert, { disabled: [@property.styles.keys[4], @property.styles.keys[5], @property.styles.keys[7], @property.styles.keys[8], @property.styles.keys[9], @property.styles.keys[11], @property.styles.keys[12], @property.styles.keys[14], @property.styles.keys[15]] }, autocomplete: "off", data: { action: "change->search-params#encode change->element#click" }, class: "property__select" %>
           <noscript>
             <button formmethod="get" formaction="<%= property_path(@property) %>">Select style</button>
           </noscript>
@@ -46,19 +50,7 @@
   </div>
      
   <%= turbo_frame_tag @property do %>
-<!--    <div class="space__body">-->
-    <% if params.dig(:property, :name) == "Singles" %>
-      <%= render "selections" %>
-    <% end %>
-    
-    <% if params[:singles] and params[:singles] == "x2" %>
-      <%= render "selections" %>
-    <% end %>
-    
-    <% if params[:singles] and params[:singles] == "spaces with features" %>
-      <%= render "selections" %>
-    <% end %>
-    
+<!--    <div class="space__body">-->    
     <%= turbo_frame_tag Space.new %>
     <%= turbo_frame_tag "spaces" do %>
       <%= render "spaces/empty_state" %>

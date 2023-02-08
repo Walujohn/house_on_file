@@ -9,14 +9,14 @@ en:
         name: Name of your space
       feature:
         name: Name of your feature
-        description: Description (required)
+        description: Description (brand, style, serial, pattern, description...) https://huggingface.co/ Inference API machine learning text generation is (COMING SOON!)
         quantity: 1 
         unit_price: $100.00
       appliance:
         name: Name of your appliance
       appliance_feature:
         name: Name of your feature
-        description: Description (required)
+        description: Description (brand, model, style...)
         quantity: 1
         unit_price: $100.00
     labels:

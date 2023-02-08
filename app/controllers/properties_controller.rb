@@ -2,8 +2,6 @@ class PropertiesController < ApplicationController
     before_action :set_property, only: [:show, :edit, :update, :destroy]
     before_action :set_space, only: [:show]
     before_action :set_came_from_new_create, only: [:new, :create]
-    before_action :set_names, only: [:show]
-    before_action :set_lettered_names, only: [:show]
   
     def index
       @properties = current_group.properties.ordered
@@ -54,6 +52,7 @@ class PropertiesController < ApplicationController
       if @property.save
         if params.dig(:property, :style) == "Town houses, shared, apartments"
           @property.build(property_params, current_group)
+          @properties = current_group.properties.ordered
         end
         respond_to do |format|
           format.html { redirect_to properties_path, notice: "Property was successfully created." }
@@ -100,14 +99,6 @@ class PropertiesController < ApplicationController
     
     def set_came_from_new_create
       @came_from_new_create = "yes"
-    end
-    
-    def set_names
-      @names = @property.list_of_space_names
-    end
-  
-    def set_lettered_names 
-      @lettered_names = @names.group_by { |name| name[0].to_sym } 
     end
 
     def property_params
