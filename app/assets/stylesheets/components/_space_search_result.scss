@@ -21,7 +21,8 @@
     border: solid 2px var(--color-light);
     border-radius: var(--border-radius);
     justify-content: space-between;
-    margin-bottom: var(--space-xs);    
+    margin-bottom: var(--space-xs); 
+    width: 45%;
   } 
     
   &__form {
@@ -36,7 +37,8 @@
     
   &__search-input {
     border-color: var(--color-light);
-    border-radius: var(--border-radius);    
+    border-radius: var(--border-radius);
+    padding: var(--space-xxxxs);
   }
     
   &__cancel {
@@ -46,11 +48,16 @@
   }
     
   &--letter-group {
-    background-color: var(--color-light);     
+//    background-color: var(--color-light); 
+    border: solid 2px var(--color-light);
+    margin-bottom: var(--space-xl);
+    border-radius: var(--border-radius);
   }
 
   &--letter-header {
-    font-weight: normal;    
+    font-weight: normal; 
+    padding: var(--space-xxxxs);
+    font-weight: 600;
   }
     
   &--line-item {

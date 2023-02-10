@@ -19,7 +19,7 @@
     flex: 0 0 auto;
     align-self: flex-start;
     gap: var(--space-xs);
-      
+    width: 25%;  
     justify-content: flex-end;
   }
        
@@ -59,7 +59,12 @@
     
   &__hint {
     font-size: 0.875rem;
-    max-width: 50%;
+    max-width: 40%;
+  }
+    
+  &__nav-link {
+    display: flex;
+    justify-content: space-between;
   }
     
   &--form {

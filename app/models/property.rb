@@ -135,8 +135,8 @@ class Property < ApplicationRecord
          loft livingroom office patio porch pantry stairway sunroom].sort
     end
     
-    def total_features
-      self.features.count + self.appliance_features.count
+    def total_spaces
+      self.spaces.count
     end
     
     def define_template(template)  
@@ -591,5 +591,51 @@ class Property < ApplicationRecord
     def associated_count (current_group)
       properties = self.get_associated_properties(current_group)
       properties.count
+    end
+    
+    def respond_to_alternative_space_create_params(params, space, current_group, current_user, space_params)  
+      if params[:x2]
+        self.respond_to_spaces_with_features(params, space)
+        self.property_template_respond_to_spaces_with_features(params, current_group, space, current_user)
+        multiplier(params[:x2]).times do  
+          @space = self.spaces.build(space_params)
+          @space.number_the_name(self)  
+          @space.save
+          self.respond_to_spaces_with_features(params, @space)
+          self.property_template_respond_to_spaces_with_features(params, current_group, @space, current_user)
+        end
+      else
+        self.respond_to_spaces_with_features(params, space)
+        self.property_template_respond_to_spaces_with_features(params, current_group, space, current_user)
+      end
+    end
+    
+    def multiplier(params)
+#      one space is already created in the controller
+      @multiplier = params.to_i - 1
+    end
+    
+    def respond_to_spaces_with_features(params, space)
+      if params[:spaces_with_features]
+        self.create_common_features(space)
+      end
+    end
+    
+    def property_template_respond_to_spaces_with_features(params, current_group, space, current_user)
+      if self.property_template and self.property_template.to_i == 0
+        if params[:spaces_with_features]
+          self.hand_down_duplicate_space_with_features(current_group, space, current_user)
+        else
+          self.hand_down_space(current_group, space, current_user)
+        end
+      end
+    end
+    
+    def respond_to_alternative_space_update_params(space, previous_space, current_group, current_user)
+      previous_space.duplicate_features(space) unless previous_space.features.empty?
+#      then check to see if this is an 'apartment' etc. style template property doing this
+      if self.property_template and self.property_template.to_i == 0
+          self.hand_down_duplicate_space_with_features(current_group, space, current_user)
+      end
     end
 end

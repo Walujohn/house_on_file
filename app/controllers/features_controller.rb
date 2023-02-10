@@ -13,13 +13,13 @@ class FeaturesController < ApplicationController
 
   def create
     @feature = @space.features.build(feature_params)
-
     if @feature.save
       if @property.property_template and @property.property_template.to_i == 0
         @property.hand_down_feature(current_group, @space, @feature, current_user)
       end
 #     so this space cannot be destroyed by reset canvas if its features are edited
       @space.update(user_id: current_user.id)
+        
       respond_to do |format|
         format.html { redirect_to property_path(@property), notice: "Feature was successfully created." }
         format.turbo_stream { flash.now[:notice] = "Feature was successfully created." }
@@ -39,6 +39,7 @@ class FeaturesController < ApplicationController
       end
 #     so this space cannot be destroyed by reset canvas if its features are edited
       @space.update(user_id: current_user.id)
+        
       respond_to do |format|
         format.html { redirect_to property_path(@property), notice: "Feature was successfully updated." }
         format.turbo_stream { flash.now[:notice] = "Feature was successfully updated." }
@@ -55,6 +56,7 @@ class FeaturesController < ApplicationController
     @feature.destroy
 #   so this space cannot be destroyed by reset canvas if its features are edited
     @space.update(user_id: current_user.id)
+      
     respond_to do |format|
       format.html { redirect_to property_path(@property), notice: "Feature was successfully destroyed." }
       format.turbo_stream { flash.now[:notice] = "Feature was successfully destroyed." }

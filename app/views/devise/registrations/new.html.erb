@@ -1,7 +1,7 @@
 <div class="devise">
   <%= image_tag "wordswag.png", class: "signature" %>
   <h2>Try House On File</h2>
-  <p>Create a profile and quickly direct simple property reports.</p>
+  <p>Create a profile and quickly assemble simple property reports.</p>
   <% resource.group ||= Group.new %>
   <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: false }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>

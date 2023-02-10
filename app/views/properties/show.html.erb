@@ -1,25 +1,24 @@
 <%= turbo_stream_from current_group, "properties" %>
 <main class="container mb-xxxxl">
-  <%= link_to sanitize("&larr; Back to properties"), properties_path %>
+  <div class="property__nav-link">
+    <%= link_to sanitize("&larr; Back to properties"), properties_path %>
+<!--
+    https://turbo.hotwired.dev/handbook/drive#preload-links-into-the-cache
+    <a href="/properties" data-turbo-preload>Back to properties</a>
+-->
+    <%= link_to sanitize("PDF &rarr;"), property_path(@property, format: :pdf), data: { turbo_frame: "_top" } %>
+  </div>
   <div class="header">
     <h1>
       <%= @property.name %>
     </h1>
     <% if @property.property_template and @property.property_template.to_i == 0 %>
-      <p class="property__hint">Hint: This is a town house, shared, apartments style canvas property. Changes made here will be inherited by its <%= @property.associated_count(current_group) %> associated properties.</p>
+      <p class="property__hint">This is a town house, shared, apartments style property template. Changes made here will be broadcasted to its <%= @property.associated_count(current_group) %> associated properties.</p>
     <% end %>
     <% if @property.property_template and @property.property_template.to_i != 0 %>
-      <p class="property__hint">Hint: Inheriting changes from <%= current_group.properties.where(id: @property.property_template.to_i).first.name %> canvas</p>
+      <p class="property__hint">This property is also receiving changes from the <%= current_group.properties.where(id: @property.property_template.to_i).first.name %> broadcast.</p>
     <% end %>
     <div class="property__actions">
-<!--
-      https://turbo.hotwired.dev/handbook/drive#preload-links-into-the-cache
-      <a href="/properties" data-turbo-preload>Back to properties</a>
--->
-      <%= link_to "pdf", 
-                  property_path(@property, format: :pdf), 
-                  data: { turbo_frame: "_top" },
-                  class: "btn btn--light" %>
       <%= link_to "New space",
                   new_property_space_path(@property),
                   data: { turbo_frame: dom_id(Space.new) },

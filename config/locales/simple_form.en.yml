@@ -13,9 +13,9 @@ en:
         quantity: 1 
         unit_price: $100.00
       appliance:
-        name: Name of your appliance
+        name: Name of your appliance (i.e. sink)
       appliance_feature:
-        name: Name of your feature
+        name: Name of your feature (i.e. style of system)
         description: Description (brand, model, style...)
         quantity: 1
         unit_price: $100.00

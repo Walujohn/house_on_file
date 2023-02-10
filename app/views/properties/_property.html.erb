@@ -9,7 +9,7 @@
                 data: { turbo_frame: "_top" } %>
 <!--</div>-->
     <% if property.property_template and property.property_template.to_i == 0 %>
-      <p class="property__hint">Hint: This is a town house, shared, apartments style canvas property. Changes made here will be inherited by its <%= property.associated_count(current_group) %> associated properties.</p>
+      <p class="property__hint">This is a town house, shared, apartments style property template. Changes made here will be broadcasted to its <%= property.associated_count(current_group) %> associated properties.</p>
     <% end %>
 <!--
     <div class="feature__variety-brand">

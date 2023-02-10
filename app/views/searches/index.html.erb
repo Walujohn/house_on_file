@@ -4,7 +4,6 @@
   <ul role="listbox"> 
     <% @names.each do |space| %>
       <li class="space-search-result--line-item">
-          
         <div class="space">
           <div class="space__header">
             <h2 class="space__title">
@@ -13,7 +12,7 @@
             <div class="space__actions">
 <!--          you transformed the link_to into a button_to-->
               <%# link_to highlight(space.name, params[:query]), property_space_path(space.property, space), id: dom_id(space, :search_result), role: "option", class: "aria-selected:outline-black" %>
-              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "space_search_result_form" => "" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
+              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "space_search_result_form" => "", "space[location]" => "#{@space.location}", "location" => "#{params[:location]}", "list" => "#{params[:location]}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
               <div class="property__actions"></div>            
             </div>
           </div>
@@ -36,7 +35,7 @@
               <%= highlight("#{space} x3", params[:query]) %>
             </h2>
             <div class="space__actions">
-              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "x2" => "3", "space_search_result_form" => "" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
+              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "x2" => "3", "space_search_result_form" => "", "space[location]" => "#{@space.location}", "location" => "#{params[:location]}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
               <div class="property__actions"></div>
             </div>
           </div>
@@ -59,7 +58,7 @@
               <%= highlight("#{space} with fill", params[:query]) %>
             </h2>
             <div class="space__actions">
-              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "spaces_with_features" => "common", "space_search_result_form" => "" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
+              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "spaces_with_features" => "common", "space_search_result_form" => "", "space[location]" => "#{@space.location}", "location" => "#{params[:location]}", "list" => "#{params[:location]}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
               <div class="property__actions"></div>
             </div>
           </div>
@@ -82,7 +81,7 @@
               <%= highlight("#{space} x3 w/ fill", params[:query]) %>
             </h2>
             <div class="space__actions">
-              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "x2" => "3", "spaces_with_features" => "common", "space_search_result_form" => "" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
+              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "x2" => "3", "spaces_with_features" => "common", "space_search_result_form" => "", "space[location]" => "#{@space.location}", "location" => "#{params[:location]}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
               <div class="property__actions"></div>
             </div>
           </div>

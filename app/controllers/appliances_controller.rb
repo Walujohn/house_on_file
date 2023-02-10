@@ -44,6 +44,7 @@ class AppliancesController < ApplicationController
         @property.hand_down_destroy_appliance(current_group, @appliance)
       end
       @appliance.destroy
+      
       respond_to do |format|
           format.html { redirect_to property_path(@property), notice: "Appliance was successfully destroyed." }
           format.turbo_stream { flash.now[:notice] = "Appliance was successfully destroyed." }

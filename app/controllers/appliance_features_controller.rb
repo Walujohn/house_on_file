@@ -9,7 +9,6 @@ class ApplianceFeaturesController < ApplicationController
 
   def create
     @appliance_feature = @appliance.appliance_features.build(feature_params)
-
     if @appliance_feature.save
       if @property.property_template and @property.property_template.to_i == 0
         @property.hand_down_appliance_feature(current_group, @appliance, @appliance_feature, current_user)
@@ -36,6 +35,7 @@ class ApplianceFeaturesController < ApplicationController
       end
 #     so this space cannot be destroyed by reset canvas if its features are edited
       @appliance.update(user_id: current_user.id)
+        
       respond_to do |format|
         format.html { redirect_to property_path(@property), notice: "Feature was successfully updated." }
         format.turbo_stream { flash.now[:notice] = "Feature was successfully updated." }
@@ -52,6 +52,7 @@ class ApplianceFeaturesController < ApplicationController
     @appliance_feature.destroy
 #   so this space cannot be destroyed by reset canvas if its features are edited
     @appliance.update(user_id: current_user.id)
+      
     respond_to do |format|
       format.html { redirect_to property_path(@property), notice: "Feature was successfully destroyed." }
       format.turbo_stream { flash.now[:notice] = "Feature was successfully destroyed." }

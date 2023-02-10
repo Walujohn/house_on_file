@@ -6,58 +6,30 @@ class SpacesController < ApplicationController
   
   def new
     @space = @property.spaces.build
-    if params[:location] and params[:location] == "List exteriors"
+    if params[:location] == "List exteriors"
       @space.location = "exterior"
     end
   end
 
   def create  
-    if params[:x2]
-      @multiplier = params[:x2].to_i
-      @multiplier.times do    
-        @space = @property.spaces.build(space_params)
-        @space.number_the_name(@property)
-        if @space.save    
-          if params[:spaces_with_features]
-            @property.create_common_features(@space)
-          end    
-          if @property.property_template and @property.property_template.to_i == 0
-            if params[:spaces_with_features]
-              @property.hand_down_duplicate_space_with_features(current_group, @space, current_user)
-            else
-              @property.hand_down_space(current_group, @space, current_user)
-            end
-          end
-          @spaces = @property.spaces.includes(:features).ordered
-          respond_to do |format|
-            format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
-            format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
-          end
-        else
-          render :new, status: :unprocessable_entity
-        end
+    @space = @property.spaces.build(space_params)
+    @space.number_the_name(@property)
+    if @space.save
+      @property.respond_to_alternative_space_create_params(params, @space, current_group, current_user, space_params)
+      if params[:location] == "List interiors"
+        @spaces = @property.spaces.includes(:features).ordered.where(location: "interior")
+      elsif params[:location] == "List exteriors"
+        @spaces = @property.spaces.includes(:features).ordered.where(location: "exterior")
+      else
+        @spaces = @property.spaces.includes(:features).ordered
+      end
+        
+      respond_to do |format|
+        format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
+        format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
       end
     else
-      @space = @property.spaces.build(space_params)
-      @space.number_the_name(@property)
-      if @space.save
-        if params[:spaces_with_features]
-          @property.create_common_features(@space)
-        end
-        if @property.property_template and @property.property_template.to_i == 0
-          if params[:spaces_with_features]
-            @property.hand_down_duplicate_space_with_features(current_group, @space, current_user)
-          else
-            @property.hand_down_space(current_group, @space, current_user)
-          end
-        end
-        respond_to do |format|
-          format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
-          format.turbo_stream { flash.now[:notice] = "Space was successfully created." }
-        end
-      else
-        render :new, status: :unprocessable_entity
-      end
+      render :new, status: :unprocessable_entity
     end
   end
     
@@ -69,11 +41,7 @@ class SpacesController < ApplicationController
       @space = @property.spaces.build(space_params)
       @previous_space = @property.spaces.find(params[:previous_space_id])
       if @space.save  
-        @previous_space.duplicate_features(@space) unless @previous_space.features.empty?
-#        then check to see if this is an 'apartment' template property doing this
-        if @property.property_template and @property.property_template.to_i == 0
-          @property.hand_down_duplicate_space_with_features(current_group, @space, current_user)
-        end
+        @property.respond_to_alternative_space_update_params(@space, @previous_space, current_group, current_user)
           
         respond_to do |format|
           format.html { redirect_to property_path(@property), notice: "Space was successfully created." }
@@ -87,6 +55,7 @@ class SpacesController < ApplicationController
         if @property.property_template and @property.property_template.to_i == 0
           @property.hand_down_update_space(current_group, @space, current_user)
         end
+          
         respond_to do |format|
           format.html { redirect_to property_path(@property), notice: "Space was successfully updated." }
           format.turbo_stream { flash.now[:notice] = "Space was successfully updated." }
@@ -98,14 +67,15 @@ class SpacesController < ApplicationController
   end
     
   def destroy
-      if @property.property_template and @property.property_template.to_i == 0
-        @property.hand_down_destroy_space(current_group, @space)
-      end
-      @space.destroy
-      respond_to do |format|
-          format.html { redirect_to property_path(@property), notice: "Space was successfully destroyed." }
-          format.turbo_stream { flash.now[:notice] = "Space was successfully destroyed." }
-      end
+    if @property.property_template and @property.property_template.to_i == 0
+      @property.hand_down_destroy_space(current_group, @space)
+    end
+    @space.destroy
+      
+    respond_to do |format|
+      format.html { redirect_to property_path(@property), notice: "Space was successfully destroyed." }
+      format.turbo_stream { flash.now[:notice] = "Space was successfully destroyed." }
+    end
   end
 
   private
