@@ -14,16 +14,11 @@
       padding: var(--space-m);
     }        
   }
-   
-//  you typically don't add margins to components for a good design model but oh well
-  &__tool-nav {
-    display: flex;
-    border: solid 2px var(--color-light);
-    border-radius: var(--border-radius);
+    
+  &__actions {
+    display: flex;  
     justify-content: space-between;
-    margin-bottom: var(--space-xs); 
-    width: 45%;
-  } 
+  }
     
   &__form {
     display: flex;
@@ -39,12 +34,6 @@
     border-color: var(--color-light);
     border-radius: var(--border-radius);
     padding: var(--space-xxxxs);
-  }
-    
-  &__cancel {
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;    
   }
     
   &--letter-group {

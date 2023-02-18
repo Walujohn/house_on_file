@@ -6,17 +6,17 @@ en:
       property:
         name: Name of your property
       space:
-        name: Name of your space
+        name: Name of your space (i.e bedroom, bath, kitchen)
       feature:
         name: Name of your feature
         description: Description (brand, style, serial, pattern, description...) https://huggingface.co/ Inference API machine learning text generation is (COMING SOON!)
         quantity: 1 
         unit_price: $100.00
       appliance:
-        name: Name of your appliance (i.e. sink)
+        name: Name of your appliance (i.e. furnace, washer, dryer)
       appliance_feature:
-        name: Name of your feature (i.e. style of system)
-        description: Description (brand, model, style...)
+        name: Name of specific component part of appliance system (i.e. convection fan, stove top). Leave blank if not applicable.											
+        description: Description (i.e. brand, model, serial number, purchase date & location)							
         quantity: 1
         unit_price: $100.00
     labels:
@@ -60,8 +60,8 @@ en:
         create: Create appliance
         update: Update appliance
       appliance_feature:
-        create: Create feature
-        update: Update feature
+        create: Create component
+        update: Update component
     # Examples
     # labels:
     #   defaults:

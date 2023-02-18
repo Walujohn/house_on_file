@@ -51,20 +51,57 @@
     }
   }
     
+  &__input-multi-unit {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+    column-gap: var(--space-xs);
+      
+    label {
+      width: 70%;       
+    }
+  }
+
+  &__input-multi-unit-letters {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+    column-gap: var(--space-xs);
+  }
+    
   &__select {
-    font-size: 0.875rem;
+    font-size: var(--font-size-s);
     width: 100%;
     border-radius: var(--border-radius);
   }
     
   &__hint {
-    font-size: 0.875rem;
+    font-size: var(--font-size-s);
     max-width: 40%;
   }
     
   &__nav-link {
     display: flex;
     justify-content: space-between;
+  }
+    
+  &__turbo-frame {
+    display: flex;
+    justify-content: flex-end;
+  }
+    
+  &__letters-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;  
+    gap: var(--space-xxs);
+    width: 20%;
+  }
+    
+  &__actions-multi-unit {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xxs);
   }
     
   &--form {
@@ -78,14 +115,24 @@
   &--inputs {
     display: flex;
   }
-    
+
+  &--text-area {
+    border-radius: var(--border-radius);     
+  }
+
 //  you typically don't add margins to components for a good design model but oh well
-  &--fieldset {
+  &--fieldset-detail {
     padding: var(--space-s);
-      
+    display: flex;
+    column-gap: var(--space-xxl);
+    
     .legend {
       margin-left: var(--space-l); 
     }
+  }
+    
+  &--fieldset {
+    padding: var(--space-s);
   }
 }
 

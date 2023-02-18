@@ -17,8 +17,8 @@ class ApplianceFeaturesController < ApplicationController
       @appliance.update(user_id: current_user.id)  
         
       respond_to do |format|
-        format.html { redirect_to property_path(@property), notice: "Feature was successfully created." }
-        format.turbo_stream { flash.now[:notice] = "Feature was successfully created." }
+        format.html { redirect_to property_path(@property), notice: "Component was successfully created." }
+        format.turbo_stream { flash.now[:notice] = "Component was successfully created." }
       end
     else
         render :new, status: :unprocessable_entity

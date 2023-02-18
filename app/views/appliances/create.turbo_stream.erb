@@ -1,5 +1,7 @@
-<%# Step 1: remove the form from the Properties#show page %>
-<%= turbo_stream.update Appliance.new, "" %>
+<% if !params[:appliances_table] %>
+  <%# Step 1: remove the form from the Properties#show page %>
+  <%= turbo_stream.update Appliance.new, "" %>
+<% end %>
 
 <%# Step 2: add the space at the right place %>
 <% if previous_appliance = @appliance.previous_appliance %>

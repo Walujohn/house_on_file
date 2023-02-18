@@ -13,10 +13,10 @@
       <%= @property.name %>
     </h1>
     <% if @property.property_template and @property.property_template.to_i == 0 %>
-      <p class="property__hint">This is a town house, shared, apartments style property template. Changes made here will be broadcasted to its <%= @property.associated_count(current_group) %> associated properties.</p>
+      <p class="property__hint">This is a multi-unit style templating property. Changes made here will be automatically shared with its <%= @property.associated_count(current_group) %> associated properties.</p>
     <% end %>
     <% if @property.property_template and @property.property_template.to_i != 0 %>
-      <p class="property__hint">This property is also receiving changes from the <%= current_group.properties.where(id: @property.property_template.to_i).first.name %> broadcast.</p>
+      <p class="property__hint">This property is also automatically receiving changes from <%= current_group.properties.where(id: @property.property_template.to_i).first.name %>.</p>
     <% end %>
     <div class="property__actions">
       <%= link_to "New space",
@@ -33,7 +33,7 @@
       <%= simple_form_for [@property], html: { class: "form--property-dropdown" } do |f| %>
         <%= form_error_notification(@property) %>
         <div data-controller="element search-params">
-          <%= f.select :name, @property.styles.invert, { disabled: [@property.styles.keys[4], @property.styles.keys[5], @property.styles.keys[7], @property.styles.keys[8], @property.styles.keys[9], @property.styles.keys[11], @property.styles.keys[12], @property.styles.keys[14], @property.styles.keys[15]] }, autocomplete: "off", data: { action: "change->search-params#encode change->element#click" }, class: "property__select" %>
+          <%= f.select :name, @property.styles.invert, {}, autocomplete: "off", data: { action: "change->search-params#encode change->element#click" }, class: "property__select" %>
           <noscript>
             <button formmethod="get" formaction="<%= property_path(@property) %>">Select style</button>
           </noscript>
@@ -51,9 +51,17 @@
   <%= turbo_frame_tag @property do %>
 <!--    <div class="space__body">-->    
     <%= turbo_frame_tag Space.new %>
+    <% if params.dig(:property, :name) == "New spaces table" or params.dig(:property, :name) == "Interior spaces table" or params.dig(:property, :name) == "Exterior spaces table" or params.dig(:property, :name) == "Interior spaces table w/ features" or params.dig(:property, :name) == "Exterior spaces table w/ features" %>
+      <%= render "spaces/form" %>
+    <% end %>
+    <% if params.dig(:property, :name) == "New appliances table" or params.dig(:property, :name) == "Shut off locations" %>
+      <%= render "appliances/form" %>
+    <% end %>
     <%= turbo_frame_tag "spaces" do %>
-      <%= render "spaces/empty_state" %>
-      <%= render @spaces, property: @property %>
+      <% if params.dig(:property, :name) != "List appliances" %>
+        <%= render "spaces/empty_state" %>
+        <%= render @spaces, property: @property %>
+      <% end %>
     <% end %>
     <div class="header">
       <h1>
@@ -104,6 +112,11 @@
                       class: "btn btn--primary emptyStateLink" %>
         </template>
       </turbo-stream>
+    <% end %>
+    <% if @model_creations %>
+      <%= turbo_stream.update dom_id(@property, :total) do %>
+        <%= render "properties/total", property: @property %>
+      <% end %>
     <% end %>
 <!--    </div>-->
   <% end %>

@@ -6,8 +6,4 @@
   <%= render @appliance_feature, property: @property, appliance: @appliance %>
 <% end %>
 
-<%= turbo_stream.update dom_id(@property, :total) do %>
-  <%= render "properties/total", property: @property %>
-<% end %>
-
 <%= render_turbo_stream_flash_messages %>

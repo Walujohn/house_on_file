@@ -36,6 +36,13 @@
     }
   }
 
+  &__select {
+    font-size: var(--font-size-s);
+    width: 60%;
+    border-radius: var(--border-radius);
+    border: solid 2px var(--color-light);
+  }
+
   &__footer {
     border: dashed 2px var(--color-light);
     border-radius: var(--border-radius);

@@ -22,20 +22,19 @@ class Property < ApplicationRecord
     broadcasts_to ->(property) { [property.group, "properties"] }, inserts_by: :prepend
     
     SPACES_TEMPLATES = {
-        "Create 3 bed" => ["bedroom", "bedroom 2", "bedroom 3", "sunroom", 
-                           "bathroom", "bathroom 2", "bathroom 3", "stairs", "basement", 
-                           "kitchen", "dining room", "living room", "foyer", 
-                           "front entrance", "hallway", "office", "yard", "garage"],
-        "Create studio apt." => ["kitchen area", "bedroom", "loft", "living room", "bathroom"],
-        "Create retail layout" => ["storage", "sales floor", "registers", "entrance", "emergency exit", "office", "family restrooms"],
-        "Create town home" => ["kitchen", "bedroom", "bedroom 2", "living room", "media room", "basement", "deck", "patio", "porch"]
+        "One bedroom home" => ["bedroom", "bathroom", "kitchen", "living room"],
+        "Two bedroom home" => ["bedroom", "bedroom 2", "bathroom", "bathroom 2", "kitchen", "living room"],
+        "Three bedroom home" => ["bedroom", "bedroom 2", "bedroom 3", "bathroom", "bathroom 2", "kitchen", "living room"],
+        "Studio apartment" => ["bathroom", "kitchen", "living room"],
+        "Retail apartment" => ["office", "bathroom", "kitchen"]
         }
     
     APPLIANCES_TEMPLATES = {
-        "Create 3 bed" => ["hvac", "refrigerator", "shower tub", "shower tub 2"],
-        "Create studio apt." => ["refrigerator", "fireplace", "dryer", "dryer vent"],
-        "Create retail layout" => ["commercial HVAC"],
-        "Create town home" => ["refrigerator", "shower", "dishwasher"]
+        "One bedroom home" => ["stove", "refrigerator", "washer", "dryer"],
+        "Two bedroom home" => ["stove", "refrigerator", "washer", "dryer"],
+        "Three bedroom home" => ["stove", "refrigerator", "washer", "dryer"],
+        "Studio apartment" => ["stove", "refrigerator", "washer", "dryer"],
+        "Retail apartment" => ["stove", "refrigerator", "storage area", "security system"]
         }
     
     FEATURES_TEMPLATES = {  
@@ -102,37 +101,63 @@ class Property < ApplicationRecord
     
     def styles
       { "List all" => "List all", 
+        "New spaces table" => "Selection ideas...",
         "List interiors" => "List interiors",
         "List exteriors" => "List exteriors",
-          
-        "Create town home" => "Town house size starting layer",
-        "Line four" => " Remove all unedited spaces and appliances from property and generate 2 bedrooms, kitchen,",
-        "Line five" => "living room, media room, basement, deck, patio, porch, refrigerator, shower and dishwasher",
-
-        "Create 3 bed" => "3 bedroom size starting layer", 
-        "Line seven" => "Remove all unedited spaces and appliances from property and generate, 3 bedrooms,",  
-        "Line eight" => "3 bathrooms, kitchen, dining room, living room, sunroom, stairs, basement, foyer,", 
-        "Line nine" => "front entrance, hallway, office, yard, garage, 2 shower tubs, hvac and refrigerator", 
-          
-        "Create studio apt." => "Studio apt. size starting layer", 
-        "Line eleven" => "Remove all unedited spaces and appliances from property and generate a bedroom,", 
-        "Line twelve" => "kitchen, loft, living room, bathroom, refrigerator, fireplace, dryer, and dryer vent", 
-          
-        "Create retail layout" => "Commercial size starting layer",
-        "Line fourteen" => "Remove all unedited spaces and appliances from property and generate a storage,",
-        "Line fifteen" => "sales floor, registers, entrance, emergency exit, office, restrooms and commercial HVAC",
-          
-        "Reset canvas" => "Reset canvas/all unedited spaces and appliances" }
+        "List appliances" => "List appliances",
+        "One bedroom home" => "One bedroom home 1BD, 1BA, Kitchen, Living Room, Stove, Refrigerator, Washer, Dryer",
+        "Two bedroom home" => "Two bedroom home 2BD, 2BA, Kitchen, Living Room, Stove, Refrigerator, Washer, Dryer",
+        "Three bedroom home" => "Three bedroom home 3BD, 2BA, Kitchen, Living Room, Stove, Refrigerator, Washer, Dryer", 
+        "Studio apartment" => "Studio apartment 1BA, Kitchen, Living Room, Stove, Refrigerator, Washer, Dryer", 
+        "Retail apartment" => "Retail apartment Office, 1BA, Kitchen, Stove, Refrigerator, Storage area, Security system",
+        "Reset canvas" => "RESET canvas/all unedited spaces and appliances" }
+    end
+    
+    def table_styles
+      { "New spaces table" => "Reset", 
+        "Interior spaces table" => "Interiors",
+        "Interior spaces table w/ features" => "Interiors w/ features",
+        "Exterior spaces table" => "Exteriors",
+        "Exterior spaces table w/ features" => "Exteriors w/ features",
+        "New appliances table" => "Appliances",
+        "Shut off locations" => "Shut-off locations"}
     end
     
     def forms
-      { "Address" => "Address", "Town houses, shared, apartments" => "Town houses, shared, apartments" }
+      { "Address" => "Single Home", "Town houses, shared, apartments" => "Multi-Unit Complex (i.e. apartments)" }
     end
     
     def list_of_space_names
-      %w[attic basement bathroom balcony bedroom closet 
-         deck driveway entryway foyer garage hallway kitchen 
-         loft livingroom office patio porch pantry stairway sunroom].sort
+      ["attic", "balcony", "basement", "bathroom", "bedroom", "bonus room", "closet", "den", "dining room",
+       "entry foyer", "family room", "garage", "hallway", "kitchen", "laundry room", "living room",
+       "loft", "mud room", "office", "pantry", "storage area", "stairs", "sunroom", "siding", "deck",
+       "doors", "driveway", "gazebo", "gutters", "outbuilding", "patio", "pool", "pool house", "porch",
+	   "roof", "shed", "windows", "greenhouse", "firepit", "landscaping"].sort
+    end
+    
+    def list_of_interior_space_names
+      ["attic", "balcony", "basement", "bathroom", "bedroom", "bonus room", "closet", "den", "dining room",
+       "entry foyer", "family room", "garage", "hallway", "kitchen", "laundry room", "living room",
+       "loft", "mud room", "office", "pantry", "storage area", "stairs", "sunroom"].sort
+    end
+    
+    def list_of_exterior_space_names
+      ["siding", "deck", "doors", "driveway", "gazebo", "gutters", "outbuilding", "patio", "pool", 
+       "pool house", "porch", "roof", "shed", "windows", "greenhouse", "firepit", "landscaping"].sort
+    end
+    
+    def list_of_appliance_names
+      ["air conditioner", "air purifier", "answering machine", "attic fan", "ceiling fan", "central vacuum",
+       "computer", "de-humidifier", "dish washer", "dryer", "fax machine", "fireplace", "freezer", "furnace", 
+       "game system", "garage door opener", "garbage disposal", "generator", "heat pump", "hot tub",
+       "hot water heater", "humidifier", "jacuzzi", "microwave", "oven", "refrigerator", "satellite dish",
+       "security system", "septic tank", "shredder", "smoke alarms", "sprinkler system", "stereo system",
+       "stove", "sump pump", "telephones", "television", "trash compactor", "washer", "water purification",
+       "well", "wine cooler"].sort
+    end
+    
+    def shut_off_locations
+      ["electric panel/fuses", "furnace/boiler", "gas", "hot water heater", "water main"].sort
     end
     
     def total_spaces
@@ -287,16 +312,59 @@ class Property < ApplicationRecord
     def build(params, current_group)
       low = params[:low]
       high = params[:high]
-      letters = params[:letter].strip
-      self.assign_numbers_and_letters(low, high, letters, current_group)
+      if params[:interval].present?
+        interval = params[:interval].to_i
+      end
+      if params[:letter].present?
+        letters = params[:letter].strip 
+      end
+      if params[:exclusion].present?
+        exclusions = set_exclusions(params[:exclusion])
+      end
+      collection = set_collection(low, high, interval, exclusions)
+      self.assign_numbers_and_letters(collection, letters, current_group)
 #      if property_template = params[:property_template]
 #        split_property_template(property_template, current_group)   
 #      end
     end
     
-    def assign_numbers_and_letters(low, high, letters, current_group)
-      (low..high).each do |number|
-        if letters.empty?
+    def set_exclusions(params)
+#      array of exclusions 
+      exclusions = params.split(" ").select {|item| item.to_i != 0}
+      exclusions
+    end
+    
+    def exclude(collection, exclusions)
+#      remove the exclusions matches from the collection
+      collection = collection.to_a.map(&:to_i)
+      exclusions = exclusions.to_a.map(&:to_i)
+      collection = collection - exclusions 
+    end
+    
+    def set_collection(low, high, interval = "", exclusions = "")
+      if interval.present?
+        collection = set_interval(low, high, interval)
+        if exclusions.present?
+          collection = exclude(collection, exclusions)
+        end
+        collection
+      else
+        collection = (low..high)
+        if exclusions.present?
+          collection = exclude(collection, exclusions)
+        end
+        collection
+      end
+    end
+    
+    def set_interval(low, high, interval)
+      collection = (low..high).step(interval).select {|num| num}
+      collection
+    end
+    
+    def assign_numbers_and_letters(collection, letters = "", current_group)
+      collection.each do |number|
+        if letters.blank?
           @property = current_group.properties.build(name: "#{self.name.strip}" + " #{number}", property_template: "#{self.id}") 
           @property.save
         else
@@ -593,26 +661,9 @@ class Property < ApplicationRecord
       properties.count
     end
     
-    def respond_to_alternative_space_create_params(params, space, current_group, current_user, space_params)  
-      if params[:x2]
-        self.respond_to_spaces_with_features(params, space)
-        self.property_template_respond_to_spaces_with_features(params, current_group, space, current_user)
-        multiplier(params[:x2]).times do  
-          @space = self.spaces.build(space_params)
-          @space.number_the_name(self)  
-          @space.save
-          self.respond_to_spaces_with_features(params, @space)
-          self.property_template_respond_to_spaces_with_features(params, current_group, @space, current_user)
-        end
-      else
-        self.respond_to_spaces_with_features(params, space)
-        self.property_template_respond_to_spaces_with_features(params, current_group, space, current_user)
-      end
-    end
-    
-    def multiplier(params)
-#      one space is already created in the controller
-      @multiplier = params.to_i - 1
+    def respond_to_alternative_space_create_params(params, space, current_group, current_user)       
+      self.respond_to_spaces_with_features(params, space)
+      self.property_template_respond_to_spaces_with_features(params, current_group, space, current_user)
     end
     
     def respond_to_spaces_with_features(params, space)

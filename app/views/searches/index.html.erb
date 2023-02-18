@@ -28,30 +28,6 @@
             </div>
           </div>
         </div>  
-        
-        <div class="space">
-          <div class="space__header">
-            <h2 class="space__title">
-              <%= highlight("#{space} x3", params[:query]) %>
-            </h2>
-            <div class="space__actions">
-              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "x2" => "3", "space_search_result_form" => "", "space[location]" => "#{@space.location}", "location" => "#{params[:location]}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
-              <div class="property__actions"></div>
-            </div>
-          </div>
-          <div class="space__body">
-            <div class="feature feature--header">
-              <div class="feature__name">Features</div>
-              <div class="feature__variety">Variety</div>
-              <div class="feature__variety"></div>
-              <div class="feature__brand"></div>
-              <div class="feature__actions"></div>
-            </div>
-            <div class="space__footer">
-            </div>
-          </div>
-        </div>
-          
         <div class="space">
           <div class="space__header">
             <h2 class="space__title">
@@ -59,29 +35,6 @@
             </h2>
             <div class="space__actions">
               <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "spaces_with_features" => "common", "space_search_result_form" => "", "space[location]" => "#{@space.location}", "location" => "#{params[:location]}", "list" => "#{params[:location]}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
-              <div class="property__actions"></div>
-            </div>
-          </div>
-          <div class="space__body">
-            <div class="feature feature--header">
-              <div class="feature__name">Features</div>
-              <div class="feature__variety">Variety</div>
-              <div class="feature__variety"></div>
-              <div class="feature__brand"></div>
-              <div class="feature__actions"></div>
-            </div>
-            <div class="space__footer">
-              Wall covering, floor covering, ceiling covering
-            </div>
-          </div>
-        </div>  
-        <div class="space">
-          <div class="space__header">
-            <h2 class="space__title">
-              <%= highlight("#{space} x3 w/ fill", params[:query]) %>
-            </h2>
-            <div class="space__actions">
-              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "x2" => "3", "spaces_with_features" => "common", "space_search_result_form" => "", "space[location]" => "#{@space.location}", "location" => "#{params[:location]}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
               <div class="property__actions"></div>
             </div>
           </div>

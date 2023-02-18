@@ -1,8 +1,5 @@
-<% if controller_name == "spaces" and params[:singles] %>
+<% if params.dig(:property, :name) == "New spaces table" or params.dig(:property, :name) == "Interior spaces table" or params.dig(:property, :name) == "Exterior spaces table" or params.dig(:property, :name) == "New appliances table" or params.dig(:property, :name) == "Shut off locations" or params.dig(:property, :name) == "Interior spaces table w/ features" or params.dig(:property, :name) == "Exterior spaces table w/ features" %>
   <%= turbo_frame_tag "space_search_result_tool" do %>
-    <div class="space-search-result__cancel">
-      <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
-    </div>
 <!--if can enhance progressively and get skypack working with stimulus-->
 <!--data-controller="combobox"-->
     <div class="space">
@@ -21,53 +18,39 @@
       </form>
       <turbo-frame id="search_results" target="_top" class="empty:hidden peer-invalid:hidden"></turbo-frame>  
         
-      <div class="space-search-result__body">
-        <div class="space-search-result__tool-nav">
-          <%= link_to "Reset",
-                      new_property_space_path(@property, singles: "nil", location: "#{params[:location]}"),
-                      class: "btn btn--toolbar" %> 
-          <%= link_to "x2",
-                      new_property_space_path(@property, singles: "x2", location: "#{params[:location]}"),
-                      class: "btn btn--toolbar" %>
-          <%= link_to "Fill",
-                      new_property_space_path(@property, singles: "fill features", location: "#{params[:location]}"),
-                      class: "btn btn--toolbar" %>
-          <%= link_to "x2 w/ fill",
-                      new_property_space_path(@property, singles: "x2 w/ fill", location: "#{params[:location]}"),
-                      class: "btn btn--toolbar" %>
+      <div class="space-search-result__body">   
+        <div class="space-search-result__actions">
+          <%= simple_form_for [@property], html: { class: "form--property-dropdown" } do |f| %>
+            <%= form_error_notification(@property) %>
+            <div data-controller="element search-params">
+              <%= f.select :name, @property.table_styles.invert, {}, autocomplete: "off", data: { action: "change->search-params#encode change->element#click" }, class: "space__select" %>
+              <noscript>
+                <button formmethod="get" formaction="<%= property_path(@property) %>">Select style</button>
+              </noscript>
+              <a href="<%= property_path(@property) %>" 
+                 hidden
+                 data-search-params-target="anchor"
+                 data-element-target="click"></a> 
+<!--            <span>Tip: Use the dropdown tools here to change views and create templates!</span>-->
+            </div>
+          <% end %>  
+          <%= link_to "Cancel", property_path(@property), class: "btn btn--light" %>
         </div>
-        <p class="devise__hint devise--space-form-hint">Hint: Click a name to create the space and use the form to customize form elements.</p>
+        <p class="devise__hint devise--space-form-hint">Hint: Click on the name of a space or appliance to create them.</p>
         <% @lettered_names.each do |key, value| %>
           <h4 class="space-search-result--letter-header"><%= key %></h4>
           <div class="space-search-result--letter-group">
             <% value.each do |value| %>
               <%= simple_form_for [@property, @space], html: { class: "space-search-result__form" } do |form| %>
-                <% if params[:singles] and params[:singles] == "x2" %>
-                  <%= hidden_field_tag "x2", "2" %>
-                <% end %>
-                <% if params[:singles] and params[:singles] == "fill features" %>
+                <% if params.dig(:property, :name) == "Interior spaces table w/ features" or params.dig(:property, :name) == "Exterior spaces table w/ features" %>
                   <%= hidden_field_tag "spaces_with_features", "common" %>
                 <% end %>
-                <% if params[:singles] and params[:singles] == "x2 w/ fill" %>
-                  <%= hidden_field_tag "x2", "2" %>
-                  <%= hidden_field_tag "spaces_with_features", "common" %>
-                <% end %>
-                <%= hidden_field_tag "location", "#{params[:location]}" %>
-                <%= hidden_field_tag "space_search_result_form" %>
-                <%= hidden_field_tag :list, "#{params[:location]}" %>
                 <%= form.hidden_field :user_id, value: current_user.id %>
                 <%= form.hidden_field :location, value: @space.location %>
                 <%= form.hidden_field :name, value: "#{value}" %>
                 <%= form.submit "#{value}", class: "btn btn--drawn" %>
-                <% if params[:singles] and params[:singles] == "x2" %>
-                  <span>x2</span>
-                <% end %>
-                <% if params[:singles] and params[:singles] == "fill features" %>
+                <% if params.dig(:property, :name) == "Interior spaces table w/ features" or params.dig(:property, :name) == "Exterior spaces table w/ features" %>
                     <span>Wall, ceiling, floor covering</span>
-                <% end %>
-                <% if params[:singles] and params[:singles] == "x2 w/ fill" %>
-                  <span>Wall, ceiling, floor covering</span>
-                  <span>x2</span>
                 <% end %>
               <% end %>
             <% end %>
@@ -104,11 +87,6 @@
     <%= f.input :name, html5: true, input_html: { autofocus: true } %>
     <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
     <%= f.submit class: "btn btn--secondary" %>
-    <% if controller_name == "spaces" and params[:action] == "new" %>
-      <%= link_to "More",
-                  new_property_space_path(@property, singles: "tool", location: "#{params[:location]}"),
-                  class: "btn btn--white" %> 
-    <% end %>
     <% if params[:action] == "edit" %> 
       <% if params[:edit_location] %>
         <button formmethod="get" 

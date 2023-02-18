@@ -1,7 +1,64 @@
-<%= simple_form_for [property, appliance], html: { class: "form appliance" } do |f| %>
-  <%= form_error_notification(appliance) %>
-  <%= f.hidden_field :user_id, value: current_user.id %>
-  <%= f.input :name, html5: true, input_html: { autofocus: true } %>
-  <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
-  <%= f.submit class: "btn btn--secondary" %>
+<% if params.dig(:property, :name) == "New appliances table" or params.dig(:property, :name) == "Shut off locations" %>
+  <%= turbo_frame_tag "space_search_result_tool" do %>
+<!--if can enhance progressively and get skypack working with stimulus-->
+<!--data-controller="combobox"-->
+    <div class="space">
+      <form action="<%= searches_path(turbo_frame: "search_results") %>" data-turbo-frame="search_results" data-controller="form" class="peer" data-action="invalid->form#hideValidationMessage:capture">
+<!--        <label for="search_query">Query</label>-->
+        <input type="hidden" name="property_id" value="<%= @property.id %>">
+        <input type="hidden" name="location" value="<%= params[:location] %>">
+        <input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-action="input->form#submit" class="space-search-result__search-input" placeholder="Search space names">
+        <!--<input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-combobox-target="input" data-action="focus->combobox#start focusout->combobox#stop input->form#submit">-->
+
+        <!--added formethod="get" to fix the error displaying in dom that may disappear with combobox later...-->
+        <!--there is also a chrome extensions error that pops up in the dom with this search bar feature sometimes-->
+        <button formmethod="get" data-form-target="submit"> 
+          Search
+        </button>
+      </form>
+      <turbo-frame id="search_results" target="_top" class="empty:hidden peer-invalid:hidden"></turbo-frame>  
+        
+      <div class="space-search-result__body">   
+        <div class="space-search-result__actions">
+          <%= simple_form_for [@property], html: { class: "form--property-dropdown" } do |f| %>
+            <%= form_error_notification(@property) %>
+            <div data-controller="element search-params">
+              <%= f.select :name, @property.table_styles.invert, {}, autocomplete: "off", data: { action: "change->search-params#encode change->element#click" }, class: "space__select" %>
+              <noscript>
+                <button formmethod="get" formaction="<%= property_path(@property) %>">Select style</button>
+              </noscript>
+              <a href="<%= property_path(@property) %>" 
+                 hidden
+                 data-search-params-target="anchor"
+                 data-element-target="click"></a> 
+<!--            <span>Tip: Use the dropdown tools here to change views and create templates!</span>-->
+            </div>
+          <% end %>  
+          <%= link_to "Cancel", property_path(@property), class: "btn btn--light" %>
+        </div>
+        <p class="devise__hint devise--space-form-hint">Hint: Click on the name of a space or appliance to create them.</p>
+        <% @lettered_names.each do |key, value| %>
+          <h4 class="space-search-result--letter-header"><%= key %></h4>
+          <div class="space-search-result--letter-group">
+            <% value.each do |value| %>
+              <%= simple_form_for [@property, @appliance], html: { class: "space-search-result__form" } do |form| %>
+                <%= hidden_field_tag "appliances_table", "here" %>
+                <%= form.hidden_field :user_id, value: current_user.id %>
+                <%= form.hidden_field :name, value: "#{value}" %>
+                <%= form.submit "#{value}", class: "btn btn--drawn" %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>  
+<% else %>
+  <%= simple_form_for [property, appliance], html: { class: "form appliance" } do |f| %>
+    <%= form_error_notification(appliance) %>
+    <%= f.hidden_field :user_id, value: current_user.id %>
+    <%= f.input :name, html5: true, input_html: { autofocus: true } %>
+    <%= link_to "Cancel", property_path(property), class: "btn btn--light" %>
+    <%= f.submit class: "btn btn--secondary" %>
+  <% end %>
 <% end %>

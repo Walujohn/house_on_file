@@ -15,7 +15,7 @@ class SpacesController < ApplicationController
     @space = @property.spaces.build(space_params)
     @space.number_the_name(@property)
     if @space.save
-      @property.respond_to_alternative_space_create_params(params, @space, current_group, current_user, space_params)
+      @property.respond_to_alternative_space_create_params(params, @space, current_group, current_user)
       if params[:location] == "List interiors"
         @spaces = @property.spaces.includes(:features).ordered.where(location: "interior")
       elsif params[:location] == "List exteriors"

@@ -1,6 +1,2 @@
 <%= turbo_stream.remove @appliance %>
 <%= render_turbo_stream_flash_messages %>
-
-<%= turbo_stream.update dom_id(@property, :total) do %>
-  <%= render "properties/total", property: @property %>
-<% end %>
