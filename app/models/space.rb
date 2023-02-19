@@ -9,7 +9,9 @@ class Space < ApplicationRecord
   
   scope :ordered, -> { order(name: :asc) }
     
-  scope :containing, -> (query) { where(name: query) }
+#  scope :containing, -> (query) { where(name: query) }
+    
+#  broadcasts_to ->(space) { [space.property, "spaces"] }, inserts_by: :prepend
 
   CREATED_FEATURES = Array.new
 

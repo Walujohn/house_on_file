@@ -1,5 +1,12 @@
 <%= turbo_stream_from current_group, "properties" %>
+<%# turbo_stream_from @property, "spaces" %>
 <main class="container mb-xxxxl">
+  <% if @property.property_template and @property.property_template.to_i == 0 %>
+    <p class="property__hint">This is a multi-unit style templating property. The same changes made here will also be automatically applied to its <%= @property.associated_count(current_group) %> associated properties.</p>
+  <% end %>
+  <% if @property.property_template and @property.property_template.to_i != 0 %>
+    <p class="property__hint">This property is additionally automatically applying the same changes made to <%= current_group.properties.where(id: @property.property_template.to_i).first.name %>.</p>
+  <% end %>
   <div class="property__nav-link">
     <%= link_to sanitize("&larr; Back to properties"), properties_path %>
 <!--
@@ -12,12 +19,6 @@
     <h1>
       <%= @property.name %>
     </h1>
-    <% if @property.property_template and @property.property_template.to_i == 0 %>
-      <p class="property__hint">This is a multi-unit style templating property. Changes made here will be automatically shared with its <%= @property.associated_count(current_group) %> associated properties.</p>
-    <% end %>
-    <% if @property.property_template and @property.property_template.to_i != 0 %>
-      <p class="property__hint">This property is also automatically receiving changes from <%= current_group.properties.where(id: @property.property_template.to_i).first.name %>.</p>
-    <% end %>
     <div class="property__actions">
       <%= link_to "New space",
                   new_property_space_path(@property),
@@ -57,29 +58,47 @@
     <% if params.dig(:property, :name) == "New appliances table" or params.dig(:property, :name) == "Shut off locations" %>
       <%= render "appliances/form" %>
     <% end %>
-    <%= turbo_frame_tag "spaces" do %>
+    <%= turbo_frame_tag "spaces", class: "property__turbo-frame-spaces" do %>
       <% if params.dig(:property, :name) != "List appliances" %>
         <%= render "spaces/empty_state" %>
         <%= render @spaces, property: @property %>
       <% end %>
     <% end %>
+    
     <div class="header">
       <h1>
       </h1>
       <div class="property__actions"> 
         <%= link_to "New appliance",
                     new_property_appliance_path(@property),
-                    data: { turbo_frame: dom_id(Appliance.new) },
+                    data: { turbo_frame: dom_id(Appliance.new, :hello) },
                     class: "btn btn--primary" %>  
       </div>
     </div>
-    <%= turbo_frame_tag Appliance.new %>
+    <%= turbo_frame_tag "hello_appliance" %>
     <%= turbo_frame_tag "appliances" do %>
       <%= render "appliances/empty_state" %>
       <%= render @appliances, property: @property %>
     <% end %> 
     <% if params.dig(:property, :name) == "List interiors" or params.dig(:property, :name) == "List exteriors" %>
       <turbo-stream action="replace" targets=".headerLink">
+        <template>
+          <%= link_to "New space",
+                      new_property_space_path(@property, location: "#{params.dig(:property, :name)}"),
+                      data: { turbo_frame: dom_id(Space.new) },
+                      class: "btn btn--primary headerLink" %>
+        </template>
+      </turbo-stream>
+      <turbo-stream action="replace" targets=".emptyStateLink">
+        <template>
+          <%= link_to "Add space",
+                      new_property_space_path(@property, location: "#{params.dig(:property, :name)}"),
+                      data: { turbo_frame: dom_id(Space.new) },
+                      class: "btn btn--primary emptyStateLink" %>
+        </template>
+      </turbo-stream>
+    <% elsif params.dig(:property, :name) == "List appliances"%>
+       <turbo-stream action="replace" targets=".headerLink">
         <template>
           <%= link_to "New space",
                       new_property_space_path(@property, location: "#{params.dig(:property, :name)}"),

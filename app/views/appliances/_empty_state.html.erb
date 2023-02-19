@@ -5,6 +5,6 @@
 
   <%= link_to "Add appliance",
               new_property_appliance_path(@property),
-              data: { turbo_frame: dom_id(Appliance.new) },
+              data: { turbo_frame: dom_id(Appliance.new, :hello) },
               class: "btn btn--primary" %>  
 </div>

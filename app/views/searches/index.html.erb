@@ -1,62 +1,98 @@
 <turbo-frame id="<%= params.fetch(:turbo_frame, "search_results") %>">
   <h1>Results</h1>
+  <% if @space_names %>
 <!--data-combobox-target="list"    -->
-  <ul role="listbox"> 
-    <% @names.each do |space| %>
-      <li class="space-search-result--line-item">
-        <div class="space">
-          <div class="space__header">
-            <h2 class="space__title">
-              <%= highlight(space, params[:query]) %>
-            </h2>
-            <div class="space__actions">
-<!--          you transformed the link_to into a button_to-->
-              <%# link_to highlight(space.name, params[:query]), property_space_path(space.property, space), id: dom_id(space, :search_result), role: "option", class: "aria-selected:outline-black" %>
-              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "space_search_result_form" => "", "space[location]" => "#{@space.location}", "location" => "#{params[:location]}", "list" => "#{params[:location]}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
-              <div class="property__actions"></div>            
+    <ul role="listbox"> 
+      <% @space_names.each do |space| %>
+        <li class="space-search-result--line-item">
+            
+          <div class="space">
+            <div class="space__header">
+              <h2 class="space__title">
+                <%= highlight(space, params[:query]) %>
+              </h2>
+              <div class="space__actions">
+<!--            you transformed the link_to into a button_to-->
+                <%# link_to highlight(space.name, params[:query]), property_space_path(space.property, space), id: dom_id(space, :search_result), role: "option", class: "aria-selected:outline-black" %>
+                <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "space[location]" => "#{@space.location}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
+                <div class="property__actions"></div>            
+              </div>
             </div>
-          </div>
-          <div class="space__body">
-            <div class="feature feature--header">
-              <div class="feature__name">Features</div>
-              <div class="feature__variety">Variety</div>
-              <div class="feature__variety"></div>
-              <div class="feature__brand"></div>
-              <div class="feature__actions"></div>
+            <div class="space__body">
+              <div class="feature feature--header">
+                <div class="feature__name">Features</div>
+                <div class="feature__variety">Variety</div>
+                <div class="feature__variety"></div>
+                <div class="feature__brand"></div>
+                <div class="feature__actions"></div>
+              </div>
+              <div class="space__footer">
+              </div>
             </div>
-            <div class="space__footer">
+          </div>  
+            
+          <div class="space">
+            <div class="space__header">
+              <h2 class="space__title">
+                <%= highlight("#{space} with fill", params[:query]) %>
+              </h2>
+              <div class="space__actions">
+                <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "spaces_with_features" => "common", "space[location]" => "#{@space.location}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
+                <div class="property__actions"></div>
+              </div>
             </div>
-          </div>
-        </div>  
-        <div class="space">
-          <div class="space__header">
-            <h2 class="space__title">
-              <%= highlight("#{space} with fill", params[:query]) %>
-            </h2>
-            <div class="space__actions">
-              <%= button_to "Create", [@property, @space],  params: { "space[name]" => "#{space}", "space[user_id]" => "#{current_user.id}", "spaces_with_features" => "common", "space_search_result_form" => "", "space[location]" => "#{@space.location}", "location" => "#{params[:location]}", "list" => "#{params[:location]}" }, id: dom_id(@space, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %>        
-              <div class="property__actions"></div>
+            <div class="space__body">
+              <div class="feature feature--header">
+                <div class="feature__name">Features</div>
+                <div class="feature__variety">Variety</div>
+                <div class="feature__variety"></div>
+                <div class="feature__brand"></div>
+                <div class="feature__actions"></div>
+              </div>
+              <div class="space__footer">
+                Wall covering, floor covering, ceiling covering
+              </div>
             </div>
-          </div>
-          <div class="space__body">
-            <div class="feature feature--header">
-              <div class="feature__name">Features</div>
-              <div class="feature__variety">Variety</div>
-              <div class="feature__variety"></div>
-              <div class="feature__brand"></div>
-              <div class="feature__actions"></div>
-            </div>
-            <div class="space__footer">
-              Wall covering, floor covering, ceiling covering
-            </div>
-          </div>
-        </div>  
-      </li>
-    <% end %>
+          </div>  
+            
+        </li>
+      <% end %>
 <!--    progessively enhance to search for existing properties, spaces and appliances?-->
     <%# @spaces.each do |space| %>
     <%# end %>
-  </ul>
+    </ul>
+  <% end %>  
+  <% if @appliance_names %>
+<!--    data-combobox-target="list"    -->
+    <ul role="listbox"> 
+      <% @appliance_names.each do |appliance| %>
+        <li class="space-search-result--line-item">
+          <div class="appliance">
+            <div class="appliance__header">
+              <h2 class="appliance__title">
+                <%= highlight(appliance, params[:query]) %>
+              </h2>
+              <div class="appliance__actions">
+<!--                you transformed the link_to into a button_to-->
+                <%# link_to highlight(space.name, params[:query]), property_space_path(space.property, space), id: dom_id(space, :search_result), role: "option", class: "aria-selected:outline-black" %>
+                <%= button_to "Create", [@property, @appliance],  params: { "appliance[name]" => "#{appliance}", "appliance[user_id]" => "#{current_user.id}" }, id: dom_id(@appliance, :search_result), role: "option", class: "aria-selected:outline-black btn btn--white" %> 
+              </div>
+            </div>
+            <div class="appliance__body">
+              <div class="feature feature--appliance-feature-header">
+                <div class="feature__name">Components</div>
+              </div>
+              <div class="appliance__footer">
+              </div>
+            </div>
+          </div>  
+        </li>
+      <% end %>
+<!--    progessively enhance to search for existing properties, spaces and appliances?-->
+      <%# @spaces.each do |space| %>
+      <%# end %>
+    </ul> 
+  <% end %>
 </turbo-frame>
 
  

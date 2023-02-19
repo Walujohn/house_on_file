@@ -2,7 +2,7 @@
 <%= turbo_stream.update Space.new, "" %>
 
 <%# Step 2: add the space at the right place %>
-<% if params[:list].present? %>
+<% if params[:list].present? and params[:list] != "List appliances" %>
   <% if previous_space = @space.previous_space_with_list(@space.location) %>
     <%= turbo_stream.after previous_space do %>
       <%= render @space, property: @property %>
@@ -12,13 +12,23 @@
       <%= render @space, property: @property %>
     <% end %>
   <% end %>
+<% elsif params[:list].present? and params[:list] == "List appliances" %>
+<!--  update "spaces" turbo frame in case List Appliances removed it so @spaces can be prepended-->
+  <%= turbo_stream.update "spaces" do %>
+    <%= render "spaces/empty_state" %>
+    <%= render @spaces, property: @property %>
+  <% end %>
+
+  <% if previous_space = @space.previous_space %>
+    <%= turbo_stream.after previous_space do %>
+      <%= render @space, property: @property %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.prepend "spaces" do %>
+      <%= render @space, property: @property %>
+    <% end %>
+  <% end %>
 <% else %>
-<!--    update "spaces" turbo frame in case List Appliances removed it so @spaces can be prepended-->
-  <%# turbo_stream.update "spaces" do %>
-    <%# render "spaces/empty_state" %>
-    <%# render @spaces, property: @property %>
-  <%# end %>
- 
   <% if previous_space = @space.previous_space %>
     <%= turbo_stream.after previous_space do %>
       <%= render @space, property: @property %>

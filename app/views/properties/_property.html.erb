@@ -38,18 +38,25 @@
   <%= turbo_frame_tag property do %>
 <!--  replace with commented out to make more info display and wrap like features-->
 <!--  <div class="feature">-->
-    <div class="property">
-<!--      <div class="feature__name">-->
-      <%= link_to property.name,
-                  property_path(property),
-                  autocomplete: "off",
-                  data: { turbo_frame: "_top" } %>
-<!--      </div>-->
+    <div class="property">  
       <% if property.property_template and property.property_template.to_i == 0 %>
+        <%= link_to property.name,
+                    property_path(property),
+                    class: "property__link",
+                    autocomplete: "off",
+                    data: { turbo_frame: "_top" } %>
+        
         <turbo-frame id="hint-<%= "#{property.id}" %>">
-          <p class="property__hint">This is a multi-unit style templating property. Changes made here will be automatically shared with its <%= property.associated_count(current_group) %> associated properties.</p>
+          <p class="property__hint">This is a multi-unit style templating property. The same changes made here will also be automatically applied to its <%= property.associated_count(current_group) %> associated properties.</p>
         </turbo-frame>
-      <% end %>
+      <% else %>
+<!--        <div class="feature__name">-->
+        <%= link_to property.name,
+                    property_path(property),
+                    autocomplete: "off",
+                    data: { turbo_frame: "_top" } %>
+<!--        </div>-->
+      <% end %>  
 <!--
       <div class="feature__variety-brand">
         <%# property.low %>

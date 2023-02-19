@@ -1,8 +1,6 @@
 class SpacesController < ApplicationController
   before_action :set_property
   before_action :set_space, only: [:edit, :update, :destroy]
-  before_action :set_names, only: [:new]
-  before_action :set_lettered_names, only: [:new]
   
   def new
     @space = @property.spaces.build
@@ -16,11 +14,7 @@ class SpacesController < ApplicationController
     @space.number_the_name(@property)
     if @space.save
       @property.respond_to_alternative_space_create_params(params, @space, current_group, current_user)
-      if params[:location] == "List interiors"
-        @spaces = @property.spaces.includes(:features).ordered.where(location: "interior")
-      elsif params[:location] == "List exteriors"
-        @spaces = @property.spaces.includes(:features).ordered.where(location: "exterior")
-      else
+      if params[:list] == "List appliances"
         @spaces = @property.spaces.includes(:features).ordered
       end
         
@@ -90,14 +84,6 @@ class SpacesController < ApplicationController
     
   def set_space
     @space = @property.spaces.find(params[:id])
-  end
-
-  def set_names
-    @names = @property.list_of_space_names
-  end
-  
-  def set_lettered_names 
-    @lettered_names = @names.group_by { |name| name[0].to_sym } 
   end
 end
 

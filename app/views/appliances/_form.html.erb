@@ -6,7 +6,6 @@
       <form action="<%= searches_path(turbo_frame: "search_results") %>" data-turbo-frame="search_results" data-controller="form" class="peer" data-action="invalid->form#hideValidationMessage:capture">
 <!--        <label for="search_query">Query</label>-->
         <input type="hidden" name="property_id" value="<%= @property.id %>">
-        <input type="hidden" name="location" value="<%= params[:location] %>">
         <input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-action="input->form#submit" class="space-search-result__search-input" placeholder="Search space names">
         <!--<input id="search_query" name="query" type="search" pattern=".*\w+.*" required autocomplete="off" data-combobox-target="input" data-action="focus->combobox#start focusout->combobox#stop input->form#submit">-->
 
@@ -20,7 +19,8 @@
         
       <div class="space-search-result__body">   
         <div class="space-search-result__actions">
-          <%= simple_form_for [@property], html: { class: "form--property-dropdown" } do |f| %>
+          <p class="devise__hint devise--space-form-hint">Hint: Click on the name of a space or appliance to create them.</p>
+          <%= simple_form_for [@property] do |f| %>
             <%= form_error_notification(@property) %>
             <div data-controller="element search-params">
               <%= f.select :name, @property.table_styles.invert, {}, autocomplete: "off", data: { action: "change->search-params#encode change->element#click" }, class: "space__select" %>
@@ -30,26 +30,28 @@
               <a href="<%= property_path(@property) %>" 
                  hidden
                  data-search-params-target="anchor"
-                 data-element-target="click"></a> 
+                 data-element-target="click"
+                 data-turbo-frame="lettered_names"></a> 
 <!--            <span>Tip: Use the dropdown tools here to change views and create templates!</span>-->
             </div>
           <% end %>  
-          <%= link_to "Cancel", property_path(@property), class: "btn btn--light" %>
+          <%# link_to "Cancel", property_path(@property), class: "btn btn--light" %>
         </div>
-        <p class="devise__hint devise--space-form-hint">Hint: Click on the name of a space or appliance to create them.</p>
-        <% @lettered_names.each do |key, value| %>
-          <h4 class="space-search-result--letter-header"><%= key %></h4>
-          <div class="space-search-result--letter-group">
-            <% value.each do |value| %>
-              <%= simple_form_for [@property, @appliance], html: { class: "space-search-result__form" } do |form| %>
-                <%= hidden_field_tag "appliances_table", "here" %>
-                <%= form.hidden_field :user_id, value: current_user.id %>
-                <%= form.hidden_field :name, value: "#{value}" %>
-                <%= form.submit "#{value}", class: "btn btn--drawn" %>
+        <turbo-frame id="lettered_names">
+          <% @lettered_names.each do |key, value| %>
+            <h4 class="space-search-result--letter-header"><%= key %></h4>
+            <div class="space-search-result--letter-group">
+              <% value.each do |value| %>
+                <%= simple_form_for [@property, @appliance], html: { class: "space-search-result__form" } do |form| %>
+                  <%= hidden_field_tag "appliances_table", "here" %>
+                  <%= form.hidden_field :user_id, value: current_user.id %>
+                  <%= form.hidden_field :name, value: "#{value}" %>
+                  <%= form.submit "#{value}", class: "btn btn--drawn" %>
+                <% end %>
               <% end %>
-            <% end %>
-          </div>
-        <% end %>
+            </div>
+          <% end %>
+        </turbo-frame>
       </div>
     </div>
   <% end %>  

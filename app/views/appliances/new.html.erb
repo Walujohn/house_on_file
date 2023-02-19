@@ -9,7 +9,8 @@
                 class: "btn btn--primary" %>
   </div>
     
-  <%= turbo_frame_tag @appliance do %>
+  <%# turbo_frame_tag @appliance do %>
+  <%= turbo_frame_tag "hello_appliance" do %>
     <%= render "form", property: @property, appliance: @appliance %>
   <% end %>
 </main>

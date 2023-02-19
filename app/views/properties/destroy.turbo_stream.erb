@@ -4,7 +4,7 @@
 <% if @property.property_template and @property.property_template.to_i != 0 and @associated_property.present? %>
   <turbo-stream action="update" target="hint-<%= "#{@associated_property.id}" %>">
     <template>
-      <p class="property__hint">This is a multi-unit templating property. Changes made here will be shared with its <%= @associated_property.associated_count(current_group) %> associated properties.</p>
+      <p class="property__hint">This is a multi-unit style templating property. The same changes made here will also be automatically applied to its <%= @associated_property.associated_count(current_group) %> associated properties.</p>
     </template>
   </turbo-stream>
 <% end %>
