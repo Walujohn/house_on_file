@@ -2,10 +2,10 @@
 <%# turbo_stream_from @property, "spaces" %>
 <main class="container mb-xxxxl">
   <% if @property.property_template and @property.property_template.to_i == 0 %>
-    <p class="property__hint">This is a multi-unit style templating property. The same changes made here will also be automatically applied to its <%= @property.associated_count(current_group) %> associated properties.</p>
+    <p class="property__hint">This is a multi-unit style property template. The same changes made here will also be automatically applied to its <%= @property.associated_count(current_group) %> associated properties.</p>
   <% end %>
-  <% if @property.property_template and @property.property_template.to_i != 0 %>
-    <p class="property__hint">This property is additionally automatically applying the same changes made to <%= current_group.properties.where(id: @property.property_template.to_i).first.name %>.</p>
+  <% if @property.property_template and @property.property_template.to_i != 0 and current_group.properties.where(id: @property.property_template.to_i).first.present? %>
+    <p class="property__hint">This property is automatically applying the same changes made to <%= current_group.properties.where(id: @property.property_template.to_i).first.name %>.</p>
   <% end %>
   <div class="property__nav-link">
     <%= link_to sanitize("&larr; Back to properties"), properties_path %>

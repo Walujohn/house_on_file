@@ -47,7 +47,7 @@
                     data: { turbo_frame: "_top" } %>
         
         <turbo-frame id="hint-<%= "#{property.id}" %>">
-          <p class="property__hint">This is a multi-unit style templating property. The same changes made here will also be automatically applied to its <%= property.associated_count(current_group) %> associated properties.</p>
+          <p class="property__hint">This is a multi-unit style property template. The same changes made here will also be automatically applied to its <%= property.associated_count(current_group) %> associated properties.</p>
         </turbo-frame>
       <% else %>
 <!--        <div class="feature__name">-->

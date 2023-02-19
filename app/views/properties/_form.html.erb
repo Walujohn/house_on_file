@@ -29,8 +29,13 @@
     <% if @came_from_new_create %>
       <fieldset data-controller="element search-params" class="property--fieldset">
         <%= f.label :style %>
-        <%= f.select :style, property.forms.invert, {}, autocomplete: "off",
+        <% if params.dig(:property, :style) == "no" or params.dig(:property, :style) == "yes" %>
+          <%= f.select :style, property.forms.invert, { selected: property.forms.to_a.second }, autocomplete: "off",
                      data: { action: "change->search-params#encode change->element#click" } %>
+        <% else %>
+          <%= f.select :style, property.forms.invert, {}, autocomplete: "off",
+                     data: { action: "change->search-params#encode change->element#click" } %>
+        <% end %>
         <noscript>
           <button formmethod="get" formaction="<%= new_property_path %>">Select style</button>
         </noscript>
