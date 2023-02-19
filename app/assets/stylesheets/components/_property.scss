@@ -143,6 +143,10 @@
   &--fieldset {
     padding: var(--space-s);
   }
+  
+  &--actions-dropdown {
+    flex-wrap: wrap;    
+  }
 }
 
 //these are inside Simple Form config?

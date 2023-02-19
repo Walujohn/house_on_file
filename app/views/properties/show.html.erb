@@ -19,7 +19,7 @@
     <h1>
       <%= @property.name %>
     </h1>
-    <div class="property__actions">
+    <div class="property__actions property--actions-dropdown">
       <%= link_to "New space",
                   new_property_space_path(@property),
                   data: { turbo_frame: dom_id(Space.new) },
