@@ -10,6 +10,13 @@
   <div class="property__nav-link">
     <%= link_to sanitize("&larr; Back to properties"), properties_path %>
 <!--
+    <section>
+      <form action="<%# new_property_space_path(@property) %>" class="hidden sm:block" data-turbo-frame="dialog">
+        <button name="turbo_frame" value="dialog" aria-expanded="false">Select from ideas</button>
+      </form>
+    </section>
+-->
+<!--
     https://turbo.hotwired.dev/handbook/drive#preload-links-into-the-cache
     <a href="/properties" data-turbo-preload>Back to properties</a>
 -->
@@ -24,13 +31,6 @@
                   new_property_space_path(@property),
                   data: { turbo_frame: dom_id(Space.new) },
                   class: "btn btn--primary headerLink" %>  
-<!--
-      <section>
-        <form action="<%# new_property_space_path(@property) %>" class="hidden sm:block" data-turbo-frame="dialog">
-          <button name="turbo_frame" value="dialog" aria-expanded="false">Select from ideas</button>
-        </form>
-      </section>
--->
       <%= simple_form_for [@property], html: { class: "form--property-dropdown" } do |f| %>
         <%= form_error_notification(@property) %>
         <div data-controller="element search-params">
