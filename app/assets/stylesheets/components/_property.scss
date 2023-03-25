@@ -112,6 +112,11 @@
   &__link {
     width: 35%    
   }
+
+  &__new-list {
+    display: flex;
+    column-gap: var(--space-xs);
+  }
     
   &--form {
     flex-basis: 100%;
@@ -146,6 +151,12 @@
   
   &--actions-dropdown {
     flex-wrap: wrap;    
+  }
+    
+  &--new-list {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
   }
 }
 

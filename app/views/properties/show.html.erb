@@ -51,35 +51,88 @@
      
   <%= turbo_frame_tag @property do %>
 <!--    <div class="space__body">-->    
-    <%= turbo_frame_tag Space.new %>
+    <%= turbo_frame_tag Space.new %>    
     <% if params.dig(:property, :name) == "New spaces table" or params.dig(:property, :name) == "Interior spaces table" or params.dig(:property, :name) == "Exterior spaces table" or params.dig(:property, :name) == "Interior spaces table w/ features" or params.dig(:property, :name) == "Exterior spaces table w/ features" %>
-      <%= render "spaces/form" %>
-    <% end %>
-    <% if params.dig(:property, :name) == "New appliances table" or params.dig(:property, :name) == "Shut off locations" %>
-      <%= render "appliances/form" %>
-    <% end %>
-    <%= turbo_frame_tag "spaces", class: "property__turbo-frame-spaces" do %>
-      <% if params.dig(:property, :name) != "List appliances" %>
-        <%= render "spaces/empty_state" %>
-        <%= render @spaces, property: @property %>
+      <div class="property__new-list">
+        <%= render "spaces/form" %>  
+        <div class="property--new-list">
+          <%= turbo_frame_tag "spaces", class: "property__turbo-frame-spaces" do %>
+            <% if params.dig(:property, :name) != "List appliances" %>
+              <%= render "spaces/empty_state" %>
+              <%= render @spaces, property: @property %>
+            <% end %>
+          <% end %>
+          
+          <div class="header">
+            <h1>
+            </h1>
+            <div class="property__actions"> 
+              <%= link_to "New appliance",
+                          new_property_appliance_path(@property),
+                          data: { turbo_frame: dom_id(Appliance.new, :hello) },
+                          class: "btn btn--primary" %>  
+            </div>
+          </div>
+          <%= turbo_frame_tag "hello_appliance" %>
+          <%= turbo_frame_tag "appliances" do %>
+            <%= render "appliances/empty_state" %>
+            <%= render @appliances, property: @property %>
+          <% end %>
+        </div>
+      </div>
+    <% elsif params.dig(:property, :name) == "New appliances table" or params.dig(:property, :name) == "Shut off locations" %>
+      <div class="property__new-list">
+        <%= render "appliances/form" %>
+        <div class="property--new-list">
+          <%= turbo_frame_tag "spaces", class: "property__turbo-frame-spaces" do %>
+            <% if params.dig(:property, :name) != "List appliances" %>
+              <%= render "spaces/empty_state" %>
+              <%= render @spaces, property: @property %>
+            <% end %>
+          <% end %>
+          
+          <div class="header">
+            <h1>
+            </h1>
+            <div class="property__actions"> 
+              <%= link_to "New appliance",
+                          new_property_appliance_path(@property),
+                          data: { turbo_frame: dom_id(Appliance.new, :hello) },
+                          class: "btn btn--primary" %>  
+            </div>
+          </div>
+          <%= turbo_frame_tag "hello_appliance" %>
+          <%= turbo_frame_tag "appliances" do %>
+            <%= render "appliances/empty_state" %>
+            <%= render @appliances, property: @property %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <%= turbo_frame_tag "spaces", class: "property__turbo-frame-spaces" do %>
+        <% if params.dig(:property, :name) != "List appliances" %>
+          <%= render "spaces/empty_state" %>
+          <%= render @spaces, property: @property %>
+        <% end %>
+      <% end %>
+    
+      <div class="header">
+        <h1>
+        </h1>
+        <div class="property__actions"> 
+          <%= link_to "New appliance",
+                      new_property_appliance_path(@property),
+                      data: { turbo_frame: dom_id(Appliance.new, :hello) },
+                      class: "btn btn--primary" %>  
+        </div>
+      </div>
+      <%= turbo_frame_tag "hello_appliance" %>
+      <%= turbo_frame_tag "appliances" do %>
+        <%= render "appliances/empty_state" %>
+        <%= render @appliances, property: @property %>
       <% end %>
     <% end %>
     
-    <div class="header">
-      <h1>
-      </h1>
-      <div class="property__actions"> 
-        <%= link_to "New appliance",
-                    new_property_appliance_path(@property),
-                    data: { turbo_frame: dom_id(Appliance.new, :hello) },
-                    class: "btn btn--primary" %>  
-      </div>
-    </div>
-    <%= turbo_frame_tag "hello_appliance" %>
-    <%= turbo_frame_tag "appliances" do %>
-      <%= render "appliances/empty_state" %>
-      <%= render @appliances, property: @property %>
-    <% end %> 
     <% if params.dig(:property, :name) == "List interiors" or params.dig(:property, :name) == "List exteriors" %>
       <turbo-stream action="replace" targets=".headerLink">
         <template>
