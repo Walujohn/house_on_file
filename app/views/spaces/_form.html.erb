@@ -1,8 +1,8 @@
 <% if params.dig(:property, :name) == "New spaces table" or params.dig(:property, :name) == "Interior spaces table" or params.dig(:property, :name) == "Exterior spaces table" or params.dig(:property, :name) == "New appliances table" or params.dig(:property, :name) == "Shut off locations" or params.dig(:property, :name) == "Interior spaces table w/ features" or params.dig(:property, :name) == "Exterior spaces table w/ features" %>
-  <%= turbo_frame_tag "space_search_result_tool" do %>
+  <%= turbo_frame_tag "space_search_result_tool", class: "space__new-list-turbo-frame" do %>
 <!--if can enhance progressively and get skypack working with stimulus-->
 <!--data-controller="combobox"-->
-    <div class="space">
+    <div class="space-search-result__panel">   
       <form action="<%= searches_path(turbo_frame: "search_results") %>" data-turbo-frame="search_results" data-controller="form" class="peer" data-action="invalid->form#hideValidationMessage:capture">
 <!--        <label for="search_query">Query</label>-->
         <input type="hidden" name="property_id" value="<%= @property.id %>">
@@ -15,8 +15,7 @@
           Search
         </button>
       </form>
-      <turbo-frame id="search_results" target="_top" class="empty:hidden peer-invalid:hidden"></turbo-frame>  
-        
+      <turbo-frame id="search_results" target="_top" class="empty:hidden peer-invalid:hidden"></turbo-frame> 
       <div class="space-search-result__body">   
         <div class="space-search-result__actions">
           <p class="devise__hint devise--space-form-hint">Hint: Click on the name of a space or appliance to create them.</p>
@@ -37,7 +36,7 @@
           <% end %>  
           <%# link_to "Cancel", property_path(@property), class: "btn btn--light" %>
         </div>
-        <turbo-frame id="lettered_names">
+        <turbo-frame id="lettered_names" class="space__turbo-frame-lettered-names">
           <% @lettered_names.each do |key, value| %>
             <h4 class="space-search-result--letter-header"><%= key %></h4>
             <div class="space-search-result--letter-group">
@@ -48,6 +47,7 @@
                   <% end %>
                   <%= form.hidden_field :user_id, value: current_user.id %>
                   <%= form.hidden_field :location, value: @space.location %>
+                  <%= hidden_field_tag "origin", "new list" %>
                   <%= form.hidden_field :name, value: "#{value}" %>
                   <%= form.submit "#{value}", class: "btn btn--drawn" %>
                   <% if params.dig(:property, :name) == "Interior spaces table w/ features" or params.dig(:property, :name) == "Exterior spaces table w/ features" %>

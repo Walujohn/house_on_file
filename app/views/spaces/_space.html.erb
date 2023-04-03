@@ -1,6 +1,6 @@
 <%= turbo_frame_tag space do %>
-  <% if params.dig(:property, :name) == "New spaces table" %>
-    <div class="property">
+  <% if params.dig(:property, :name) == "New spaces table" or params[:space_name_link] or params[:origin] == "new list" %>
+    <div class="space__shrunk-name">
       <%= link_to space.name,
                   property_path(property),
                   autocomplete: "off" %>
@@ -10,7 +10,10 @@
       <%= turbo_frame_tag dom_id(space, :edit) do %>
         <div class="space__header">
           <h2 class="space__title">
-            <%= space.name %>
+            <%= link_to space.name,
+                        property_path(property, space_name_link: "space name link"),
+                        data: { turbo_frame: dom_id(space) },
+                        autocomplete: "off" %>
           </h2>
           <div class="space__actions">
             <%= button_to "Delete",

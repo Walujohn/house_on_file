@@ -101,7 +101,7 @@ class Property < ApplicationRecord
     
     def styles
       { "List all" => "List all", 
-        "New spaces table" => "Selection ideas...",
+        "New spaces table" => "List creations",
         "List interiors" => "List interiors",
         "List exteriors" => "List exteriors",
         "List appliances" => "List appliances",

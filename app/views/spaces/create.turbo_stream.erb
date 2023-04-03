@@ -28,6 +28,17 @@
       <%= render @space, property: @property %>
     <% end %>
   <% end %>
+<!--if the space was created by clicking on the new spaces list of names-->
+<% elsif params[:origin] and params[:origin] == "new list" %>
+  <% if previous_space = @space.previous_space %>
+    <%= turbo_stream.after previous_space do %>
+      <%= render @space, property: @property, origin: params[:origin] %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.prepend "spaces" do %>
+      <%= render @space, property: @property, origin: params[:origin] %>
+    <% end %>
+  <% end %>
 <% else %>
   <% if previous_space = @space.previous_space %>
     <%= turbo_stream.after previous_space do %>
