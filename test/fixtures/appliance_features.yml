@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  appliance: one
+  name: MyString
+  description: MyText
+  quantity: 1
+  unit_price: 9.99
+
+two:
+  appliance: two
+  name: MyString
+  description: MyText
+  quantity: 1
+  unit_price: 9.99

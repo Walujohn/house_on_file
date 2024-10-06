@@ -1,0 +1,54 @@
+//  you typically don't add margins to components for a good design model but oh well
+.devise {
+  width: 100%;
+  padding-right: var(--space-xs);
+  padding-left: var(--space-xs);
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+
+  @include media(tabletAndUp) {
+    padding-right: var(--space-m);
+    padding-left: var(--space-m);
+    max-width: 24rem;
+  }
+    
+  &__btn {
+    border: solid 2px;
+    width: 100%;
+    margin-bottom: var(--space-s);
+    margin-top: var(--space-m);
+  }
+  
+  &__google {
+    margin-top: var(--space-s);
+  }
+    
+  &__hint {
+    font-size: var(--font-size-s); 
+    margin-bottom: var(--space-s);
+  }
+  
+  &__forgot-password {
+    text-decoration: underline;
+    font-size: var(--font-size-s);
+  }
+
+  &--inputs {
+    text-align: left;
+  }
+
+  &--space-form-hint {
+    width: 45%;     
+    font-weight: 600;
+    
+    @include media(tabletAndUp) {
+      width: 100%;     
+    }
+  }
+}
+
+//these are inside Devise config?
+#user_email, #user_password, #user_password_confirmation, #user_remember_me {
+  margin-bottom: var(--space-s);
+}

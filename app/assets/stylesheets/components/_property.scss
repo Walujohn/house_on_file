@@ -19,5 +19,137 @@
     flex: 0 0 auto;
     align-self: flex-start;
     gap: var(--space-xs);
+    width: 25%;  
+    justify-content: flex-end;
   }
+       
+  &__input-large {
+    flex: 1 1 100%;
+
+    @include media(tabletAndUp) {
+      flex: 1 1 0;
+    }   
+  }
+    
+  &__input-medium {
+    flex: 1;
+    display: none;
+
+    @include media(tabletAndUp) {
+      display: revert;
+      flex: 0 0 9rem;
+    }
+  }
+    
+  &__input-small {
+    flex: 1;
+    display: none;
+
+    @include media(tabletAndUp) {
+      display: revert;
+      flex: 0 0 7rem;
+    }
+  }
+    
+  &__input-multi-unit {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+    column-gap: var(--space-xs);
+      
+    label {
+      width: 70%;       
+    }
+  }
+
+  &__input-multi-unit-letters {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+    column-gap: var(--space-xs);
+  }
+    
+  &__select {
+    font-size: var(--font-size-s);
+    width: 100%;
+    border-radius: var(--border-radius);
+  }
+    
+  &__hint {
+    font-size: var(--font-size-s);
+  }
+    
+  &__nav-link {
+    display: flex;
+    justify-content: space-between;
+  }
+    
+  &__turbo-frame {
+    display: flex;
+    justify-content: flex-end;
+  }
+    
+//you typically don't add margins to components for a good design model but oh well
+  &__turbo-frame-spaces {
+    display: block;
+    margin-bottom: var(--space-xxxxxl);
+  }
+    
+  &__letters-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;  
+    gap: var(--space-xxs);
+    width: 20%;
+  }
+    
+  &__actions-multi-unit {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xxs);
+  }
+
+  &__link {
+    width: 35%    
+  }
+    
+  &--form {
+    flex-basis: 100%;
+    justify-content: flex-start;
+//    gap: var(--space-xs);
+//    margin-bottom: var(--space-s);
+//    padding: var(--space-xs);     
+  }
+    
+  &--inputs {
+    display: flex;
+  }
+
+  &--text-area {
+    border-radius: var(--border-radius);     
+  }
+
+//  you typically don't add margins to components for a good design model but oh well
+  &--fieldset-detail {
+    padding: var(--space-s);
+    display: flex;
+    column-gap: var(--space-xxl);
+    
+    .legend {
+      margin-left: var(--space-l); 
+    }
+  }
+    
+  &--fieldset {
+    padding: var(--space-s);
+  }
+  
+  &--actions-dropdown {
+    flex-wrap: wrap;    
+  }
+}
+
+//these are inside Simple Form config?
+#property-name, #property_address, #property_addresstwo, #property_city, #property_state, #property_zip, #property_country, #property_yearbuilt, #property_lotsize, #property_squarefootage {
+  margin-bottom: var(--space-m);     
 }

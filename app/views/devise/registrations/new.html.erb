@@ -1,0 +1,36 @@
+<div class="devise">
+  <%= image_tag "wordswag.png", class: "signature" %>
+  <h2>Try House On File</h2>
+  <p>Create a profile and quickly assemble simple property reports.</p>
+  <% resource.group ||= Group.new %>
+  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: false }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+  
+    <div class="form-inputs devise--inputs">
+      <%= f.label :email_address %>
+      <%= f.input :email, required: true, placeholder: "Email address", autofocus: true %>
+      
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+      <% end %>
+
+      <%= f.simple_fields_for :group do |group_form| %>
+        <%= group_form.label "Group name" %>
+        <%= group_form.input :name, placeholder: "Group name", required: true %>
+      <% end %>
+      <p class="devise__hint">Hint: Use your company/team name or make up a new name up if that doesn't apply.</p>
+
+      <%= f.label :password %>
+      <%= f.input :password, required: true, placeholder: "Password" %>
+      
+      <%= f.label :password_confirmation %>
+      <%= f.input :password_confirmation, required: true, placeholder: "Password confirmation" %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.button :submit, "Next", class: "devise__btn" %>
+    </div>
+  <% end %>
+  <label>Already have an account?</label>
+  <%= render :partial => "devise/shared/links" %>
+</div>

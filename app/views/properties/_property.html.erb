@@ -1,16 +1,86 @@
-<%= turbo_frame_tag property do %>
-  <div class="property">
-    <%= link_to property.name,
-                property_path(property),
-                data: { turbo_frame: "_top" } %>
-    <div class="property__actions">
-      <%= button_to "Delete",
-                    property_path(property),
-                    method: :delete,
+<% if property.property_template and property.property_template.to_i != 0 %>
+  <%= turbo_frame_tag property, class: "property__turbo-frame" do %>
+<!--    replace with commented out to make more info display and wrap like features-->
+<!--    <div class="feature">-->
+    <div class="property">
+<!--    <div class="feature__name">-->
+      <%= link_to property.name,
+                  property_path(property),
+                  autocomplete: "off",
+                  data: { turbo_frame: "_top" } %>
+<!--    </div>-->
+<!--
+      <div class="feature__variety-brand">
+        <%# property.low %>
+          &times;
+        <%# property.high %>
+      </div>
+      <div class="feature__variety">
+        <%# property.low %>
+      </div>
+      <div class="feature__brand">
+        <%# property.high %>
+      </div>
+-->
+<!--  <div class="feature__actions">-->
+      <div class="property__actions">
+        <%= button_to "Delete",
+                      property_path(property),
+                      method: :delete,
+                      class: "btn btn--light" %>
+        <%= link_to "Edit",
+                    edit_property_path(property),
                     class: "btn btn--light" %>
-      <%= link_to "Edit",
-                  edit_property_path(property),
-                  class: "btn btn--light" %>
+      </div>
     </div>
-  </div>
+  <% end %>
+<% else %>
+  <%= turbo_frame_tag property do %>
+<!--  replace with commented out to make more info display and wrap like features-->
+<!--  <div class="feature">-->
+    <div class="property">  
+      <% if property.property_template and property.property_template.to_i == 0 %>
+        <%= link_to property.name,
+                    property_path(property),
+                    class: "property__link",
+                    autocomplete: "off",
+                    data: { turbo_frame: "_top" } %>
+        
+        <turbo-frame id="hint-<%= "#{property.id}" %>">
+          <p class="property__hint">This is a multi-unit style property template. The same changes made here will also be automatically applied to its <%= property.associated_count(current_group) %> associated properties.</p>
+        </turbo-frame>
+      <% else %>
+<!--        <div class="feature__name">-->
+        <%= link_to property.name,
+                    property_path(property),
+                    autocomplete: "off",
+                    data: { turbo_frame: "_top" } %>
+<!--        </div>-->
+      <% end %>  
+<!--
+      <div class="feature__variety-brand">
+        <%# property.low %>
+          &times;
+        <%# property.high %>
+      </div>
+      <div class="feature__variety">
+        <%# property.low %>
+      </div>
+      <div class="feature__brand">
+        <%# property.high %>
+      </div>
+-->
+<!--  <div class="feature__actions">-->
+      <div class="property__actions">
+        <%= button_to "Delete",
+                      property_path(property),
+                      method: :delete,
+                      class: "btn btn--light" %>
+        <%= link_to "Edit",
+                    edit_property_path(property),
+                    class: "btn btn--light" %>
+      </div>
+    </div>
+  <% end %>
 <% end %>
+

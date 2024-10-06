@@ -1,6 +1,107 @@
-<%= simple_form_for property, html: { class: "property form" } do |f| %>
+<%= simple_form_for property, html: { class: "property form property--form" } do |f| %>
   <%= form_error_notification(property) %>
-  <%= f.input :name, input_html: { autofocus: true } %>
+  <div class="property--form">
+<!--config styles in simple form?-->
+    <div id="property-name"><%= f.input :name, input_html: { autofocus: true }, class: "property--input" %></div>
+    <%= f.input :address, placeholder: "Address" %>
+    <%= f.input :addresstwo, placeholder: "Address Two" %>
+    <div class="property--inputs">
+      <%= f.input :city, placeholder: "City", 
+                         wrapper_html: { class: "property__input-large" } %>
+      <%= f.input :state, placeholder: "State", 
+                          wrapper_html: { class: "property__input-small" } %>
+      <%= f.input :zip, placeholder: "Zip", 
+                        wrapper_html: { class: "property__input-medium" } %>
+    </div>
+    <div class="property--inputs">
+      <%= f.input :country, placeholder: "Country",
+                            wrapper_html: { class: "property__input-large" } %>  
+      <%= f.input :yearbuilt, placeholder: "Year built",
+                              wrapper_html: { class: "property__input-small" } %>
+    </div>
+    <div class="property--inputs">
+      <%= f.input :lotsize, placeholder: "Lot size", 
+                            wrapper_html: { class: "property__input-large" } %>
+      <%= f.input :squarefootage, placeholder: "Square footage", 
+                                  wrapper_html: { class: "property__input-medium" } %>
+    </div>
+
+    <% if @came_from_new_create %>
+      <fieldset data-controller="element search-params" class="property--fieldset">
+        <%= f.label :style %>
+        <% if params.dig(:property, :style) == "no" or params.dig(:property, :style) == "yes" %>
+          <%= f.select :style, property.forms.invert, { selected: property.forms.to_a.second }, autocomplete: "off",
+                     data: { action: "change->search-params#encode change->element#click" } %>
+        <% else %>
+          <%= f.select :style, property.forms.invert, {}, autocomplete: "off",
+                     data: { action: "change->search-params#encode change->element#click" } %>
+        <% end %>
+        <noscript>
+          <button formmethod="get" formaction="<%= new_property_path %>">Select style</button>
+        </noscript>
+        <a href="<%= new_property_path %>" 
+           hidden
+           data-search-params-target="anchor"
+           data-element-target="click" 
+           data-turbo-frame="<%= f.field_id(:turbo_frame, property.id) %>"></a> 
+      </fieldset> 
+    <% end %>  
+      
+    <turbo-frame id="<%= f.field_id(:turbo_frame, property.id) %>">
+      <% if property.style == "Town houses, shared, apartments" and @came_from_new_create or property.style == "yes" and @came_from_new_create or property.style == "no" and @came_from_new_create %>
+        <%= f.hidden_field :property_template, value: "#{property.style}" %>
+        <section>
+          <%= field_set_tag "Multi-Unit Complex detail", class: "property--fieldset-detail" do %>
+            <div class="property__actions-multi-unit">
+              <div class="property__input-multi-unit">
+                <label>The LOWEST address/unit number of this street:</label>
+                <%= f.input :low, placeholder: "Lowest #" %>
+              </div>
+                
+              <div class="property__input-multi-unit">
+                <label>The HIGHEST address/unit number of this street:</label>
+                <%= f.input :high, placeholder: "Highest #" %>
+              </div>
+                
+              <div class="property__input-multi-unit">
+                <label>Interval size in this address range:</label>
+                <%= f.input :interval, placeholder: "i.e. 2, 3, 4" %>
+              </div>
+                
+              <div class="property__input-multi-unit-letters">
+                <label>Do the addresses include alphabetical letters?</label>
+                <div class="property__letters-dropdown">
+                  <div data-controller="element search-params">
+                    <%= f.select :style, ["no", "yes"], {}, autocomplete: "off",
+                                 data: { action: "change->search-params#encode change->element#click" } %>
+                    <noscript>
+                      <button formmethod="get" formaction="<%= new_property_path %>">Select</button>
+                    </noscript>
+                    <a href="<%= new_property_path %>" 
+                       hidden
+                       data-search-params-target="anchor"
+                       data-element-target="click" 
+                       data-turbo-frame="<%= f.field_id(:turbo_frame, "yes") %>"></a> 
+                  </div>  
+                  <turbo-frame id="<%= f.field_id(:turbo_frame, "yes") %>">
+                    <% if property.style == "yes" %>
+                      <%= f.input :letter, placeholder: "i.e. abc" %>
+                    <% end %>
+                  </turbo-frame>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="property__input-multi-unit">
+                <label>List any specific addresses to exclude from range:</label>
+                <%= f.text_area :exclusion, class: "property--text-area" %>
+              </div>
+            </div>
+          <% end %>
+        </section>
+      <% end %>
+    </turbo-frame>
+  </div>
   <%= link_to "Cancel", properties_path, class: "btn btn--light" %>
   <%= f.submit class: "btn btn--secondary" %>
 <% end %>

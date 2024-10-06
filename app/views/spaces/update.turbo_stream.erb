@@ -2,7 +2,7 @@
 <%= turbo_stream.remove @space %>
 
 <%# Step 2: add the space at the right place %>
-<% if previous_space = @space.previous_space %>
+<% if previous_space = @space.previous_space_with_list(@space.location) %>
   <%= turbo_stream.after previous_space do %>
     <%= render @space, property: @property %>
   <% end %>

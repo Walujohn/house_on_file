@@ -35,6 +35,14 @@ gem "redis", "~> 4.0"
 
 gem "devise", "~> 4.8.1"
 
+gem "dotenv-rails"
+
+gem "omniauth"
+
+gem "omniauth-google-oauth2"
+
+gem "omniauth-rails_csrf_protection"
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
@@ -50,6 +58,10 @@ gem "bootsnap", require: false
 gem "simple_form", "~> 5.1.0"
 
 gem "pry"
+
+gem 'wicked_pdf'
+
+gem 'wkhtmltopdf-binary'
 
 # Use Sass to process CSS
 # gem "sassc-rails"

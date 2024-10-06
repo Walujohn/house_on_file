@@ -1,0 +1,44 @@
+<%= turbo_frame_tag appliance do %>
+ <div class="appliance">
+   <%= turbo_frame_tag dom_id(appliance, :edit) do %>
+     <div class="appliance__header">
+        <h2 class="appliance__title">
+            <%= appliance.name %>
+        </h2>
+        <div class="appliance__actions">
+            <%= button_to "Delete",
+                    [property, appliance],
+                    method: :delete,
+                    form: { data: { turbo_confirm: "Are you sure?" } },
+                    class: "btn btn--light" %>
+            <%= link_to "Edit",
+                    [:edit, property, appliance],
+                    class: "btn btn--light" %>
+        </div>
+      </div>
+    <% end %>
+    <div class="appliance__body">
+        <div class="feature feature--appliance-feature-header">
+            <div class="feature__name">Components</div>
+<!--
+            <div class="feature__variety">Variety</div>
+            <div class="feature__brand">Brand</div>
+            <div class="feature__actions"></div>
+-->
+        </div>
+
+        <%= turbo_frame_tag nested_dom_id(appliance, "appliance_features") do %>
+          <%= render appliance.appliance_features, property: property, appliance: appliance %>
+        <% end %>
+        
+        <%= turbo_frame_tag nested_dom_id(appliance, ApplianceFeature.new) %>
+
+        <div class="appliance__footer">
+            <%= link_to "Add component",
+                        [:new, property, appliance, :appliance_feature],
+                        data: { turbo_frame: nested_dom_id(appliance, ApplianceFeature.new) },
+                        class: "btn btn--primary" %>
+        </div>
+    </div>
+ </div>
+<% end %>

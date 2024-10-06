@@ -1,0 +1,5 @@
+<%= turbo_stream.replace @appliance_feature do %>
+  <%= render @appliance_feature, property: @property, appliance: @appliance %>
+<% end %>
+
+<%= render_turbo_stream_flash_messages %>

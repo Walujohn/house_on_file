@@ -4,5 +4,20 @@
 
 import { application } from "./application"
 
+//import ComboboxController from "./combobox_controller"
+//application.register("combobox", ComboboxController)
+
+//import DialogController from "./dialog_controller"
+//application.register("dialog", DialogController)
+
+import ElementController from "./element_controller"
+application.register("element", ElementController)
+
+import FormController from "./form_controller"
+application.register("form", FormController)
+
 import RemovalsController from "./removals_controller"
 application.register("removals", RemovalsController)
+
+import SearchParamsController from "./search_params_controller"
+application.register("search-params", SearchParamsController)

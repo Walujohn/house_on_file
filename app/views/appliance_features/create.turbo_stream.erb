@@ -1,0 +1,9 @@
+<%# Step 1: empty the Turbo Frame containing the form %>
+<%= turbo_stream.update nested_dom_id(@appliance, ApplianceFeature.new), "" %>
+
+<%# Step 2: append the created feature to the list %>
+<%= turbo_stream.append nested_dom_id(@appliance, "appliance_features") do %>
+  <%= render @appliance_feature, property: @property, appliance: @appliance %>
+<% end %>
+
+<%= render_turbo_stream_flash_messages %>

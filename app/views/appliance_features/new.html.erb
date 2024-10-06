@@ -1,0 +1,14 @@
+<main class="container">
+  <%= link_to sanitize("&larr; Back to property"), property_path(@property) %>
+
+  <div class="header">
+    <h1>New feature for <%= @appliance.name %></h1>
+  </div>
+
+  <%= turbo_frame_tag nested_dom_id(@appliance, ApplianceFeature.new) do %>
+    <%= render "form",
+             property: @property,
+             appliance: @appliance,
+             appliance_feature: @appliance_feature %>
+  <% end %>
+</main>

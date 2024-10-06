@@ -1,0 +1,16 @@
+<main class="container">
+  <%= link_to sanitize("&larr; Back to property"), property_path(@property) %>
+
+  <div class="header">
+    <h1>New appliance</h1>
+    <%= link_to "New appliance",
+                new_property_appliance_path(@property),
+                data: { turbo_frame: dom_id(Appliance.new) },
+                class: "btn btn--primary" %>
+  </div>
+    
+  <%# turbo_frame_tag @appliance do %>
+  <%= turbo_frame_tag "hello_appliance" do %>
+    <%= render "form", property: @property, appliance: @appliance %>
+  <% end %>
+</main>

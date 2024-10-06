@@ -1,0 +1,32 @@
+<%= turbo_frame_tag appliance_feature do %>
+    <div class="feature">
+      <div class="feature__name">
+        <%= appliance_feature.name %>
+        <div class="feature__description">
+          <%= simple_format appliance_feature.description %>
+        </div>
+      </div>
+<!--
+      <div class="feature__variety-brand">
+        <%# appliance_feature.quantity %>
+        &times;
+        <%# number_to_currency appliance_feature.unit_price %>
+      </div>
+      <div class="feature__variety">
+        <%# appliance_feature.quantity %>
+      </div>
+      <div class="feature__brand">
+        <%# number_to_currency appliance_feature.unit_price %>
+      </div>
+-->
+      <div class="feature__actions">
+        <%= button_to "Delete",
+                      [@property, appliance, appliance_feature],
+                      method: :delete,
+                      class: "btn btn--light" %>
+        <%= link_to "Edit",
+                    [:edit, @property, appliance, appliance_feature],
+                    class: "btn btn--light" %>
+      </div>
+    </div>
+<% end %>

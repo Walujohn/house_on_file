@@ -70,4 +70,34 @@
       color: var(--color-white);
     }
   }
+    
+  &--drawn {
+    font-size: var(--font-size-s);
+    border: none;
+    font-weight: normal;
+    padding: var(--space-xxxs);
+  }
+    
+  &--toolbar {
+    color: var(--color-dark);
+    font-weight: 600;
+  }
+    
+  &--white {
+    color: var(--color-dark);
+    background-color: var(--color-white);
+
+    &:hover,
+    &:focus,
+    &:focus-within,
+    &:active {
+      color: var(--color-dark);
+      filter: brightness(92%);
+    }   
+  }
 }
+
+
+
+
+

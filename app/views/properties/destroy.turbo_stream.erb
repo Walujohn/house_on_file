@@ -1,2 +1,10 @@
 <%= turbo_stream.remove @property %>
 <%= render_turbo_stream_flash_messages %>
+
+<% if @property.property_template and @property.property_template.to_i != 0 and @associated_property.present? %>
+  <turbo-stream action="update" target="hint-<%= "#{@associated_property.id}" %>">
+    <template>
+      <p class="property__hint">This is a multi-unit style templating property. The same changes made here will also be automatically applied to its <%= @associated_property.associated_count(current_group) %> associated properties.</p>
+    </template>
+  </turbo-stream>
+<% end %>

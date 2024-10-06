@@ -1,0 +1,65 @@
+.space-search-result {
+  &__body {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    column-gap: var(--space-m);  
+    
+//    background-color: var(--color-white);
+    padding: var(--space-xxs);
+    padding-top: 0;
+
+    @include media(tabletAndUp) {
+      padding: var(--space-m);
+    }        
+  }
+    
+  &__actions {
+    display: flex;  
+    justify-content: space-between;
+      
+    @include media(tabletAndUp) {
+      display: flex;  
+      flex-direction: column;
+    }
+  }
+    
+  &__form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-right: var(--space-s);
+    /* font-weight: bold; */
+    font-size: var(--font-size-s);     
+  }
+  
+  //  you typically don't add margins to components for a good design model but oh well
+  &__panel {
+    margin-top: var(--space-xxxl);        
+  }
+    
+  &__search-input {
+    border-color: var(--color-light);
+    border-radius: var(--border-radius);
+    padding: var(--space-xxxxs);
+  }
+    
+  &--letter-group {
+//    background-color: var(--color-light); 
+    border: solid 2px var(--color-light);
+    margin-bottom: var(--space-xxs);
+    border-radius: var(--border-radius);
+  }
+
+  &--letter-header {
+    font-weight: normal; 
+    padding: var(--space-xxxxs);
+    font-weight: 600;
+  }
+    
+  &--line-item {
+    list-style-type: none;    
+  }
+}

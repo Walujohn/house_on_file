@@ -2,14 +2,56 @@
 <%= turbo_stream.update Space.new, "" %>
 
 <%# Step 2: add the space at the right place %>
-<% if previous_space = @space.previous_space %>
-  <%= turbo_stream.after previous_space do %>
-    <%= render @space, property: @property %>
+<% if params[:list].present? and params[:list] != "List appliances" %>
+  <% if previous_space = @space.previous_space_with_list(@space.location) %>
+    <%= turbo_stream.after previous_space do %>
+      <%= render @space, property: @property %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.prepend "spaces" do %>
+      <%= render @space, property: @property %>
+    <% end %>
+  <% end %>
+<% elsif params[:list].present? and params[:list] == "List appliances" %>
+<!--  update "spaces" turbo frame in case List Appliances removed it so @spaces can be prepended-->
+  <%= turbo_stream.update "spaces" do %>
+    <%= render "spaces/empty_state" %>
+    <%= render @spaces, property: @property %>
+  <% end %>
+
+  <% if previous_space = @space.previous_space %>
+    <%= turbo_stream.after previous_space do %>
+      <%= render @space, property: @property %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.prepend "spaces" do %>
+      <%= render @space, property: @property %>
+    <% end %>
+  <% end %>
+<!--if the space was created by clicking on the new spaces list of names-->
+<% elsif params[:origin] and params[:origin] == "new list" %>
+  <% if previous_space = @space.previous_space %>
+    <%= turbo_stream.after previous_space do %>
+      <%= render @space, property: @property, origin: params[:origin] %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.prepend "spaces" do %>
+      <%= render @space, property: @property, origin: params[:origin] %>
+    <% end %>
   <% end %>
 <% else %>
-  <%= turbo_stream.prepend "spaces" do %>
-    <%= render @space, property: @property %>
+  <% if previous_space = @space.previous_space %>
+    <%= turbo_stream.after previous_space do %>
+      <%= render @space, property: @property %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.prepend "spaces" do %>
+      <%= render @space, property: @property %>
+    <% end %>
   <% end %>
 <% end %>
 
+<%= turbo_stream.update dom_id(@property, :total) do %>
+  <%= render "properties/total", property: @property %>
+<% end %>
 <%= render_turbo_stream_flash_messages %>

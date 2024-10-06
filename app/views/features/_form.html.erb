@@ -1,15 +1,58 @@
 <%= simple_form_for [property, space, feature],
                     html: { class: "form feature feature--form" } do |f| %>
-
   <%= form_error_notification(feature) %>
 
-  <%= f.input :name,
-              wrapper_html: { class: "feature__name" },
-              input_html: { autofocus: true } %>
-  <%= f.input :quantity,
-              wrapper_html: { class: "feature__quantity" } %>
-  <%= f.input :unit_price,
-              wrapper_html: { class: "feature__price" } %>
+  <%= turbo_frame_tag "tabs", class: "form feature__dropdowns" do %>
+    <% if @tab %>
+      <%= f.hidden_field :tab, value: @tab %>
+      <%= f.hidden_field :user_id, value: "#{current_user.id}" %>
+      <%= f.input :name,
+                  wrapper_html: { class: "feature__name" },
+                  input_html: { autofocus: true } %>
+      <%= f.input :variety,
+                  placeholder: "Variety",
+                  wrapper_html: { class: "feature__variety" } %>
+      <%= link_to "Cancel",
+                  new_property_space_feature_path(property, space),
+                  class: "feature__link",
+                  wrapper_html: { class: "feature__variety" } %>
+    <% else %>
+      <fieldset data-controller="element search-params" class="feature--fieldset">
+        <%= f.hidden_field :user_id, value: "#{current_user.id}" %>
+        <%= f.label :name %>
+        <%= f.select :name, feature.names.invert, {}, autocomplete: "off",
+                     data: { action: "change->search-params#encode change->element#click" } %>
+        <noscript>
+          <button formmethod="get" formaction="<%= new_property_space_feature_path(property, space) %>">Select name</button>
+        </noscript>
+
+        <a href="<%= new_property_space_feature_path(property, space) %>" 
+           hidden
+           data-search-params-target="anchor"
+           data-element-target="click" 
+           data-turbo-frame="<%= f.field_id(:variety, :turbo_frame, Feature.new) %>"></a> 
+      </fieldset>
+
+      <turbo-frame id="<%= f.field_id(:variety, :turbo_frame, Feature.new) %>">
+        <% if feature.varieties(@selected_name).present? %>
+          <%= f.label :variety %>
+          <%= f.select :variety,
+                       feature.varieties(@selected_name),
+                       wrapper_html: { class: "feature__variety" } %>
+        <% end %>
+        <%# turbo_stream.replace dom_id(@feature), partial: "feature", object: feature %>
+      </turbo-frame>
+      <%= link_to "New",
+                  new_property_space_feature_path(property, space, tab: "switch"),
+                  class: "feature__link",
+                  wrapper_html: { class: "feature__variety" } %>
+    <% end %>
+  <% end %>
+
+  <%# f.input :quantity,
+    #         wrapper_html: { class: "feature__variety" } %>
+  <%# f.input :unit_price,
+    #         wrapper_html: { class: "feature__brand" } %>
   <%= f.input :description,
               wrapper_html: { class: "feature__description" } %>
 
